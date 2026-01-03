@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - Fresh Leads Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .pricing-card.featured {
+            border: 3px solid #667eea;
+            position: relative;
+        }
+        .featured-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 1rem 0;
+        }
+        .price-period {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .feature-list li::before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .btn-purchase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+        .btn-purchase:hover {
+            opacity: 0.9;
+            color: white;
+        }
+        .faq-section {
+            max-width: 800px;
+            margin: 4rem auto;
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+        .faq-question {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Cash Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="pricing.html">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="counties.html">Browse Counties</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Simple, Transparent Pricing</h1>
+        <p class="lead mb-3">Fresh property leads by county - daily data updates from public records</p>
+        <p style="font-size: 0.95rem; color: rgba(255,255,255,0.95); margin-bottom: 0;">
+            Most guys charge three, four hundred a month. We do $79.
+        </p>
+    </div>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <!-- Beta Member Plan (Featured) -->
+            <div class="col-md-5">
+                <div class="pricing-card featured">
+                    <div class="featured-badge">BETA SPECIAL - LIMITED TIME</div>
+                    <h3 class="text-center">Beta Member</h3>
+                    <div class="price text-center">
+                        $79<span class="price-period">/mo</span>
+                    </div>
+                    <p class="text-center text-muted"><small>Lock in this rate forever!</small></p>
+                    <ul class="feature-list">
+                        <li>Unlimited leads</li>
+                        <li><strong>20+ Available Counties:</strong></li>
+                        <li style="padding-left: 1.5rem;">Davidson County, TN (Nashville)</li>
+                        <li style="padding-left: 1.5rem;">Williamson County, TN</li>
+                        <li style="padding-left: 1.5rem;">Shelby County, TN (Memphis)</li>
+                        <li style="padding-left: 1.5rem;">Knox County, TN (Knoxville)</li>
+                        <li style="padding-left: 1.5rem;">Maricopa County, AZ (Phoenix)</li>
+                        <li style="padding-left: 1.5rem;">Clark County, NV (Las Vegas)</li>
+                        <li style="padding-left: 1.5rem;">Fulton County, GA (Atlanta)</li>
+                        <li style="padding-left: 1.5rem;">Mecklenburg County, NC (Charlotte)</li>
+                        <li style="padding-left: 1.5rem;">Harris County, TX (Houston)</li>
+                        <li style="padding-left: 1.5rem;">Dallas County, TX</li>
+                        <li style="padding-left: 1.5rem;">+ 10 more counties</li>
+                        <li>Daily data updates</li>
+                        <li>Priority support</li>
+                        <li>Advanced filtering & search</li>
+                        <li>CSV export</li>
+                        <li>Owner contact lookup</li>
+                        <li>Warranty deed filtering</li>
+                        <li>Early access to new features</li>
+                        <li><strong>Price locked forever</strong></li>
+                    </ul>
+                    <button class="btn btn-purchase" onclick="selectPlan('beta', 79)">Join Beta Now</button>
+                    <p class="text-center mt-3"><small class="text-danger">Only available during beta period</small></p>
+                </div>
+            </div>
+
+            <!-- Regular Plan -->
+            <div class="col-md-5">
+                <div class="pricing-card">
+                    <h3 class="text-center">Full Launch</h3>
+                    <div class="price text-center">
+                        $99<span class="price-period">/mo</span>
+                    </div>
+                    <p class="text-center text-muted"><small>Available after beta</small></p>
+                    <ul class="feature-list">
+                        <li>Unlimited leads</li>
+                        <li><strong>50+ Counties Including:</strong></li>
+                        <li style="padding-left: 1.5rem;">All Beta counties PLUS:</li>
+                        <li style="padding-left: 1.5rem;">Tarrant County, TX (Fort Worth)</li>
+                        <li style="padding-left: 1.5rem;">Bexar County, TX (San Antonio)</li>
+                        <li style="padding-left: 1.5rem;">Travis County, TX (Austin)</li>
+                        <li style="padding-left: 1.5rem;">Orange County, FL (Orlando)</li>
+                        <li style="padding-left: 1.5rem;">Hillsborough County, FL (Tampa)</li>
+                        <li style="padding-left: 1.5rem;">Miami-Dade County, FL</li>
+                        <li style="padding-left: 1.5rem;">Broward County, FL</li>
+                        <li style="padding-left: 1.5rem;">Wake County, NC (Raleigh)</li>
+                        <li style="padding-left: 1.5rem;">Jefferson County, AL (Birmingham)</li>
+                        <li style="padding-left: 1.5rem;">+ 30+ more major counties</li>
+                        <li>Real-time data updates</li>
+                        <li>Priority support</li>
+                        <li>Advanced filtering & search</li>
+                        <li>CSV export & API access</li>
+                        <li>Owner contact lookup</li>
+                        <li>Warranty deed filtering</li>
+                        <li>All new features</li>
+                    </ul>
+                    <button class="btn btn-outline-secondary" disabled style="width: 100%; padding: 1rem 2rem; border-radius: 10px;">Coming Soon</button>
+                    <p class="text-center mt-3"><small class="text-success">Save $20/mo by joining beta now!</small></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">What types of leads do you provide?</div>
+                <div class="faq-answer">We provide fresh real estate leads from county Register of Deeds offices across major US cities. Our data includes warranty deeds, property sales, owner/buyer information, and sale amounts - all scraped daily from public county records.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Which counties are currently available?</div>
+                <div class="faq-answer">Beta members have access to 20+ counties including Davidson County TN (Nashville), Shelby County TN (Memphis), Knox County TN (Knoxville), Williamson County TN, Maricopa County AZ (Phoenix), Clark County NV (Las Vegas), Fulton County GA (Atlanta), Mecklenburg County NC (Charlotte), Harris County TX (Houston), Dallas County TX, and 10 more major metro counties. We're adding new counties weekly.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I cancel anytime?</div>
+                <div class="faq-answer">Yes! All plans are month-to-month with no long-term contracts. You can cancel at any time from your account dashboard.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How fresh is the data?</div>
+                <div class="faq-answer">Starter plans receive daily updates. Professional and Enterprise plans receive real-time updates as new records are filed with county offices.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Do you offer a free trial?</div>
+                <div class="faq-answer">Yes! All new users get a 7-day free trial with full access to Professional plan features. No credit card required.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What payment methods do you accept?</div>
+                <div class="faq-answer">We accept all major credit cards (Visa, MasterCard, American Express, Discover) and ACH bank transfers for Enterprise plans.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I upgrade or downgrade my plan?</div>
+                <div class="faq-answer">Absolutely! You can change your plan at any time. Upgrades take effect immediately, and downgrades take effect at the start of your next billing cycle.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="modal fade" id="checkoutModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Complete Your Purchase</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h6>Billing Information</h6>
+                            <form id="checkoutForm">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Card Number</label>
+                                    <input type="text" class="form-control" placeholder="1234 5678 9012 3456" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Expiration</label>
+                                        <input type="text" class="form-control" placeholder="MM/YY" required>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">CVV</label>
+                                        <input type="text" class="form-control" placeholder="123" required>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Billing Address</label>
+                                    <input type="text" class="form-control" required>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">City</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">State</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">ZIP</label>
+                                        <input type="text" class="form-control" required>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h6 class="card-title">Order Summary</h6>
+                                    <hr>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span id="planName">Beta Member Plan</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <span>Monthly subscription</span>
+                                        <strong id="planPrice">$79.00</strong>
+                                    </div>
+                                    <hr>
+                                    <div class="d-flex justify-content-between mb-3">
+                                        <strong>Total due today</strong>
+                                        <strong id="totalPrice">$79.00</strong>
+                                    </div>
+                                    <small class="text-muted">Your subscription will renew automatically each month. Cancel anytime. <strong class="text-success">Beta price locked forever!</strong></small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-purchase" onclick="processPayment()">Complete Purchase</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedPlan = '';
+        let selectedPrice = 0;
+
+        function selectPlan(plan, price) {
+            selectedPlan = plan;
+            selectedPrice = price;
+
+            // Update modal content
+            document.getElementById('planName').textContent = plan.charAt(0).toUpperCase() + plan.slice(1) + ' Plan';
+            document.getElementById('planPrice').textContent = '$' + price + '.00';
+            document.getElementById('totalPrice').textContent = '$' + price + '.00';
+
+            // Show checkout modal
+            const modal = new bootstrap.Modal(document.getElementById('checkoutModal'));
+            modal.show();
+        }
+
+        function processPayment() {
+            // Get form data
+            const form = document.getElementById('checkoutForm');
+
+            if (form.checkValidity()) {
+                // In production, this would integrate with Stripe, PayPal, etc.
+                alert('Processing payment for ' + selectedPlan + ' plan ($' + selectedPrice + '/mo)...\n\nThis is a demo. In production, this would integrate with a payment processor like Stripe.');
+
+                // Close modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('checkoutModal'));
+                modal.hide();
+
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 2000);
+            } else {
+                form.reportValidity();
+            }
+        }
+    </script>
+</body>
+</html>
