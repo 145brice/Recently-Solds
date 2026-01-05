@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Rutherford County Recent Sales Scraper
-Scrapes property sales from Rutherford County assessor
+Uses the new WebPro 5 system at secured.rutherfordcountytn.gov
 Cron-ready: Runs daily, handles errors, logs output
 """
 
@@ -10,6 +10,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.edge.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.keys import Keys
 import pandas as pd
 import logging
 from datetime import datetime, timedelta
@@ -43,242 +44,145 @@ def scrape_rutherford():
     options.add_experimental_option('useAutomationExtension', False)
 
     driver = None
+    all_sales = []
 
     try:
         driver = webdriver.Edge(options=options)
-        driver.set_page_load_timeout(90)  # Increased timeout
+        driver.set_page_load_timeout(90)
 
-        url = "https://secured.rutherfordcountytn.gov/propertydata/RealPropertySearch2.aspx"
-        logging.info(f"Loading: {url}")
+        # Load the new WebPro 5 property search page
+        url = "https://secured.rutherfordcountytn.gov/OFS/WP/Home"
+        logging.info(f"Loading WebPro 5 page: {url}")
         driver.get(url)
-        time.sleep(3)
+        time.sleep(5)
 
-        # Calculate date range (last 30 days for recent sales)
+        # Calculate date range (last 30 days)
         end_date = datetime.now()
         start_date = end_date - timedelta(days=30)
 
-        start_date_str = start_date.strftime("%m/%d/%Y")
-        end_date_str = end_date.strftime("%m/%d/%Y")
+        logging.info(f"Searching for sales from {start_date.strftime('%m/%d/%Y')} to {end_date.strftime('%m/%d/%Y')}")
 
-        logging.info(f"Searching for sales from {start_date_str} to {end_date_str}")
-
-        # Look for the property sales search
+        # Try to click Advanced Search
         try:
-            # Debug: See what's on the page
-            page_text = driver.find_element(By.TAG_NAME, "body").text
-            logging.info(f"Page preview: {page_text[:800]}")
-
-            # Click on Advanced Search to get a better interface
-            try:
-                adv_search_link = driver.find_element(By.PARTIAL_LINK_TEXT, "Advanced Search")
-                driver.execute_script("arguments[0].scrollIntoView(true);", adv_search_link)
-                time.sleep(1)
-                driver.execute_script("arguments[0].click();", adv_search_link)
-                time.sleep(3)
-                logging.info("Clicked on Advanced Search")
-            except Exception as e:
-                logging.warning(f"Could not click Advanced Search: {e}")
-
-            # Now try to find Real Property Sales search
-            try:
-                # Look for link/button to sales search
-                sales_link = driver.find_element(By.PARTIAL_LINK_TEXT, "Search for Real Property Sales")
-                driver.execute_script("arguments[0].scrollIntoView(true);", sales_link)
-                time.sleep(1)
-                driver.execute_script("arguments[0].click();", sales_link)
-                time.sleep(3)
-                logging.info("Clicked on Real Property Sales link")
-
-                # After clicking sales link, page should show sales search form
-                page_text = driver.find_element(By.TAG_NAME, "body").text
-                logging.info(f"Sales page preview: {page_text[:600]}")
-
-            except Exception as e:
-                logging.warning(f"Could not find Sales link: {e}")
-
-            # Submit search
-            search_buttons = driver.find_elements(By.CSS_SELECTOR, "input[type='submit'], button[type='submit']")
-
-            logging.info(f"Found {len(search_buttons)} search buttons")
-
-            if search_buttons:
-                for i, btn in enumerate(search_buttons[:3]):
-                    btn_text = btn.get_attribute("value") or btn.text or ""
-                    logging.info(f"  Button {i}: {btn_text}")
-
-                # Click the first search button
-                driver.execute_script("arguments[0].scrollIntoView(true);", search_buttons[0])
-                time.sleep(1)
-                driver.execute_script("arguments[0].click();", search_buttons[0])
-                logging.info("Search submitted")
-
-                # Wait for results to load
-                logging.info("Waiting for results...")
-                time.sleep(8)
-
-        except Exception as e:
-            logging.error(f"Error with search form: {e}")
-            import traceback
-            logging.error(traceback.format_exc())
-
-        # Extract results
-        logging.info("Extracting results...")
-
-        try:
-            # Wait for results
+            adv_search = driver.find_element(By.LINK_TEXT, "Advanced Search")
+            adv_search.click()
+            logging.info("Clicked Advanced Search")
             time.sleep(3)
+        except Exception as e:
+            logging.warning(f"Could not click Advanced Search: {e}")
 
-            # Try to load all results by scrolling
-            try:
-                last_height = driver.execute_script("return document.body.scrollHeight")
-                for _ in range(10):
-                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-                    time.sleep(1)
-                    new_height = driver.execute_script("return document.body.scrollHeight")
-                    if new_height == last_height:
-                        break
-                    last_height = new_height
-                logging.info("Scrolled to load all results")
-            except Exception as e:
-                logging.info(f"Scroll not needed: {e}")
-
-            # Debug: Print page text after search
-            page_text = driver.find_element(By.TAG_NAME, "body").text
-            logging.info(f"Results page preview: {page_text[:1000]}")
-
-            # Find results table
-            tables = driver.find_elements(By.TAG_NAME, "table")
-            logging.info(f"Found {len(tables)} tables on page")
-
-            results_table = None
-            for i, table in enumerate(tables):
-                # Look for a table with multiple rows (results)
-                rows = table.find_elements(By.TAG_NAME, "tr")
-                logging.info(f"  Table {i}: {len(rows)} rows")
-                if len(rows) > 1:  # At least header + one row
-                    results_table = table
-                    logging.info(f"  Using table {i} as results table")
-                    break
-
-            if not results_table:
-                logging.warning("No results table found")
-                return None
-
-            # Try both tbody and regular tr selectors
-            rows = results_table.find_elements(By.CSS_SELECTOR, "tbody tr")
-            if len(rows) == 0:
-                rows = results_table.find_elements(By.TAG_NAME, "tr")
-
-            logging.info(f"Found {len(rows)} total rows to process")
-
-            all_data = []
-            page_num = 1
-            max_pages = 50
+        # Look for date fields or sale date filters
+        try:
+            # Search for any date-related input fields
+            date_inputs = driver.find_elements(By.CSS_SELECTOR, "input[type='text'], input[type='date']")
+            logging.info(f"Found {len(date_inputs)} input fields")
             
-            # Process all pages
-            while page_num <= max_pages:
-                logging.info(f"Processing page {page_num}...")
-                
-                # Get rows from current page
-                page_rows = []
-                try:
-                    tables = driver.find_elements(By.TAG_NAME, "table")
-                    for table in tables:
-                        rows_in_table = table.find_elements(By.TAG_NAME, "tr")
-                        if len(rows_in_table) > 1:
-                            page_rows = rows_in_table
-                            break
-                except:
-                    pass
-                
-                logging.info(f"  Found {len(page_rows)} rows on page {page_num}")
-                
-                if len(page_rows) == 0:
-                    break
+            # Try to fill in dates if we find relevant fields
+            for field in date_inputs:
+                field_id = field.get_attribute('id') or ''
+                field_name = field.get_attribute('name') or ''
+                if 'date' in field_id.lower() or 'date' in field_name.lower():
+                    logging.info(f"Found date field: {field_id or field_name}")
+        except Exception as e:
+            logging.warning(f"Error checking date fields: {e}")
 
-                for idx, row in enumerate(page_rows):
+        # Just submit the search to get recent sales
+        try:
+            # Look for search button
+            search_btn = driver.find_element(By.CSS_SELECTOR, "button[type='submit'], input[type='submit']")
+            driver.execute_script("arguments[0].scrollIntoView(true);", search_btn)
+            time.sleep(1)
+            driver.execute_script("arguments[0].click();", search_btn)
+            logging.info("Submitted search")
+            time.sleep(5)
+        except Exception as e:
+            logging.warning(f"Could not submit search: {e}")
+
+        # Wait for results to load
+        logging.info("Waiting for results...")
+        time.sleep(5)
+
+        # Collect data from pages
+        page_num = 1
+        max_pages = 100
+
+        while page_num <= max_pages:
+            logging.info(f"Processing page {page_num}")
+            
+            try:
+                # Look for results - could be in table or div structure
+                rows = driver.find_elements(By.CSS_SELECTOR, "table tr, .property-row, .result-row")
+                logging.info(f"Found {len(rows)} potential result elements")
+                
+                for row in rows:
                     try:
-                        row_text = row.text.strip()
-                        if not row_text or ('owner' in row_text.lower() and 'address' in row_text.lower()):
-                            continue
-
-                        cells = row.find_elements(By.TAG_NAME, "td")
-                        if len(cells) < 2:
-                            continue
-
-                        row_data = [cell.text.strip() for cell in cells]
-
-                        owner = "N/A"
-                        address = "N/A"
-                        sale_date = "N/A"
-                        price = "N/A"
-
-                        for i, cell_text in enumerate(row_data):
-                            if '$' in cell_text or (cell_text.replace(',', '').replace('.', '').isdigit() and len(cell_text) > 4):
-                                price = cell_text
-                            elif '/' in cell_text and len(cell_text) < 12:
-                                sale_date = cell_text
-                            elif i == 0 and not any(c in cell_text for c in ['$', '/']):
-                                owner = cell_text
-                            elif i == 1 and not any(c in cell_text for c in ['$', '/']):
-                                address = cell_text
-
-                        if address != "N/A" or price != "N/A":
-                            all_data.append({
-                                'Date': sale_date,
-                                'Address': address,
-                                'Owner Name': owner,
-                                'Amount': price
-                            })
-
+                        text = row.text.strip()
+                        if text and len(text) > 10:  # Has substantial content
+                            # Try to extract structured data
+                            cells = row.find_elements(By.TAG_NAME, "td")
+                            if len(cells) >= 3:
+                                sale_data = {
+                                    'Date': cells[0].text.strip() if len(cells) > 0 else '',
+                                    'Address': cells[1].text.strip() if len(cells) > 1 else '',
+                                    'Owner Name': cells[2].text.strip() if len(cells) > 2 else '',
+                                    'Amount': cells[3].text.strip() if len(cells) > 3 else ''
+                                }
+                                
+                                if sale_data['Address']:
+                                    all_sales.append(sale_data)
                     except Exception as e:
                         continue
-                
-                # Look for Next/pagination
+
+                logging.info(f"Collected {len(all_sales)} sales so far")
+
+                # Try to go to next page
                 try:
-                    next_buttons = driver.find_elements(By.XPATH, "//a[contains(text(), 'Next')] | //input[@value='Next'] | //a[contains(@class, 'next')]")
-                    if next_buttons and next_buttons[0].is_enabled():
-                        driver.execute_script("arguments[0].click();", next_buttons[0])
-                        logging.info(f"  Clicked Next for page {page_num + 1}")
-                        page_num += 1
-                        time.sleep(3)
+                    next_buttons = driver.find_elements(By.XPATH, "//a[contains(text(), 'Next')] | //button[contains(text(), 'Next')] | //*[contains(@class, 'next')]")
+                    if next_buttons:
+                        next_btn = next_buttons[0]
+                        if 'disabled' not in next_btn.get_attribute('class'):
+                            driver.execute_script("arguments[0].click();", next_btn)
+                            logging.info(f"Clicked Next to page {page_num + 1}")
+                            time.sleep(3)
+                            page_num += 1
+                        else:
+                            logging.info("Next button is disabled")
+                            break
                     else:
-                        logging.info("  No more pages")
+                        logging.info("No Next button found")
                         break
-                except:
-                    logging.info("  No Next button found")
+                except Exception as e:
+                    logging.info(f"No more pages: {e}")
                     break
-            
-            data = all_data
-            logging.info(f"Total records collected: {len(data)}")
 
-            if not data:
-                logging.warning("No sales data extracted")
-                return None
+            except Exception as e:
+                logging.error(f"Error processing page {page_num}: {e}")
+                break
 
-            # Create DataFrame
-            df = pd.DataFrame(data)
+        # Save results
+        if all_sales:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = f"output/rutherford_sales_{timestamp}.csv"
 
-            # Save to CSV
-            output_file = f"output/rutherford_sales_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            df = pd.DataFrame(all_sales)
             df.to_csv(output_file, index=False)
 
             logging.info("="*60)
-            logging.info(f"✓ SUCCESS: Saved {len(df)} sales")
-            logging.info(f"  Output: {output_file}")
-            logging.info("  NOTE: Column mapping may need verification")
+            logging.info(f"SUCCESS: Found {len(all_sales)} sales")
+            logging.info(f"Saved to: {output_file}")
             logging.info("="*60)
 
             return output_file
-
-        except Exception as e:
-            logging.error(f"Error extracting results: {e}")
-            import traceback
-            logging.error(traceback.format_exc())
+        else:
+            logging.warning("No sales data found")
+            logging.info("Saving page source for debugging...")
+            with open("output/rutherford_debug.html", "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            logging.info("Saved to output/rutherford_debug.html")
             return None
 
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logging.error(f"Critical error: {e}")
         import traceback
         logging.error(traceback.format_exc())
         return None
@@ -286,6 +190,16 @@ def scrape_rutherford():
     finally:
         if driver:
             driver.quit()
+            logging.info("Browser closed")
 
 if __name__ == "__main__":
-    scrape_rutherford()
+    try:
+        result = scrape_rutherford()
+        if result:
+            print(f"\nSuccess! Output: {result}")
+        else:
+            print("\nFailed to get data - check logs and debug.html")
+    except Exception as e:
+        print(f"\nError: {e}")
+        import traceback
+        traceback.print_exc()

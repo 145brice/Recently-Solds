@@ -226,3 +226,710 @@ Symbols not available. Dumping unresolved backtrace:
 	0x7ffcb089cc91
 
 
+2026-01-05 03:35:46,065 - INFO - ============================================================
+2026-01-05 03:35:46,067 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 03:35:46,067 - INFO - ============================================================
+2026-01-05 03:35:48,187 - INFO - Loading assessor page: https://inigo.williamson-tn.org/assessor
+2026-01-05 03:35:54,550 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 03:35:54,887 - INFO - Filled start date in: sales_date_start
+2026-01-05 03:35:55,015 - INFO - Filled end date in: sales_date_end
+2026-01-05 03:35:58,167 - INFO - Search submitted
+2026-01-05 03:36:00,171 - INFO - Waiting for results to load...
+2026-01-05 03:36:00,285 - INFO - Results loaded after 1 seconds
+2026-01-05 03:36:03,286 - INFO - Extracting results...
+2026-01-05 03:36:09,398 - INFO - Scrolled to bottom to load all results
+2026-01-05 03:36:09,399 - INFO - Processing page 1...
+2026-01-05 03:36:11,498 - INFO -   Found 10 rows on page 1
+2026-01-05 03:36:13,887 - INFO -   Clicked Next button for page 2
+2026-01-05 03:36:16,891 - INFO - Processing page 2...
+2026-01-05 03:36:18,954 - INFO -   Found 10 rows on page 2
+2026-01-05 03:36:21,613 - INFO -   Clicked Next button for page 3
+2026-01-05 03:36:24,616 - INFO - Processing page 3...
+2026-01-05 03:36:26,642 - INFO -   Found 10 rows on page 3
+2026-01-05 03:36:28,806 - INFO -   Clicked Next button for page 4
+2026-01-05 03:36:31,811 - INFO - Processing page 4...
+2026-01-05 03:36:33,873 - INFO -   Found 10 rows on page 4
+2026-01-05 03:36:36,802 - INFO -   Clicked Next button for page 5
+2026-01-05 03:36:39,809 - INFO - Processing page 5...
+2026-01-05 03:36:41,873 - INFO -   Found 10 rows on page 5
+2026-01-05 03:36:44,609 - INFO -   Clicked Next button for page 6
+2026-01-05 03:36:47,612 - INFO - Processing page 6...
+2026-01-05 03:36:49,676 - INFO -   Found 10 rows on page 6
+2026-01-05 03:36:52,001 - INFO -   Clicked Next button for page 7
+2026-01-05 03:36:55,007 - INFO - Processing page 7...
+2026-01-05 03:36:57,071 - INFO -   Found 10 rows on page 7
+2026-01-05 03:36:59,348 - INFO -   Clicked Next button for page 8
+2026-01-05 03:37:02,355 - INFO - Processing page 8...
+2026-01-05 03:37:04,403 - INFO -   Found 10 rows on page 8
+2026-01-05 03:37:06,555 - INFO -   Clicked Next button for page 9
+2026-01-05 03:37:09,559 - INFO - Processing page 9...
+2026-01-05 03:37:11,623 - INFO -   Found 10 rows on page 9
+2026-01-05 03:37:13,927 - INFO -   Clicked Next button for page 10
+2026-01-05 03:37:16,928 - INFO - Processing page 10...
+2026-01-05 03:37:18,998 - INFO -   Found 10 rows on page 10
+2026-01-05 03:37:21,893 - INFO -   Clicked Next button for page 11
+2026-01-05 03:37:24,902 - INFO - Processing page 11...
+2026-01-05 03:37:26,967 - INFO -   Found 10 rows on page 11
+2026-01-05 03:37:29,246 - INFO -   Clicked Next button for page 12
+2026-01-05 03:37:32,252 - INFO - Processing page 12...
+2026-01-05 03:37:34,320 - INFO -   Found 10 rows on page 12
+2026-01-05 03:37:37,307 - INFO -   Clicked Next button for page 13
+2026-01-05 03:37:40,310 - INFO - Processing page 13...
+2026-01-05 03:37:42,373 - INFO -   Found 10 rows on page 13
+2026-01-05 03:37:44,793 - INFO -   Clicked Next button for page 14
+2026-01-05 03:37:47,799 - INFO - Processing page 14...
+2026-01-05 03:37:49,865 - INFO -   Found 10 rows on page 14
+2026-01-05 03:37:52,519 - INFO -   Clicked Next button for page 15
+2026-01-05 03:37:55,523 - INFO - Processing page 15...
+2026-01-05 03:37:57,591 - INFO -   Found 10 rows on page 15
+2026-01-05 03:37:59,940 - INFO -   Clicked Next button for page 16
+2026-01-05 03:38:02,947 - INFO - Processing page 16...
+2026-01-05 03:38:05,013 - INFO -   Found 10 rows on page 16
+2026-01-05 03:38:07,530 - INFO -   Clicked Next button for page 17
+2026-01-05 03:38:10,534 - INFO - Processing page 17...
+2026-01-05 03:38:12,596 - INFO -   Found 10 rows on page 17
+2026-01-05 03:38:15,115 - INFO -   Clicked Next button for page 18
+2026-01-05 03:38:18,119 - INFO - Processing page 18...
+2026-01-05 03:38:20,190 - INFO -   Found 10 rows on page 18
+2026-01-05 03:38:22,582 - INFO -   Clicked Next button for page 19
+2026-01-05 03:38:25,584 - INFO - Processing page 19...
+2026-01-05 03:38:27,649 - INFO -   Found 10 rows on page 19
+2026-01-05 03:38:29,982 - INFO -   Clicked Next button for page 20
+2026-01-05 03:38:32,999 - INFO - Processing page 20...
+2026-01-05 03:38:35,065 - INFO -   Found 10 rows on page 20
+2026-01-05 03:38:39,999 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=53835): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/fda7d777a771e1d1c1b10f1f01d0ab73
+2026-01-05 03:38:44,352 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=53835): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/fda7d777a771e1d1c1b10f1f01d0ab73
+2026-01-05 03:38:48,455 - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=53835): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/fda7d777a771e1d1c1b10f1f01d0ab73
+2026-01-05 03:45:58,141 - INFO - ============================================================
+2026-01-05 03:45:58,141 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 03:45:58,142 - INFO - ============================================================
+2026-01-05 03:46:00,089 - INFO - Loading property search page: https://inigo.williamson-tn.org/property_search/
+2026-01-05 03:46:06,066 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 03:46:06,489 - INFO - Filled date fields successfully
+2026-01-05 03:46:09,709 - INFO - Search submitted
+2026-01-05 03:46:14,716 - INFO - Waiting for results to load...
+2026-01-05 03:46:19,719 - INFO - Processing page 1
+2026-01-05 03:46:19,805 - INFO - Found 11 rows on page 1
+2026-01-05 03:46:20,643 - INFO - Collected 10 sales so far
+2026-01-05 03:46:21,757 - INFO - Clicked Next to page 2
+2026-01-05 03:46:24,771 - INFO - Processing page 2
+2026-01-05 03:46:24,823 - INFO - Found 11 rows on page 2
+2026-01-05 03:46:25,473 - INFO - Collected 20 sales so far
+2026-01-05 03:46:26,553 - INFO - Clicked Next to page 3
+2026-01-05 03:46:29,594 - INFO - Processing page 3
+2026-01-05 03:46:29,612 - INFO - Found 11 rows on page 3
+2026-01-05 03:46:30,252 - INFO - Collected 30 sales so far
+2026-01-05 03:46:31,326 - INFO - Clicked Next to page 4
+2026-01-05 03:46:34,337 - INFO - Processing page 4
+2026-01-05 03:46:34,405 - INFO - Found 11 rows on page 4
+2026-01-05 03:46:35,237 - INFO - Collected 40 sales so far
+2026-01-05 03:46:36,281 - INFO - Clicked Next to page 5
+2026-01-05 03:46:39,283 - INFO - Processing page 5
+2026-01-05 03:46:39,352 - INFO - Found 11 rows on page 5
+2026-01-05 03:46:40,090 - INFO - Collected 50 sales so far
+2026-01-05 03:46:41,171 - INFO - Clicked Next to page 6
+2026-01-05 03:46:44,184 - INFO - Processing page 6
+2026-01-05 03:46:44,242 - INFO - Found 11 rows on page 6
+2026-01-05 03:46:45,075 - INFO - Collected 60 sales so far
+2026-01-05 03:46:46,150 - INFO - Clicked Next to page 7
+2026-01-05 03:46:49,153 - INFO - Processing page 7
+2026-01-05 03:46:49,216 - INFO - Found 11 rows on page 7
+2026-01-05 03:46:49,893 - INFO - Collected 70 sales so far
+2026-01-05 03:46:50,971 - INFO - Clicked Next to page 8
+2026-01-05 03:46:53,982 - INFO - Processing page 8
+2026-01-05 03:46:54,042 - INFO - Found 11 rows on page 8
+2026-01-05 03:46:54,931 - INFO - Collected 80 sales so far
+2026-01-05 03:46:56,007 - INFO - Clicked Next to page 9
+2026-01-05 03:46:59,014 - INFO - Processing page 9
+2026-01-05 03:46:59,067 - INFO - Found 11 rows on page 9
+2026-01-05 03:46:59,826 - INFO - Collected 90 sales so far
+2026-01-05 03:47:00,903 - INFO - Clicked Next to page 10
+2026-01-05 03:47:03,915 - INFO - Processing page 10
+2026-01-05 03:47:03,995 - INFO - Found 11 rows on page 10
+2026-01-05 03:47:04,646 - INFO - Collected 100 sales so far
+2026-01-05 03:47:05,692 - INFO - Clicked Next to page 11
+2026-01-05 03:47:08,693 - INFO - Processing page 11
+2026-01-05 03:47:08,755 - INFO - Found 11 rows on page 11
+2026-01-05 03:47:09,685 - INFO - Collected 110 sales so far
+2026-01-05 03:47:10,762 - INFO - Clicked Next to page 12
+2026-01-05 03:47:13,766 - INFO - Processing page 12
+2026-01-05 03:47:13,825 - INFO - Found 11 rows on page 12
+2026-01-05 03:47:14,641 - INFO - Collected 120 sales so far
+2026-01-05 03:47:15,719 - INFO - Clicked Next to page 13
+2026-01-05 03:47:18,730 - INFO - Processing page 13
+2026-01-05 03:47:18,791 - INFO - Found 11 rows on page 13
+2026-01-05 03:47:19,589 - INFO - Collected 130 sales so far
+2026-01-05 03:47:20,700 - INFO - Clicked Next to page 14
+2026-01-05 03:47:23,711 - INFO - Processing page 14
+2026-01-05 03:47:23,769 - INFO - Found 11 rows on page 14
+2026-01-05 03:47:24,599 - INFO - Collected 140 sales so far
+2026-01-05 03:47:25,673 - INFO - Clicked Next to page 15
+2026-01-05 03:47:28,681 - INFO - Processing page 15
+2026-01-05 03:47:28,746 - INFO - Found 11 rows on page 15
+2026-01-05 03:47:29,419 - INFO - Collected 150 sales so far
+2026-01-05 03:47:30,496 - INFO - Clicked Next to page 16
+2026-01-05 03:47:33,512 - INFO - Processing page 16
+2026-01-05 03:47:33,568 - INFO - Found 11 rows on page 16
+2026-01-05 03:47:34,410 - INFO - Collected 160 sales so far
+2026-01-05 03:47:35,480 - INFO - Clicked Next to page 17
+2026-01-05 03:47:38,491 - INFO - Processing page 17
+2026-01-05 03:47:38,563 - INFO - Found 11 rows on page 17
+2026-01-05 03:47:39,272 - INFO - Collected 170 sales so far
+2026-01-05 03:47:40,397 - INFO - Clicked Next to page 18
+2026-01-05 03:47:43,406 - INFO - Processing page 18
+2026-01-05 03:47:43,520 - INFO - Found 11 rows on page 18
+2026-01-05 03:47:44,280 - INFO - Collected 180 sales so far
+2026-01-05 03:47:45,359 - INFO - Clicked Next to page 19
+2026-01-05 03:47:48,363 - INFO - Processing page 19
+2026-01-05 03:47:48,431 - INFO - Found 11 rows on page 19
+2026-01-05 03:47:49,094 - INFO - Collected 190 sales so far
+2026-01-05 03:47:50,171 - INFO - Clicked Next to page 20
+2026-01-05 03:47:53,179 - INFO - Processing page 20
+2026-01-05 03:47:53,245 - INFO - Found 11 rows on page 20
+2026-01-05 03:47:54,009 - INFO - Collected 200 sales so far
+2026-01-05 03:47:55,093 - INFO - Clicked Next to page 21
+2026-01-05 03:47:58,096 - INFO - Processing page 21
+2026-01-05 03:47:58,163 - INFO - Found 11 rows on page 21
+2026-01-05 03:47:59,074 - INFO - Collected 210 sales so far
+2026-01-05 03:48:00,124 - INFO - Clicked Next to page 22
+2026-01-05 03:48:03,142 - INFO - Processing page 22
+2026-01-05 03:48:03,203 - INFO - Found 11 rows on page 22
+2026-01-05 03:48:04,033 - INFO - Collected 220 sales so far
+2026-01-05 03:48:05,109 - INFO - Clicked Next to page 23
+2026-01-05 03:48:08,123 - INFO - Processing page 23
+2026-01-05 03:48:08,181 - INFO - Found 11 rows on page 23
+2026-01-05 03:48:09,119 - INFO - Collected 230 sales so far
+2026-01-05 03:48:10,196 - INFO - Clicked Next to page 24
+2026-01-05 03:48:13,207 - INFO - Processing page 24
+2026-01-05 03:48:13,267 - INFO - Found 11 rows on page 24
+2026-01-05 03:48:14,271 - INFO - Collected 240 sales so far
+2026-01-05 03:48:15,357 - INFO - Clicked Next to page 25
+2026-01-05 03:48:18,370 - INFO - Processing page 25
+2026-01-05 03:48:18,437 - INFO - Found 11 rows on page 25
+2026-01-05 03:48:19,451 - INFO - Collected 250 sales so far
+2026-01-05 03:48:20,525 - INFO - Clicked Next to page 26
+2026-01-05 03:48:23,539 - INFO - Processing page 26
+2026-01-05 03:48:23,606 - INFO - Found 11 rows on page 26
+2026-01-05 03:48:24,301 - INFO - Collected 260 sales so far
+2026-01-05 03:48:25,374 - INFO - Clicked Next to page 27
+2026-01-05 03:48:28,388 - INFO - Processing page 27
+2026-01-05 03:48:28,439 - INFO - Found 11 rows on page 27
+2026-01-05 03:48:29,233 - INFO - Collected 270 sales so far
+2026-01-05 03:48:30,306 - INFO - Clicked Next to page 28
+2026-01-05 03:48:33,321 - INFO - Processing page 28
+2026-01-05 03:48:33,380 - INFO - Found 11 rows on page 28
+2026-01-05 03:48:34,220 - INFO - Collected 280 sales so far
+2026-01-05 03:48:35,294 - INFO - Clicked Next to page 29
+2026-01-05 03:48:38,302 - INFO - Processing page 29
+2026-01-05 03:48:38,356 - INFO - Found 11 rows on page 29
+2026-01-05 03:48:39,208 - INFO - Collected 290 sales so far
+2026-01-05 03:48:40,285 - INFO - Clicked Next to page 30
+2026-01-05 03:48:43,289 - INFO - Processing page 30
+2026-01-05 03:48:43,365 - INFO - Found 11 rows on page 30
+2026-01-05 03:48:44,155 - INFO - Collected 300 sales so far
+2026-01-05 03:48:45,233 - INFO - Clicked Next to page 31
+2026-01-05 03:48:48,243 - INFO - Processing page 31
+2026-01-05 03:48:48,305 - INFO - Found 11 rows on page 31
+2026-01-05 03:48:49,290 - INFO - Collected 310 sales so far
+2026-01-05 03:48:50,368 - INFO - Clicked Next to page 32
+2026-01-05 03:48:53,375 - INFO - Processing page 32
+2026-01-05 03:48:53,486 - INFO - Found 11 rows on page 32
+2026-01-05 03:48:54,259 - INFO - Collected 320 sales so far
+2026-01-05 03:48:55,338 - INFO - Clicked Next to page 33
+2026-01-05 03:48:58,354 - INFO - Processing page 33
+2026-01-05 03:48:58,420 - INFO - Found 11 rows on page 33
+2026-01-05 03:48:59,265 - INFO - Collected 330 sales so far
+2026-01-05 03:49:00,333 - INFO - Clicked Next to page 34
+2026-01-05 03:49:03,335 - INFO - Processing page 34
+2026-01-05 03:49:03,381 - INFO - Found 11 rows on page 34
+2026-01-05 03:49:04,323 - INFO - Collected 340 sales so far
+2026-01-05 03:49:05,395 - INFO - Clicked Next to page 35
+2026-01-05 03:49:08,399 - INFO - Processing page 35
+2026-01-05 03:49:08,445 - INFO - Found 11 rows on page 35
+2026-01-05 03:49:09,238 - INFO - Collected 350 sales so far
+2026-01-05 03:49:10,300 - INFO - Clicked Next to page 36
+2026-01-05 03:49:13,303 - INFO - Processing page 36
+2026-01-05 03:49:13,347 - INFO - Found 7 rows on page 36
+2026-01-05 03:49:14,093 - INFO - Collected 356 sales so far
+2026-01-05 03:49:15,144 - INFO - Clicked Next to page 37
+2026-01-05 03:49:18,146 - INFO - Processing page 37
+2026-01-05 03:49:18,182 - INFO - Found 7 rows on page 37
+2026-01-05 03:49:18,850 - INFO - Collected 362 sales so far
+2026-01-05 03:49:19,906 - INFO - Clicked Next to page 38
+2026-01-05 03:49:22,909 - INFO - Processing page 38
+2026-01-05 03:49:22,947 - INFO - Found 7 rows on page 38
+2026-01-05 03:49:23,505 - INFO - Collected 368 sales so far
+2026-01-05 03:49:24,564 - INFO - Clicked Next to page 39
+2026-01-05 03:49:27,566 - INFO - Processing page 39
+2026-01-05 03:49:27,609 - INFO - Found 7 rows on page 39
+2026-01-05 03:49:28,210 - INFO - Collected 374 sales so far
+2026-01-05 03:49:29,265 - INFO - Clicked Next to page 40
+2026-01-05 03:49:32,268 - INFO - Processing page 40
+2026-01-05 03:49:32,309 - INFO - Found 7 rows on page 40
+2026-01-05 03:49:32,971 - INFO - Collected 380 sales so far
+2026-01-05 03:49:34,030 - INFO - Clicked Next to page 41
+2026-01-05 03:49:37,032 - INFO - Processing page 41
+2026-01-05 03:49:37,075 - INFO - Found 7 rows on page 41
+2026-01-05 03:49:37,827 - INFO - Collected 386 sales so far
+2026-01-05 03:49:38,881 - INFO - Clicked Next to page 42
+2026-01-05 03:49:41,888 - INFO - Processing page 42
+2026-01-05 03:49:41,926 - INFO - Found 7 rows on page 42
+2026-01-05 03:49:42,789 - INFO - Collected 392 sales so far
+2026-01-05 03:49:43,854 - INFO - Clicked Next to page 43
+2026-01-05 03:49:46,856 - INFO - Processing page 43
+2026-01-05 03:49:46,892 - INFO - Found 7 rows on page 43
+2026-01-05 03:49:47,776 - INFO - Collected 398 sales so far
+2026-01-05 03:49:48,829 - INFO - Clicked Next to page 44
+2026-01-05 03:49:51,832 - INFO - Processing page 44
+2026-01-05 03:49:51,875 - INFO - Found 7 rows on page 44
+2026-01-05 03:49:52,503 - INFO - Collected 404 sales so far
+2026-01-05 03:49:53,558 - INFO - Clicked Next to page 45
+2026-01-05 03:49:56,560 - INFO - Processing page 45
+2026-01-05 03:49:56,588 - INFO - Found 7 rows on page 45
+2026-01-05 03:49:56,999 - INFO - Collected 410 sales so far
+2026-01-05 03:49:58,054 - INFO - Clicked Next to page 46
+2026-01-05 03:50:01,055 - INFO - Processing page 46
+2026-01-05 03:50:01,069 - INFO - Found 7 rows on page 46
+2026-01-05 03:50:01,459 - INFO - Collected 416 sales so far
+2026-01-05 03:50:02,501 - INFO - Clicked Next to page 47
+2026-01-05 03:50:05,502 - INFO - Processing page 47
+2026-01-05 03:50:05,546 - INFO - Found 7 rows on page 47
+2026-01-05 03:50:06,082 - INFO - Collected 422 sales so far
+2026-01-05 03:50:07,137 - INFO - Clicked Next to page 48
+2026-01-05 03:50:10,140 - INFO - Processing page 48
+2026-01-05 03:50:10,189 - INFO - Found 7 rows on page 48
+2026-01-05 03:50:10,640 - INFO - Collected 428 sales so far
+2026-01-05 03:50:11,692 - INFO - Clicked Next to page 49
+2026-01-05 03:50:14,694 - INFO - Processing page 49
+2026-01-05 03:50:14,740 - INFO - Found 7 rows on page 49
+2026-01-05 03:50:15,402 - INFO - Collected 434 sales so far
+2026-01-05 03:50:16,453 - INFO - Clicked Next to page 50
+2026-01-05 03:50:19,455 - INFO - Processing page 50
+2026-01-05 03:50:19,498 - INFO - Found 7 rows on page 50
+2026-01-05 03:50:20,324 - INFO - Collected 440 sales so far
+2026-01-05 03:50:21,376 - INFO - Clicked Next to page 51
+2026-01-05 03:50:24,379 - INFO - Processing page 51
+2026-01-05 03:50:24,417 - INFO - Found 7 rows on page 51
+2026-01-05 03:50:24,951 - INFO - Collected 446 sales so far
+2026-01-05 03:50:26,006 - INFO - Clicked Next to page 52
+2026-01-05 03:50:29,008 - INFO - Processing page 52
+2026-01-05 03:50:29,053 - INFO - Found 7 rows on page 52
+2026-01-05 03:50:29,807 - INFO - Collected 452 sales so far
+2026-01-05 03:50:30,864 - INFO - Clicked Next to page 53
+2026-01-05 03:50:33,866 - INFO - Processing page 53
+2026-01-05 03:50:33,907 - INFO - Found 7 rows on page 53
+2026-01-05 03:50:34,615 - INFO - Collected 458 sales so far
+2026-01-05 03:50:35,670 - INFO - Clicked Next to page 54
+2026-01-05 03:50:38,671 - INFO - Processing page 54
+2026-01-05 03:50:38,713 - INFO - Found 7 rows on page 54
+2026-01-05 03:50:39,320 - INFO - Collected 464 sales so far
+2026-01-05 03:50:40,382 - INFO - Clicked Next to page 55
+2026-01-05 03:50:43,384 - INFO - Processing page 55
+2026-01-05 03:50:43,423 - INFO - Found 7 rows on page 55
+2026-01-05 03:50:44,034 - INFO - Collected 470 sales so far
+2026-01-05 03:50:45,088 - INFO - Clicked Next to page 56
+2026-01-05 03:50:48,090 - INFO - Processing page 56
+2026-01-05 03:50:48,132 - INFO - Found 7 rows on page 56
+2026-01-05 03:50:48,713 - INFO - Collected 476 sales so far
+2026-01-05 03:50:49,773 - INFO - Clicked Next to page 57
+2026-01-05 03:50:52,780 - INFO - Processing page 57
+2026-01-05 03:50:52,831 - INFO - Found 7 rows on page 57
+2026-01-05 03:50:53,306 - INFO - Collected 482 sales so far
+2026-01-05 03:50:54,365 - INFO - Clicked Next to page 58
+2026-01-05 03:50:57,367 - INFO - Processing page 58
+2026-01-05 03:50:57,406 - INFO - Found 7 rows on page 58
+2026-01-05 03:50:57,961 - INFO - Collected 488 sales so far
+2026-01-05 03:50:59,019 - INFO - Clicked Next to page 59
+2026-01-05 03:51:02,021 - INFO - Processing page 59
+2026-01-05 03:51:02,070 - INFO - Found 7 rows on page 59
+2026-01-05 03:51:02,820 - INFO - Collected 494 sales so far
+2026-01-05 03:51:03,873 - INFO - Clicked Next to page 60
+2026-01-05 03:51:06,878 - INFO - Processing page 60
+2026-01-05 03:51:06,913 - INFO - Found 7 rows on page 60
+2026-01-05 03:51:07,728 - INFO - Collected 500 sales so far
+2026-01-05 03:51:08,784 - INFO - Clicked Next to page 61
+2026-01-05 03:51:11,786 - INFO - Processing page 61
+2026-01-05 03:51:11,832 - INFO - Found 7 rows on page 61
+2026-01-05 03:51:12,830 - INFO - Collected 506 sales so far
+2026-01-05 03:51:13,886 - INFO - Clicked Next to page 62
+2026-01-05 03:51:16,894 - INFO - Processing page 62
+2026-01-05 03:51:16,934 - INFO - Found 7 rows on page 62
+2026-01-05 03:51:17,758 - INFO - Collected 512 sales so far
+2026-01-05 03:51:18,814 - INFO - Clicked Next to page 63
+2026-01-05 03:51:21,815 - INFO - Processing page 63
+2026-01-05 03:51:21,852 - INFO - Found 7 rows on page 63
+2026-01-05 03:51:22,796 - INFO - Collected 518 sales so far
+2026-01-05 03:51:23,864 - INFO - Clicked Next to page 64
+2026-01-05 03:51:26,865 - INFO - Processing page 64
+2026-01-05 03:51:26,899 - INFO - Found 7 rows on page 64
+2026-01-05 03:51:27,818 - INFO - Collected 524 sales so far
+2026-01-05 03:51:28,876 - INFO - Clicked Next to page 65
+2026-01-05 03:51:31,878 - INFO - Processing page 65
+2026-01-05 03:51:31,913 - INFO - Found 7 rows on page 65
+2026-01-05 03:51:32,760 - INFO - Collected 530 sales so far
+2026-01-05 03:51:33,816 - INFO - Clicked Next to page 66
+2026-01-05 03:51:36,818 - INFO - Processing page 66
+2026-01-05 03:51:36,863 - INFO - Found 7 rows on page 66
+2026-01-05 03:51:37,446 - INFO - Collected 536 sales so far
+2026-01-05 03:51:38,501 - INFO - Clicked Next to page 67
+2026-01-05 03:51:41,507 - INFO - Processing page 67
+2026-01-05 03:51:41,545 - INFO - Found 7 rows on page 67
+2026-01-05 03:51:42,507 - INFO - Collected 542 sales so far
+2026-01-05 03:51:43,574 - INFO - Clicked Next to page 68
+2026-01-05 03:51:46,576 - INFO - Processing page 68
+2026-01-05 03:51:46,612 - INFO - Found 7 rows on page 68
+2026-01-05 03:51:47,378 - INFO - Collected 548 sales so far
+2026-01-05 03:51:48,434 - INFO - Clicked Next to page 69
+2026-01-05 03:51:51,439 - INFO - Processing page 69
+2026-01-05 03:51:51,476 - INFO - Found 7 rows on page 69
+2026-01-05 03:51:52,281 - INFO - Collected 554 sales so far
+2026-01-05 03:51:53,342 - INFO - Clicked Next to page 70
+2026-01-05 03:51:56,344 - INFO - Processing page 70
+2026-01-05 03:51:56,389 - INFO - Found 7 rows on page 70
+2026-01-05 03:51:57,095 - INFO - Collected 560 sales so far
+2026-01-05 03:51:58,150 - INFO - Clicked Next to page 71
+2026-01-05 03:52:01,155 - INFO - Processing page 71
+2026-01-05 03:52:01,197 - INFO - Found 7 rows on page 71
+2026-01-05 03:52:01,610 - INFO - Collected 566 sales so far
+2026-01-05 03:52:02,664 - INFO - Clicked Next to page 72
+2026-01-05 03:52:05,670 - INFO - Processing page 72
+2026-01-05 03:52:05,709 - INFO - Found 7 rows on page 72
+2026-01-05 03:52:06,638 - INFO - Collected 572 sales so far
+2026-01-05 03:52:07,705 - INFO - Clicked Next to page 73
+2026-01-05 03:52:10,707 - INFO - Processing page 73
+2026-01-05 03:52:10,760 - INFO - Found 7 rows on page 73
+2026-01-05 03:52:11,274 - INFO - Collected 578 sales so far
+2026-01-05 03:52:12,327 - INFO - Clicked Next to page 74
+2026-01-05 03:52:15,328 - INFO - Processing page 74
+2026-01-05 03:52:15,371 - INFO - Found 7 rows on page 74
+2026-01-05 03:52:15,975 - INFO - Collected 584 sales so far
+2026-01-05 03:52:17,029 - INFO - Clicked Next to page 75
+2026-01-05 03:52:20,036 - INFO - Processing page 75
+2026-01-05 03:52:20,074 - INFO - Found 7 rows on page 75
+2026-01-05 03:52:20,710 - INFO - Collected 590 sales so far
+2026-01-05 03:52:21,765 - INFO - Clicked Next to page 76
+2026-01-05 03:52:24,769 - INFO - Processing page 76
+2026-01-05 03:52:24,808 - INFO - Found 7 rows on page 76
+2026-01-05 03:52:25,221 - INFO - Collected 596 sales so far
+2026-01-05 03:52:26,271 - INFO - Clicked Next to page 77
+2026-01-05 03:52:29,273 - INFO - Processing page 77
+2026-01-05 03:52:29,285 - INFO - Found 7 rows on page 77
+2026-01-05 03:52:29,639 - INFO - Collected 602 sales so far
+2026-01-05 03:52:30,705 - INFO - Clicked Next to page 78
+2026-01-05 03:52:33,709 - INFO - Processing page 78
+2026-01-05 03:52:33,734 - INFO - Found 7 rows on page 78
+2026-01-05 03:52:34,137 - INFO - Collected 608 sales so far
+2026-01-05 03:52:35,171 - INFO - Clicked Next to page 79
+2026-01-05 03:52:38,173 - INFO - Processing page 79
+2026-01-05 03:52:38,207 - INFO - Found 7 rows on page 79
+2026-01-05 03:52:38,953 - INFO - Collected 614 sales so far
+2026-01-05 03:52:40,001 - INFO - Clicked Next to page 80
+2026-01-05 03:52:43,002 - INFO - Processing page 80
+2026-01-05 03:52:43,045 - INFO - Found 7 rows on page 80
+2026-01-05 03:52:44,066 - INFO - Collected 620 sales so far
+2026-01-05 03:52:45,134 - INFO - Clicked Next to page 81
+2026-01-05 03:52:48,136 - INFO - Processing page 81
+2026-01-05 03:52:48,174 - INFO - Found 7 rows on page 81
+2026-01-05 03:52:48,541 - INFO - Collected 626 sales so far
+2026-01-05 03:52:49,605 - INFO - Clicked Next to page 82
+2026-01-05 03:52:52,607 - INFO - Processing page 82
+2026-01-05 03:52:52,630 - INFO - Found 7 rows on page 82
+2026-01-05 03:52:53,039 - INFO - Collected 632 sales so far
+2026-01-05 03:52:54,082 - INFO - Clicked Next to page 83
+2026-01-05 03:52:57,084 - INFO - Processing page 83
+2026-01-05 03:52:57,117 - INFO - Found 7 rows on page 83
+2026-01-05 03:52:57,569 - INFO - Collected 638 sales so far
+2026-01-05 03:52:58,616 - INFO - Clicked Next to page 84
+2026-01-05 03:53:01,618 - INFO - Processing page 84
+2026-01-05 03:53:01,625 - ERROR - Error processing page 84: Message: tab crashed
+  (Session info: MicrosoftEdge=143.0.3650.96)
+
+2026-01-05 03:53:01,664 - INFO - ============================================================
+2026-01-05 03:53:01,667 - INFO - SUCCESS: Found 638 sales
+2026-01-05 03:53:01,668 - INFO - Saved to: output/williamson_sales_20260105_035301.csv
+2026-01-05 03:53:01,669 - INFO - ============================================================
+2026-01-05 03:56:59,241 - INFO - ============================================================
+2026-01-05 03:56:59,242 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 03:56:59,242 - INFO - ============================================================
+2026-01-05 03:57:01,342 - INFO - Loading property search page: https://inigo.williamson-tn.org/property_search/
+2026-01-05 03:57:07,247 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 03:57:07,653 - INFO - Filled date fields successfully
+2026-01-05 03:57:10,839 - INFO - Search submitted
+2026-01-05 03:57:15,844 - INFO - Waiting for results to load...
+2026-01-05 03:57:20,848 - INFO - Processing page 1
+2026-01-05 03:57:20,916 - INFO - Found 11 rows on page 1
+2026-01-05 03:57:22,094 - INFO - Collected 10 sales so far
+2026-01-05 03:57:23,188 - INFO - Clicked Next to page 2
+2026-01-05 03:57:26,201 - INFO - Processing page 2
+2026-01-05 03:57:26,246 - INFO - Found 11 rows on page 2
+2026-01-05 03:57:27,549 - INFO - Collected 20 sales so far
+2026-01-05 03:57:28,615 - INFO - Clicked Next to page 3
+2026-01-05 03:57:31,617 - INFO - Processing page 3
+2026-01-05 03:57:31,661 - INFO - Found 11 rows on page 3
+2026-01-05 03:57:32,852 - INFO - Collected 30 sales so far
+2026-01-05 03:57:33,918 - INFO - Clicked Next to page 4
+2026-01-05 03:57:36,921 - INFO - Processing page 4
+2026-01-05 03:57:36,936 - INFO - Found 11 rows on page 4
+2026-01-05 03:57:37,980 - INFO - Collected 40 sales so far
+2026-01-05 03:57:39,042 - INFO - Clicked Next to page 5
+2026-01-05 03:57:42,047 - INFO - Processing page 5
+2026-01-05 03:57:42,097 - INFO - Found 11 rows on page 5
+2026-01-05 03:57:43,385 - INFO - Collected 50 sales so far
+2026-01-05 03:57:44,453 - INFO - Clicked Next to page 6
+2026-01-05 03:57:47,465 - INFO - Processing page 6
+2026-01-05 03:57:47,509 - INFO - Found 11 rows on page 6
+2026-01-05 03:57:48,730 - INFO - Collected 60 sales so far
+2026-01-05 03:57:49,832 - INFO - Clicked Next to page 7
+2026-01-05 03:57:52,838 - INFO - Processing page 7
+2026-01-05 03:57:52,881 - INFO - Found 11 rows on page 7
+2026-01-05 03:57:54,176 - INFO - Collected 70 sales so far
+2026-01-05 03:57:55,239 - INFO - Clicked Next to page 8
+2026-01-05 03:57:58,245 - INFO - Processing page 8
+2026-01-05 03:57:58,295 - INFO - Found 11 rows on page 8
+2026-01-05 03:57:59,462 - INFO - Collected 80 sales so far
+2026-01-05 03:58:00,510 - INFO - Clicked Next to page 9
+2026-01-05 03:58:03,514 - INFO - Processing page 9
+2026-01-05 03:58:03,552 - INFO - Found 11 rows on page 9
+2026-01-05 03:58:04,698 - INFO - Collected 90 sales so far
+2026-01-05 03:58:05,796 - INFO - Clicked Next to page 10
+2026-01-05 03:58:08,800 - INFO - Processing page 10
+2026-01-05 03:58:08,846 - INFO - Found 11 rows on page 10
+2026-01-05 03:58:10,028 - INFO - Collected 100 sales so far
+2026-01-05 03:58:11,102 - INFO - Clicked Next to page 11
+2026-01-05 03:58:14,114 - INFO - Processing page 11
+2026-01-05 03:58:14,194 - INFO - Found 11 rows on page 11
+2026-01-05 03:58:15,216 - INFO - Collected 110 sales so far
+2026-01-05 03:58:16,282 - INFO - Clicked Next to page 12
+2026-01-05 03:58:19,302 - INFO - Processing page 12
+2026-01-05 03:58:19,347 - INFO - Found 11 rows on page 12
+2026-01-05 03:58:20,592 - INFO - Collected 120 sales so far
+2026-01-05 03:58:21,659 - INFO - Clicked Next to page 13
+2026-01-05 03:58:24,663 - INFO - Processing page 13
+2026-01-05 03:58:24,710 - INFO - Found 11 rows on page 13
+2026-01-05 03:58:25,742 - INFO - Collected 130 sales so far
+2026-01-05 03:58:26,811 - INFO - Clicked Next to page 14
+2026-01-05 03:58:29,817 - INFO - Processing page 14
+2026-01-05 03:58:29,861 - INFO - Found 11 rows on page 14
+2026-01-05 03:58:31,283 - INFO - Collected 140 sales so far
+2026-01-05 03:58:32,345 - INFO - Clicked Next to page 15
+2026-01-05 03:58:35,358 - INFO - Processing page 15
+2026-01-05 03:58:35,409 - INFO - Found 11 rows on page 15
+2026-01-05 03:58:36,838 - INFO - Collected 150 sales so far
+2026-01-05 03:58:37,900 - INFO - Clicked Next to page 16
+2026-01-05 03:58:40,906 - INFO - Processing page 16
+2026-01-05 03:58:40,951 - INFO - Found 11 rows on page 16
+2026-01-05 03:58:42,572 - INFO - Collected 160 sales so far
+2026-01-05 03:58:43,631 - INFO - Clicked Next to page 17
+2026-01-05 03:58:46,638 - INFO - Processing page 17
+2026-01-05 03:58:46,685 - INFO - Found 11 rows on page 17
+2026-01-05 03:58:47,703 - INFO - Collected 170 sales so far
+2026-01-05 03:58:48,764 - INFO - Clicked Next to page 18
+2026-01-05 03:58:51,772 - INFO - Processing page 18
+2026-01-05 03:58:51,824 - INFO - Found 11 rows on page 18
+2026-01-05 03:58:53,019 - INFO - Collected 180 sales so far
+2026-01-05 03:58:54,089 - INFO - Clicked Next to page 19
+2026-01-05 03:58:57,093 - INFO - Processing page 19
+2026-01-05 03:58:57,146 - INFO - Found 11 rows on page 19
+2026-01-05 03:58:58,220 - INFO - Collected 190 sales so far
+2026-01-05 03:58:59,293 - INFO - Clicked Next to page 20
+2026-01-05 03:59:02,307 - INFO - Processing page 20
+2026-01-05 03:59:02,358 - INFO - Found 11 rows on page 20
+2026-01-05 03:59:03,547 - INFO - Collected 200 sales so far
+2026-01-05 03:59:04,619 - INFO - Clicked Next to page 21
+2026-01-05 03:59:07,623 - INFO - Processing page 21
+2026-01-05 03:59:07,669 - INFO - Found 11 rows on page 21
+2026-01-05 03:59:08,723 - INFO - Collected 210 sales so far
+2026-01-05 03:59:09,791 - INFO - Clicked Next to page 22
+2026-01-05 03:59:12,804 - INFO - Processing page 22
+2026-01-05 03:59:12,853 - INFO - Found 11 rows on page 22
+2026-01-05 03:59:14,356 - INFO - Collected 220 sales so far
+2026-01-05 03:59:15,422 - INFO - Clicked Next to page 23
+2026-01-05 03:59:18,427 - INFO - Processing page 23
+2026-01-05 03:59:18,470 - INFO - Found 11 rows on page 23
+2026-01-05 03:59:19,696 - INFO - Collected 230 sales so far
+2026-01-05 03:59:20,757 - INFO - Clicked Next to page 24
+2026-01-05 03:59:23,768 - INFO - Processing page 24
+2026-01-05 03:59:23,819 - INFO - Found 11 rows on page 24
+2026-01-05 03:59:25,049 - INFO - Collected 240 sales so far
+2026-01-05 03:59:26,118 - INFO - Clicked Next to page 25
+2026-01-05 03:59:29,121 - INFO - Processing page 25
+2026-01-05 03:59:29,167 - INFO - Found 11 rows on page 25
+2026-01-05 03:59:30,702 - INFO - Collected 250 sales so far
+2026-01-05 03:59:31,772 - INFO - Clicked Next to page 26
+2026-01-05 03:59:34,785 - INFO - Processing page 26
+2026-01-05 03:59:34,825 - INFO - Found 11 rows on page 26
+2026-01-05 03:59:35,811 - INFO - Collected 260 sales so far
+2026-01-05 03:59:37,019 - INFO - Clicked Next to page 27
+2026-01-05 03:59:40,023 - INFO - Processing page 27
+2026-01-05 03:59:40,067 - INFO - Found 11 rows on page 27
+2026-01-05 03:59:41,446 - INFO - Collected 270 sales so far
+2026-01-05 03:59:42,509 - INFO - Clicked Next to page 28
+2026-01-05 03:59:45,514 - INFO - Processing page 28
+2026-01-05 03:59:45,553 - INFO - Found 11 rows on page 28
+2026-01-05 03:59:46,748 - INFO - Collected 280 sales so far
+2026-01-05 03:59:47,815 - INFO - Clicked Next to page 29
+2026-01-05 03:59:50,821 - INFO - Processing page 29
+2026-01-05 03:59:50,866 - INFO - Found 11 rows on page 29
+2026-01-05 03:59:52,335 - INFO - Collected 290 sales so far
+2026-01-05 03:59:53,407 - INFO - Clicked Next to page 30
+2026-01-05 03:59:56,416 - INFO - Processing page 30
+2026-01-05 03:59:56,459 - INFO - Found 11 rows on page 30
+2026-01-05 03:59:57,625 - INFO - Collected 300 sales so far
+2026-01-05 03:59:58,714 - INFO - Clicked Next to page 31
+2026-01-05 04:00:01,718 - INFO - Processing page 31
+2026-01-05 04:00:01,741 - INFO - Found 11 rows on page 31
+2026-01-05 04:00:03,983 - INFO - Collected 310 sales so far
+2026-01-05 04:00:05,047 - INFO - Clicked Next to page 32
+2026-01-05 04:00:08,050 - INFO - Processing page 32
+2026-01-05 04:00:08,096 - INFO - Found 11 rows on page 32
+2026-01-05 04:00:09,491 - INFO - Collected 320 sales so far
+2026-01-05 04:00:10,551 - INFO - Clicked Next to page 33
+2026-01-05 04:00:13,559 - INFO - Processing page 33
+2026-01-05 04:00:13,602 - INFO - Found 11 rows on page 33
+2026-01-05 04:00:14,882 - INFO - Collected 330 sales so far
+2026-01-05 04:00:15,949 - INFO - Clicked Next to page 34
+2026-01-05 04:00:18,963 - INFO - Processing page 34
+2026-01-05 04:00:19,016 - INFO - Found 11 rows on page 34
+2026-01-05 04:00:20,326 - INFO - Collected 340 sales so far
+2026-01-05 04:00:21,393 - INFO - Clicked Next to page 35
+2026-01-05 04:00:24,396 - INFO - Processing page 35
+2026-01-05 04:00:24,446 - INFO - Found 11 rows on page 35
+2026-01-05 04:00:25,632 - INFO - Collected 350 sales so far
+2026-01-05 04:00:26,699 - INFO - Clicked Next to page 36
+2026-01-05 04:00:29,708 - INFO - Processing page 36
+2026-01-05 04:00:29,753 - INFO - Found 7 rows on page 36
+2026-01-05 04:00:30,514 - INFO - Collected 356 sales so far
+2026-01-05 04:00:31,568 - INFO - Clicked Next to page 37
+2026-01-05 04:00:34,572 - INFO - Processing page 37
+2026-01-05 04:00:34,610 - INFO - Found 7 rows on page 37
+2026-01-05 04:00:35,302 - INFO - Collected 362 sales so far
+2026-01-05 04:00:36,358 - INFO - Clicked Next to page 38
+2026-01-05 04:00:39,361 - INFO - Processing page 38
+2026-01-05 04:00:39,401 - INFO - Found 7 rows on page 38
+2026-01-05 04:00:40,190 - INFO - Collected 368 sales so far
+2026-01-05 04:00:41,242 - INFO - Clicked Next to page 39
+2026-01-05 04:00:44,244 - INFO - Processing page 39
+2026-01-05 04:00:44,292 - INFO - Found 7 rows on page 39
+2026-01-05 04:00:45,707 - INFO - Collected 374 sales so far
+2026-01-05 04:00:46,763 - INFO - Clicked Next to page 40
+2026-01-05 04:00:49,771 - INFO - Processing page 40
+2026-01-05 04:00:49,824 - INFO - Found 7 rows on page 40
+2026-01-05 04:00:50,868 - INFO - Collected 380 sales so far
+2026-01-05 04:00:51,923 - INFO - Clicked Next to page 41
+2026-01-05 04:00:54,925 - INFO - Processing page 41
+2026-01-05 04:00:54,961 - INFO - Found 7 rows on page 41
+2026-01-05 04:00:55,826 - INFO - Collected 386 sales so far
+2026-01-05 04:00:56,885 - INFO - Clicked Next to page 42
+2026-01-05 04:00:59,888 - INFO - Processing page 42
+2026-01-05 04:00:59,931 - INFO - Found 7 rows on page 42
+2026-01-05 04:01:00,620 - INFO - Collected 392 sales so far
+2026-01-05 04:01:01,672 - INFO - Clicked Next to page 43
+2026-01-05 04:01:04,674 - INFO - Processing page 43
+2026-01-05 04:01:04,713 - INFO - Found 7 rows on page 43
+2026-01-05 04:01:05,608 - INFO - Collected 398 sales so far
+2026-01-05 04:01:06,660 - INFO - Clicked Next to page 44
+2026-01-05 04:01:09,663 - INFO - Processing page 44
+2026-01-05 04:01:09,701 - INFO - Found 7 rows on page 44
+2026-01-05 04:01:10,800 - INFO - Collected 404 sales so far
+2026-01-05 04:01:11,858 - INFO - Clicked Next to page 45
+2026-01-05 04:01:14,859 - INFO - Processing page 45
+2026-01-05 04:01:14,904 - INFO - Found 7 rows on page 45
+2026-01-05 04:01:15,665 - INFO - Collected 410 sales so far
+2026-01-05 04:01:16,720 - INFO - Clicked Next to page 46
+2026-01-05 04:01:19,721 - INFO - Processing page 46
+2026-01-05 04:01:19,761 - INFO - Found 7 rows on page 46
+2026-01-05 04:01:20,566 - INFO - Collected 416 sales so far
+2026-01-05 04:01:21,620 - INFO - Clicked Next to page 47
+2026-01-05 04:01:24,622 - INFO - Processing page 47
+2026-01-05 04:01:24,663 - INFO - Found 7 rows on page 47
+2026-01-05 04:01:25,321 - INFO - Collected 422 sales so far
+2026-01-05 04:01:26,374 - INFO - Clicked Next to page 48
+2026-01-05 04:01:29,376 - INFO - Processing page 48
+2026-01-05 04:01:29,399 - INFO - Found 7 rows on page 48
+2026-01-05 04:01:30,102 - INFO - Collected 428 sales so far
+2026-01-05 04:01:31,153 - INFO - Clicked Next to page 49
+2026-01-05 04:01:34,155 - INFO - Processing page 49
+2026-01-05 04:01:34,195 - INFO - Found 7 rows on page 49
+2026-01-05 04:01:35,032 - INFO - Collected 434 sales so far
+2026-01-05 04:01:36,101 - INFO - Clicked Next to page 50
+2026-01-05 04:01:39,103 - INFO - Processing page 50
+2026-01-05 04:01:39,148 - INFO - Found 7 rows on page 50
+2026-01-05 04:01:40,038 - INFO - Collected 440 sales so far
+2026-01-05 04:01:41,096 - INFO - Clicked Next to page 51
+2026-01-05 04:01:44,098 - INFO - Processing page 51
+2026-01-05 04:01:44,135 - INFO - Found 7 rows on page 51
+2026-01-05 04:01:45,180 - INFO - Collected 446 sales so far
+2026-01-05 04:01:46,265 - INFO - Clicked Next to page 52
+2026-01-05 04:01:49,267 - INFO - Processing page 52
+2026-01-05 04:01:49,285 - INFO - Found 7 rows on page 52
+2026-01-05 04:01:50,068 - INFO - Collected 452 sales so far
+2026-01-05 04:01:51,109 - INFO - Clicked Next to page 53
+2026-01-05 04:01:54,110 - INFO - Processing page 53
+2026-01-05 04:01:54,130 - INFO - Found 7 rows on page 53
+2026-01-05 04:01:54,877 - INFO - Collected 458 sales so far
+2026-01-05 04:01:55,935 - INFO - Clicked Next to page 54
+2026-01-05 04:01:58,937 - INFO - Processing page 54
+2026-01-05 04:01:58,983 - INFO - Found 7 rows on page 54
+2026-01-05 04:02:00,143 - INFO - Collected 464 sales so far
+2026-01-05 04:02:01,180 - INFO - Clicked Next to page 55
+2026-01-05 04:02:04,182 - INFO - Processing page 55
+2026-01-05 04:02:04,202 - ERROR - Error processing page 55: Message: tab crashed
+  (Session info: MicrosoftEdge=143.0.3650.96)
+
+2026-01-05 04:02:04,244 - INFO - ============================================================
+2026-01-05 04:02:04,245 - INFO - SUCCESS: Found 464 sales
+2026-01-05 04:02:04,245 - INFO - Saved to: output/williamson_sales_20260105_040204.csv
+2026-01-05 04:02:04,246 - INFO - ============================================================
+2026-01-05 04:02:11,560 - INFO - ============================================================
+2026-01-05 04:02:11,560 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 04:02:11,561 - INFO - ============================================================
+2026-01-05 04:02:13,532 - INFO - Loading property search page: https://inigo.williamson-tn.org/property_search/
+2026-01-05 04:02:19,497 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 04:02:19,878 - INFO - Filled date fields successfully
+2026-01-05 04:02:23,108 - INFO - Search submitted
+2026-01-05 04:02:28,111 - INFO - Waiting for results to load...
+2026-01-05 04:02:33,113 - INFO - Processing page 1
+2026-01-05 04:02:33,186 - INFO - Found 11 rows on page 1
+2026-01-05 04:02:34,246 - INFO - Collected 10 sales so far
+2026-01-05 04:02:35,332 - INFO - Clicked Next to page 2
+2026-01-05 04:02:38,343 - INFO - Processing page 2
+2026-01-05 04:02:38,384 - INFO - Found 11 rows on page 2
+2026-01-05 04:02:39,631 - INFO - Collected 20 sales so far
+2026-01-05 04:02:40,698 - INFO - Clicked Next to page 3
+2026-01-05 04:02:43,706 - INFO - Processing page 3
+2026-01-05 04:02:43,748 - INFO - Found 11 rows on page 3
+2026-01-05 04:02:44,952 - INFO - Collected 30 sales so far
+2026-01-05 04:02:46,017 - INFO - Clicked Next to page 4
+2026-01-05 04:02:49,024 - INFO - Processing page 4
+2026-01-05 04:02:49,038 - INFO - Found 11 rows on page 4
+2026-01-05 04:02:50,091 - INFO - Collected 40 sales so far
+2026-01-05 04:02:51,158 - INFO - Clicked Next to page 5
+2026-01-05 04:02:54,161 - INFO - Processing page 5
+2026-01-05 04:02:54,212 - INFO - Found 11 rows on page 5
+2026-01-05 04:02:55,258 - INFO - Collected 50 sales so far
+2026-01-05 04:02:56,344 - INFO - Clicked Next to page 6
+2026-01-05 04:02:59,362 - INFO - Processing page 6
+2026-01-05 04:02:59,423 - INFO - Found 11 rows on page 6
+2026-01-05 04:03:00,434 - INFO - Collected 60 sales so far
+2026-01-05 04:03:01,512 - INFO - Clicked Next to page 7
+2026-01-05 04:03:04,524 - INFO - Processing page 7
+2026-01-05 04:03:04,573 - INFO - Found 11 rows on page 7
+2026-01-05 04:03:05,795 - INFO - Collected 70 sales so far
+2026-01-05 04:03:06,861 - INFO - Clicked Next to page 8
+2026-01-05 04:03:09,873 - INFO - Processing page 8
+2026-01-05 04:03:09,923 - INFO - Found 11 rows on page 8
+2026-01-05 04:03:11,054 - INFO - Collected 80 sales so far
+2026-01-05 04:03:12,123 - INFO - Clicked Next to page 9
+2026-01-05 04:03:15,126 - INFO - Processing page 9
+2026-01-05 04:03:15,170 - INFO - Found 11 rows on page 9
+2026-01-05 04:03:16,398 - INFO - Collected 90 sales so far
+2026-01-05 04:03:17,463 - INFO - Clicked Next to page 10
+2026-01-05 04:03:20,470 - INFO - Processing page 10
+2026-01-05 04:03:20,510 - INFO - Found 11 rows on page 10
+2026-01-05 04:03:21,652 - INFO - Collected 100 sales so far
+2026-01-05 04:03:22,723 - INFO - Clicked Next to page 11
+2026-01-05 04:03:25,800 - INFO - ============================================================
+2026-01-05 04:03:25,807 - INFO - SUCCESS: Found 100 sales
+2026-01-05 04:03:25,825 - INFO - Saved to: output/williamson_sales_20260105_040325.csv
+2026-01-05 04:03:25,841 - INFO - ============================================================
+2026-01-05 04:03:29,914 - INFO - Browser closed
