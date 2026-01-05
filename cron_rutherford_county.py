@@ -7,7 +7,7 @@ Cron-ready: Runs daily, handles errors, logs output
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.edge.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import pandas as pd
@@ -38,21 +38,24 @@ def scrape_rutherford():
     options.add_argument("--headless")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
+    options.add_argument("--disable-blink-features=AutomationControlled")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
 
     driver = None
 
     try:
-        driver = webdriver.Chrome(options=options)
-        driver.set_page_load_timeout(30)
+        driver = webdriver.Edge(options=options)
+        driver.set_page_load_timeout(90)  # Increased timeout
 
         url = "https://secured.rutherfordcountytn.gov/propertydata/RealPropertySearch2.aspx"
         logging.info(f"Loading: {url}")
         driver.get(url)
         time.sleep(3)
 
-        # Calculate date range (last 180 days to get more data)
+        # Calculate date range (last 30 days for recent sales)
         end_date = datetime.now()
-        start_date = end_date - timedelta(days=180)
+        start_date = end_date - timedelta(days=30)
 
         start_date_str = start_date.strftime("%m/%d/%Y")
         end_date_str = end_date.strftime("%m/%d/%Y")
@@ -125,6 +128,20 @@ def scrape_rutherford():
             # Wait for results
             time.sleep(3)
 
+            # Try to load all results by scrolling
+            try:
+                last_height = driver.execute_script("return document.body.scrollHeight")
+                for _ in range(10):
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                    time.sleep(1)
+                    new_height = driver.execute_script("return document.body.scrollHeight")
+                    if new_height == last_height:
+                        break
+                    last_height = new_height
+                logging.info("Scrolled to load all results")
+            except Exception as e:
+                logging.info(f"Scroll not needed: {e}")
+
             # Debug: Print page text after search
             page_text = driver.find_element(By.TAG_NAME, "body").text
             logging.info(f"Results page preview: {page_text[:1000]}")
@@ -154,77 +171,86 @@ def scrape_rutherford():
 
             logging.info(f"Found {len(rows)} total rows to process")
 
-            data = []
-
-            for idx, row in enumerate(rows):
+            all_data = []
+            page_num = 1
+            max_pages = 50
+            
+            # Process all pages
+            while page_num <= max_pages:
+                logging.info(f"Processing page {page_num}...")
+                
+                # Get rows from current page
+                page_rows = []
                 try:
-                    # Skip header row
-                    row_text = row.text.strip()
-                    if not row_text or ('owner' in row_text.lower() and 'address' in row_text.lower()):
-                        continue
+                    tables = driver.find_elements(By.TAG_NAME, "table")
+                    for table in tables:
+                        rows_in_table = table.find_elements(By.TAG_NAME, "tr")
+                        if len(rows_in_table) > 1:
+                            page_rows = rows_in_table
+                            break
+                except:
+                    pass
+                
+                logging.info(f"  Found {len(page_rows)} rows on page {page_num}")
+                
+                if len(page_rows) == 0:
+                    break
 
-                    cells = row.find_elements(By.TAG_NAME, "td")
+                for idx, row in enumerate(page_rows):
+                    try:
+                        row_text = row.text.strip()
+                        if not row_text or ('owner' in row_text.lower() and 'address' in row_text.lower()):
+                            continue
 
-                    # Debug first few rows
-                    if idx < 3:
-                        logging.info(f"Row {idx}: {len(cells)} cells - {[c.text[:30] for c in cells]}")
+                        cells = row.find_elements(By.TAG_NAME, "td")
+                        if len(cells) < 2:
+                            continue
 
-                    if len(cells) < 2:
-                        continue
+                        row_data = [cell.text.strip() for cell in cells]
 
-                    # Try to extract data
-                    # The exact column order may vary - this is a best guess
-                    # Common fields: Owner, Address, Sale Date, Sale Price
+                        owner = "N/A"
+                        address = "N/A"
+                        sale_date = "N/A"
+                        price = "N/A"
 
-                    # Attempt to map columns intelligently
-                    row_data = [cell.text.strip() for cell in cells]
-
-                    # Try to identify which column is which
-                    owner = "N/A"
-                    address = "N/A"
-                    sale_date = "N/A"
-                    price = "N/A"
-
-                    for i, cell_text in enumerate(row_data):
-                        # Look for price (contains $ or looks like a number)
-                        if '$' in cell_text or (cell_text.replace(',', '').replace('.', '').isdigit() and len(cell_text) > 3):
-                            price = cell_text
-
-                        # Look for date (contains / or -)
-                        elif '/' in cell_text or '-' in cell_text:
-                            if len(cell_text) < 15:  # Dates are typically short
+                        for i, cell_text in enumerate(row_data):
+                            if '$' in cell_text or (cell_text.replace(',', '').replace('.', '').isdigit() and len(cell_text) > 4):
+                                price = cell_text
+                            elif '/' in cell_text and len(cell_text) < 12:
                                 sale_date = cell_text
-
-                        # Address typically has numbers
-                        elif any(char.isdigit() for char in cell_text) and len(cell_text) > 5:
-                            if address == "N/A":
+                            elif i == 0 and not any(c in cell_text for c in ['$', '/']):
+                                owner = cell_text
+                            elif i == 1 and not any(c in cell_text for c in ['$', '/']):
                                 address = cell_text
 
-                        # Owner name is typically text without numbers
-                        elif cell_text and not any(char.isdigit() for char in cell_text) and len(cell_text) > 3:
-                            if owner == "N/A":
-                                owner = cell_text
+                        if address != "N/A" or price != "N/A":
+                            all_data.append({
+                                'Date': sale_date,
+                                'Address': address,
+                                'Owner Name': owner,
+                                'Amount': price
+                            })
 
-                    # If we still don't have data, use positional extraction
-                    if address == "N/A" and len(row_data) > 0:
-                        address = row_data[0]
-                    if owner == "N/A" and len(row_data) > 1:
-                        owner = row_data[1]
-                    if sale_date == "N/A" and len(row_data) > 2:
-                        sale_date = row_data[2]
-                    if price == "N/A" and len(row_data) > 3:
-                        price = row_data[3]
-
-                    data.append({
-                        'Date': sale_date,
-                        'Address': address,
-                        'Owner Name': owner,
-                        'Amount': price
-                    })
-
-                except Exception as e:
-                    logging.debug(f"Error parsing row: {e}")
-                    continue
+                    except Exception as e:
+                        continue
+                
+                # Look for Next/pagination
+                try:
+                    next_buttons = driver.find_elements(By.XPATH, "//a[contains(text(), 'Next')] | //input[@value='Next'] | //a[contains(@class, 'next')]")
+                    if next_buttons and next_buttons[0].is_enabled():
+                        driver.execute_script("arguments[0].click();", next_buttons[0])
+                        logging.info(f"  Clicked Next for page {page_num + 1}")
+                        page_num += 1
+                        time.sleep(3)
+                    else:
+                        logging.info("  No more pages")
+                        break
+                except:
+                    logging.info("  No Next button found")
+                    break
+            
+            data = all_data
+            logging.info(f"Total records collected: {len(data)}")
 
             if not data:
                 logging.warning("No sales data extracted")

@@ -1,0 +1,52 @@
+2026-01-05 02:32:10,983 - INFO - ============================================================
+2026-01-05 02:32:10,984 - INFO - Wilson County Recent Sales Scraper
+2026-01-05 02:32:10,984 - INFO - ============================================================
+2026-01-05 02:32:17,897 - INFO - Loading: https://wilsontn.geopowered.com/propertysearch/
+2026-01-05 02:32:31,655 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:32:31,769 - INFO - Page loaded, looking for search interface...
+2026-01-05 02:32:31,941 - INFO - Page preview: MT. JULIET
+Esri, HERE, Garmin, NGA, USGS, NPS | City of Mt. Juliet - GIS Division
++
+–
+20mi
+36.161359 -86.300898 Degrees
+Disclaimer
+Please note, the scheduled maintenance for this application will take place sometime between 12:30am and 2:00am CST. This maintenance should take less than 15 minute at some point during the outlined time. If you experience performance issues during this time, please try again shortly. If you experience performance issues during any other time, please contact us at H
+2026-01-05 02:32:32,007 - INFO - Found 8 potential search buttons
+2026-01-05 02:32:32,036 - INFO -   Button: Decline
+2026-01-05 02:32:32,067 - INFO -   Button: Accept
+2026-01-05 02:32:32,115 - INFO -   Button: 
+2026-01-05 02:32:38,892 - INFO - Search submitted
+2026-01-05 02:32:48,894 - INFO - Extracting results...
+2026-01-05 02:32:52,142 - WARNING - No results found
+2026-01-05 02:39:04,255 - INFO - ============================================================
+2026-01-05 02:39:04,256 - INFO - Wilson County Recent Sales Scraper
+2026-01-05 02:39:04,256 - INFO - ============================================================
+2026-01-05 02:39:06,095 - INFO - Loading: https://wilsontn.geopowered.com/propertysearch/
+2026-01-05 02:39:18,222 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:39:18,251 - INFO - Page loaded, looking for search interface...
+2026-01-05 02:39:18,320 - INFO - Found 0 potential search buttons
+2026-01-05 02:39:18,321 - WARNING - Could not find search button - may already be showing results
+2026-01-05 02:39:18,321 - INFO - Extracting results...
+2026-01-05 02:39:21,595 - WARNING - No results found
+2026-01-05 02:55:31,690 - INFO - ============================================================
+2026-01-05 02:55:31,690 - INFO - Wilson County Recent Sales Scraper
+2026-01-05 02:55:31,690 - INFO - ============================================================
+2026-01-05 02:55:33,627 - INFO - Loading: https://wilsontn.geopowered.com/propertysearch/
+2026-01-05 02:55:45,681 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:55:45,718 - INFO - Page loaded, looking for search interface...
+2026-01-05 02:55:45,851 - INFO - Page preview: MT. JULIET
+Esri, HERE, Garmin, NGA, USGS, NPS | City of Mt. Juliet - GIS Division
++
+–
+20mi
+36.161359 -86.300898 Degrees
+Disclaimer
+Please note, the scheduled maintenance for this application will take place sometime between 12:30am and 2:00am CST. This maintenance should take less than 15 minute at some point during the outlined time. If you experience performance issues during this time, please try again shortly. If you experience performance issues during any other time, please contact us at H
+2026-01-05 02:55:45,905 - INFO - Found 8 potential search buttons
+2026-01-05 02:55:45,920 - INFO -   Button: Decline
+2026-01-05 02:55:45,935 - INFO -   Button: Accept
+2026-01-05 02:55:45,960 - INFO -   Button: 
+2026-01-05 02:55:49,285 - INFO - Search submitted
+2026-01-05 02:55:59,286 - INFO - Extracting results...
+2026-01-05 02:56:02,537 - WARNING - No results found

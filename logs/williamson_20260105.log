@@ -1,0 +1,228 @@
+2026-01-05 02:33:30,419 - INFO - ============================================================
+2026-01-05 02:33:30,420 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 02:33:30,421 - INFO - ============================================================
+2026-01-05 02:33:32,364 - INFO - Loading: https://inigo.williamson-tn.org/property_search/
+2026-01-05 02:33:36,129 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:33:36,130 - INFO - Searching ALL records (no date filter) to test data availability
+2026-01-05 02:33:37,328 - INFO - Search submitted
+2026-01-05 02:33:39,332 - INFO - Waiting for results to load...
+2026-01-05 02:33:39,534 - INFO - Results loaded after 1 seconds
+2026-01-05 02:33:41,489 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)': /session/a73340bec6ddd4a3a62131de0e90a7bf
+2026-01-05 02:33:45,612 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=52733): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/a73340bec6ddd4a3a62131de0e90a7bf
+2026-01-05 02:33:49,700 - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=52733): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/a73340bec6ddd4a3a62131de0e90a7bf
+2026-01-05 02:36:48,995 - INFO - ============================================================
+2026-01-05 02:36:48,996 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 02:36:48,997 - INFO - ============================================================
+2026-01-05 02:36:51,322 - INFO - Loading: https://inigo.williamson-tn.org/property_search/
+2026-01-05 02:36:55,173 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:36:55,174 - INFO - Searching ALL records (no date filter) to test data availability
+2026-01-05 02:36:56,287 - INFO - Search submitted
+2026-01-05 02:36:58,289 - INFO - Waiting for results to load...
+2026-01-05 02:36:58,390 - INFO - Results loaded after 1 seconds
+2026-01-05 02:37:01,392 - INFO - Extracting results...
+2026-01-05 02:37:05,080 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)': /session/798cb2d97c886b2fc38e392ded8c76c7
+2026-01-05 02:37:09,157 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=52893): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/798cb2d97c886b2fc38e392ded8c76c7
+2026-01-05 02:39:37,328 - INFO - ============================================================
+2026-01-05 02:39:37,328 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 02:39:37,329 - INFO - ============================================================
+2026-01-05 02:39:39,135 - INFO - Loading: https://inigo.williamson-tn.org/property_search/
+2026-01-05 02:39:42,861 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:39:42,862 - INFO - Searching ALL records (no date filter) to test data availability
+2026-01-05 02:39:44,016 - INFO - Search submitted
+2026-01-05 02:39:46,017 - INFO - Waiting for results to load...
+2026-01-05 02:39:46,099 - INFO - Results loaded after 1 seconds
+2026-01-05 02:39:49,100 - INFO - Extracting results...
+2026-01-05 02:39:54,215 - INFO - Method 1: Found 10 table rows
+2026-01-05 02:39:54,341 - INFO - Page text preview: Search Results
+Back to search New Search
+Select a parcel from the list to see all available details.
+Owner(s) Property Address City Parcel Description Lot Number Sale Date Price
+0 OLD HILLSBORO RD TRUST 3238 BOYD MILL PIKE Unincorporated (000) 065 04306 000 12/13/2023 $1,200,000
+0 OLD HILLSBORO RD TRUST OLD HILLSBORO RD Unincorporated (000) 065 03102 000 7/17/2020 $350,000
+10000 FIREFLIES TRUST 698 BRASS LANTERN PLACE Brentwood (086) 028C C 00100 000 0001 5/4/2017 $0
+1000 LEAVES LLC 3976 NEW HWY 96 W Unincorporated (000) 039 01600 000 TR1 5/2/2023 $900,000
+1000 LEGION DRIVE LLC 200 MALLORY STATION RD Franklin (263264) 053 09900 000 4/19/2024 $44,000,000
+1005 SCRAMBLERS KNOB REVOCABLE TRUST 1005 SCRAMBLERS KNOB Unincorporated (000) 052 04200 000 0036 12/15/2025 $0
+1006 LIBERTY CHURCH TRAIL TRUST 1006 LIBERTY CHURCH TRL Brentwood (086) 030 02914 000 10/29/2024 $1,125,000
+1008 SUNDOWN CIR TRUST 1008 SUNDOWN CIR Unincorporated (000) 037A A 00800 000 0108 12/5/2014 $1,200,000
+1008 VAUGHN CR
+2026-01-05 02:39:54,513 - INFO - Row 0 has 7 cells: ['0 OLD HILLSBORO RD TRUST', '3238 BOYD MILL PIKE', 'Unincorporated (000)', '065 04306 000', '', '12/13/2023', '$1,200,000']
+2026-01-05 02:39:54,715 - INFO - Row 1 has 7 cells: ['0 OLD HILLSBORO RD TRUST', 'OLD HILLSBORO RD', 'Unincorporated (000)', '065 03102 000', '', '7/17/2020', '$350,000']
+2026-01-05 02:39:54,914 - INFO - Row 2 has 7 cells: ['10000 FIREFLIES TRUST', '698 BRASS LANTERN PLACE', 'Brentwood (086)', '028C C 00100 000', '0001', '5/4/2017', '$0']
+2026-01-05 02:39:55,819 - INFO - ============================================================
+2026-01-05 02:39:55,823 - INFO -   Output: output/williamson_sales_20260105_023955.csv
+2026-01-05 02:39:55,824 - INFO - ============================================================
+2026-01-05 02:44:42,442 - INFO - ============================================================
+2026-01-05 02:44:42,442 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 02:44:42,442 - INFO - ============================================================
+2026-01-05 02:44:44,349 - INFO - Loading: https://inigo.williamson-tn.org/property_search/
+2026-01-05 02:44:48,020 - INFO - Searching for sales from 10/07/2025 to 01/05/2026
+2026-01-05 02:44:50,353 - INFO - Search submitted
+2026-01-05 02:44:52,353 - INFO - Waiting for results to load...
+2026-01-05 02:44:52,455 - INFO - Results loaded after 1 seconds
+2026-01-05 02:44:55,456 - INFO - Extracting results...
+2026-01-05 02:45:01,585 - INFO - Scrolled to bottom to load all results
+2026-01-05 02:45:01,691 - INFO - Method 1: Found 10 table rows
+2026-01-05 02:45:01,827 - INFO - Page text preview: Search Results
+Back to search New Search
+Select a parcel from the list to see all available details.
+Owner(s) Property Address City Parcel Description Lot Number Sale Date Price
+0 OLD HILLSBORO RD TRUST 3238 BOYD MILL PIKE Unincorporated (000) 065 04306 000 12/13/2023 $1,200,000
+0 OLD HILLSBORO RD TRUST OLD HILLSBORO RD Unincorporated (000) 065 03102 000 7/17/2020 $350,000
+10000 FIREFLIES TRUST 698 BRASS LANTERN PLACE Brentwood (086) 028C C 00100 000 0001 5/4/2017 $0
+1000 LEAVES LLC 3976 NEW HWY 96 W Unincorporated (000) 039 01600 000 TR1 5/2/2023 $900,000
+1000 LEGION DRIVE LLC 200 MALLORY STATION RD Franklin (263264) 053 09900 000 4/19/2024 $44,000,000
+1005 SCRAMBLERS KNOB REVOCABLE TRUST 1005 SCRAMBLERS KNOB Unincorporated (000) 052 04200 000 0036 12/15/2025 $0
+1006 LIBERTY CHURCH TRAIL TRUST 1006 LIBERTY CHURCH TRL Brentwood (086) 030 02914 000 10/29/2024 $1,125,000
+1008 SUNDOWN CIR TRUST 1008 SUNDOWN CIR Unincorporated (000) 037A A 00800 000 0108 12/5/2014 $1,200,000
+1008 VAUGHN CR
+2026-01-05 02:45:02,155 - INFO - Row 0 has 7 cells: ['0 OLD HILLSBORO RD TRUST', '3238 BOYD MILL PIKE', 'Unincorporated (000)', '065 04306 000', '', '12/13/2023', '$1,200,000']
+2026-01-05 02:45:02,641 - INFO - Row 1 has 7 cells: ['0 OLD HILLSBORO RD TRUST', 'OLD HILLSBORO RD', 'Unincorporated (000)', '065 03102 000', '', '7/17/2020', '$350,000']
+2026-01-05 02:45:02,937 - INFO - Row 2 has 7 cells: ['10000 FIREFLIES TRUST', '698 BRASS LANTERN PLACE', 'Brentwood (086)', '028C C 00100 000', '0001', '5/4/2017', '$0']
+2026-01-05 02:45:03,820 - INFO - ============================================================
+2026-01-05 02:45:03,825 - INFO -   Output: output/williamson_sales_20260105_024503.csv
+2026-01-05 02:45:03,825 - INFO - ============================================================
+2026-01-05 02:46:28,142 - INFO - ============================================================
+2026-01-05 02:46:28,142 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 02:46:28,142 - INFO - ============================================================
+2026-01-05 02:46:30,044 - INFO - Loading: https://inigo.williamson-tn.org/property_search/
+2026-01-05 02:54:33,885 - INFO - ============================================================
+2026-01-05 02:54:33,885 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 02:54:33,885 - INFO - ============================================================
+2026-01-05 02:54:36,119 - INFO - Loading sales search: https://inigo.williamson-tn.org/sales_search/
+2026-01-05 02:54:41,469 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 02:54:41,506 - WARNING - Could not fill date fields - filled_start:False, filled_end:False
+2026-01-05 02:54:43,555 - ERROR - Error filling search form: Message: no such element: Unable to locate element: {"method":"css selector","selector":"input[type='submit'], button[type='submit']"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 02:54:43,566 - ERROR - Traceback (most recent call last):
+  File "C:\Users\user\OneDrive\Desktop\Investors back end\Property-Managers---Back-End-Recents\cron_williamson_county.py", line 95, in scrape_williamson
+    search_button = driver.find_element(By.CSS_SELECTOR, "input[type='submit'], button[type='submit']")
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 802, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 432, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {"method":"css selector","selector":"input[type='submit'], button[type='submit']"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+
+2026-01-05 02:55:18,262 - INFO - ============================================================
+2026-01-05 02:55:18,262 - INFO - Williamson County Recent Sales Scraper
+2026-01-05 02:55:18,262 - INFO - ============================================================
+2026-01-05 02:55:20,091 - INFO - Loading sales search: https://inigo.williamson-tn.org/sales_search/
+2026-01-05 02:55:25,360 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 02:55:25,410 - WARNING - Could not fill date fields - filled_start:False, filled_end:False
+2026-01-05 02:55:27,466 - ERROR - Error filling search form: Message: no such element: Unable to locate element: {"method":"css selector","selector":"input[type='submit'], button[type='submit']"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 02:55:27,477 - ERROR - Traceback (most recent call last):
+  File "C:\Users\user\OneDrive\Desktop\Investors back end\Property-Managers---Back-End-Recents\cron_williamson_county.py", line 95, in scrape_williamson
+    search_button = driver.find_element(By.CSS_SELECTOR, "input[type='submit'], button[type='submit']")
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 802, in find_element
+    return self.execute(Command.FIND_ELEMENT, {"using": by, "value": value})["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 432, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.NoSuchElementException: Message: no such element: Unable to locate element: {"method":"css selector","selector":"input[type='submit'], button[type='submit']"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+
