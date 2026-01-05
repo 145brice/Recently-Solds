@@ -291,3 +291,180 @@ selenium.common.exceptions.WebDriverException: Message: tab crashed
   (Session info: MicrosoftEdge=143.0.3650.96)
 
 
+2026-01-05 04:29:28,884 - INFO - ============================================================
+2026-01-05 04:29:28,885 - INFO - Wilson County Recent Sales Scraper
+2026-01-05 04:29:28,886 - INFO - ============================================================
+2026-01-05 04:29:30,990 - INFO - Loading Wilson County property search: https://wilsontn.geopowered.com/propertysearch/
+2026-01-05 04:29:43,269 - INFO - Searching for sales from 12/29/2025 to 01/05/2026
+2026-01-05 04:29:48,449 - INFO - Clicked search/sales tab
+2026-01-05 04:29:51,530 - INFO - Found 1 input fields
+2026-01-05 04:29:53,886 - INFO - Looking for results...
+2026-01-05 04:29:58,887 - INFO - Processing page 1
+2026-01-05 04:29:58,997 - INFO - Found 2 potential result elements
+2026-01-05 04:29:59,085 - INFO - Collected 0 sales so far
+2026-01-05 04:29:59,128 - INFO - Clicked Next to page 2
+2026-01-05 04:30:02,130 - INFO - Processing page 2
+2026-01-05 04:30:02,207 - INFO - Found 2 potential result elements
+2026-01-05 04:30:02,263 - INFO - Collected 0 sales so far
+2026-01-05 04:30:02,293 - INFO - Clicked Next to page 3
+2026-01-05 04:30:05,295 - INFO - Processing page 3
+2026-01-05 04:30:05,365 - INFO - Found 2 potential result elements
+2026-01-05 04:30:05,452 - INFO - Collected 0 sales so far
+2026-01-05 04:30:05,492 - INFO - Clicked Next to page 4
+2026-01-05 04:30:08,494 - INFO - Processing page 4
+2026-01-05 04:30:08,569 - INFO - Found 2 potential result elements
+2026-01-05 04:30:08,631 - INFO - Collected 0 sales so far
+2026-01-05 04:30:08,675 - INFO - Clicked Next to page 5
+2026-01-05 04:30:11,676 - INFO - Processing page 5
+2026-01-05 04:30:11,750 - INFO - Found 2 potential result elements
+2026-01-05 04:30:11,812 - INFO - Collected 0 sales so far
+2026-01-05 04:30:11,846 - INFO - Clicked Next to page 6
+2026-01-05 04:30:14,848 - INFO - Processing page 6
+2026-01-05 04:30:14,944 - INFO - Found 2 potential result elements
+2026-01-05 04:30:15,019 - INFO - Collected 0 sales so far
+2026-01-05 04:30:15,060 - INFO - Clicked Next to page 7
+2026-01-05 04:30:18,062 - INFO - Processing page 7
+2026-01-05 04:30:18,130 - INFO - Found 2 potential result elements
+2026-01-05 04:30:18,228 - INFO - Collected 0 sales so far
+2026-01-05 04:30:18,294 - INFO - Clicked Next to page 8
+2026-01-05 04:30:21,296 - INFO - Processing page 8
+2026-01-05 04:30:21,366 - INFO - Found 2 potential result elements
+2026-01-05 04:30:21,442 - INFO - Collected 0 sales so far
+2026-01-05 04:30:21,475 - INFO - Clicked Next to page 9
+2026-01-05 04:30:24,476 - INFO - Processing page 9
+2026-01-05 04:30:24,530 - INFO - Found 2 potential result elements
+2026-01-05 04:30:24,607 - INFO - Collected 0 sales so far
+2026-01-05 04:30:24,648 - INFO - Clicked Next to page 10
+2026-01-05 04:30:27,649 - INFO - Processing page 10
+2026-01-05 04:30:27,744 - INFO - Found 2 potential result elements
+2026-01-05 04:30:27,795 - INFO - Collected 0 sales so far
+2026-01-05 04:30:27,826 - INFO - Clicked Next to page 11
+2026-01-05 04:30:30,828 - INFO - Processing page 11
+2026-01-05 04:30:30,848 - INFO - Found 2 potential result elements
+2026-01-05 04:30:30,900 - INFO - Collected 0 sales so far
+2026-01-05 04:30:30,943 - INFO - Clicked Next to page 12
+2026-01-05 04:30:33,946 - INFO - Processing page 12
+2026-01-05 04:30:34,031 - INFO - Found 2 potential result elements
+2026-01-05 04:30:34,097 - INFO - Collected 0 sales so far
+2026-01-05 04:30:34,154 - INFO - Clicked Next to page 13
+2026-01-05 04:30:37,156 - INFO - Processing page 13
+2026-01-05 04:30:37,230 - INFO - Found 2 potential result elements
+2026-01-05 04:30:37,310 - INFO - Collected 0 sales so far
+2026-01-05 04:30:37,359 - INFO - Clicked Next to page 14
+2026-01-05 04:30:40,361 - INFO - Processing page 14
+2026-01-05 04:30:40,430 - INFO - Found 2 potential result elements
+2026-01-05 04:30:40,480 - INFO - Collected 0 sales so far
+2026-01-05 04:30:40,543 - INFO - Clicked Next to page 15
+2026-01-05 04:30:43,544 - INFO - Processing page 15
+2026-01-05 04:30:43,612 - INFO - Found 2 potential result elements
+2026-01-05 04:30:43,661 - INFO - Collected 0 sales so far
+2026-01-05 04:30:43,705 - INFO - Clicked Next to page 16
+2026-01-05 04:30:46,707 - INFO - Processing page 16
+2026-01-05 04:30:46,783 - INFO - Found 2 potential result elements
+2026-01-05 04:30:46,855 - INFO - Collected 0 sales so far
+2026-01-05 04:30:46,899 - INFO - Clicked Next to page 17
+2026-01-05 04:30:49,905 - INFO - Processing page 17
+2026-01-05 04:30:49,979 - INFO - Found 2 potential result elements
+2026-01-05 04:30:50,054 - INFO - Collected 0 sales so far
+2026-01-05 04:30:50,086 - INFO - Clicked Next to page 18
+2026-01-05 04:30:53,089 - INFO - Processing page 18
+2026-01-05 04:30:53,162 - INFO - Found 2 potential result elements
+2026-01-05 04:30:53,230 - INFO - Collected 0 sales so far
+2026-01-05 04:30:53,262 - INFO - Clicked Next to page 19
+2026-01-05 04:30:56,263 - INFO - Processing page 19
+2026-01-05 04:30:56,345 - INFO - Found 2 potential result elements
+2026-01-05 04:30:56,420 - INFO - Collected 0 sales so far
+2026-01-05 04:30:56,446 - INFO - Clicked Next to page 20
+2026-01-05 04:30:59,455 - INFO - Processing page 20
+2026-01-05 04:30:59,508 - INFO - Found 2 potential result elements
+2026-01-05 04:30:59,544 - INFO - Collected 0 sales so far
+2026-01-05 04:30:59,579 - INFO - Clicked Next to page 21
+2026-01-05 04:31:02,585 - INFO - Processing page 21
+2026-01-05 04:31:02,664 - INFO - Found 2 potential result elements
+2026-01-05 04:31:02,772 - INFO - Collected 0 sales so far
+2026-01-05 04:31:02,806 - INFO - Clicked Next to page 22
+2026-01-05 04:31:05,807 - INFO - Processing page 22
+2026-01-05 04:31:05,857 - INFO - Found 2 potential result elements
+2026-01-05 04:31:05,921 - INFO - Collected 0 sales so far
+2026-01-05 04:31:05,960 - INFO - Clicked Next to page 23
+2026-01-05 04:31:08,970 - INFO - Processing page 23
+2026-01-05 04:31:08,996 - INFO - Found 2 potential result elements
+2026-01-05 04:31:09,052 - INFO - Collected 0 sales so far
+2026-01-05 04:31:09,086 - INFO - Clicked Next to page 24
+2026-01-05 04:31:12,087 - INFO - Processing page 24
+2026-01-05 04:31:12,173 - INFO - Found 2 potential result elements
+2026-01-05 04:31:12,243 - INFO - Collected 0 sales so far
+2026-01-05 04:31:12,276 - INFO - Clicked Next to page 25
+2026-01-05 04:31:15,278 - INFO - Processing page 25
+2026-01-05 04:31:15,325 - INFO - Found 2 potential result elements
+2026-01-05 04:31:15,449 - INFO - Collected 0 sales so far
+2026-01-05 04:31:15,556 - INFO - Clicked Next to page 26
+2026-01-05 04:31:18,559 - INFO - Processing page 26
+2026-01-05 04:31:18,599 - INFO - Found 2 potential result elements
+2026-01-05 04:31:18,704 - INFO - Collected 0 sales so far
+2026-01-05 04:31:18,739 - INFO - Clicked Next to page 27
+2026-01-05 04:31:21,741 - INFO - Processing page 27
+2026-01-05 04:31:21,766 - INFO - Found 2 potential result elements
+2026-01-05 04:31:21,831 - INFO - Collected 0 sales so far
+2026-01-05 04:31:21,882 - INFO - Clicked Next to page 28
+2026-01-05 04:31:24,884 - INFO - Processing page 28
+2026-01-05 04:31:24,906 - INFO - Found 2 potential result elements
+2026-01-05 04:31:24,972 - INFO - Collected 0 sales so far
+2026-01-05 04:31:25,024 - INFO - Clicked Next to page 29
+2026-01-05 04:31:28,030 - INFO - Processing page 29
+2026-01-05 04:31:28,067 - INFO - Found 2 potential result elements
+2026-01-05 04:31:28,167 - INFO - Collected 0 sales so far
+2026-01-05 04:31:28,222 - INFO - Clicked Next to page 30
+2026-01-05 04:31:31,223 - INFO - Processing page 30
+2026-01-05 04:31:31,255 - INFO - Found 2 potential result elements
+2026-01-05 04:31:31,341 - INFO - Collected 0 sales so far
+2026-01-05 04:31:31,419 - INFO - Clicked Next to page 31
+2026-01-05 04:31:34,421 - INFO - Processing page 31
+2026-01-05 04:31:34,428 - ERROR - Error processing page 31: Message: tab crashed
+  (Session info: MicrosoftEdge=143.0.3650.96)
+
+2026-01-05 04:31:34,431 - WARNING - No sales data found
+2026-01-05 04:31:34,433 - INFO - Wilson County site may require JavaScript interaction or different approach
+2026-01-05 04:31:34,444 - ERROR - Critical error: Message: tab crashed
+  (Session info: MicrosoftEdge=143.0.3650.96)
+
+2026-01-05 04:31:34,456 - ERROR - Traceback (most recent call last):
+  File "C:\Users\user\OneDrive\Desktop\Investors back end\Property-Managers---Back-End-Recents\cron_wilson_county.py", line 229, in scrape_wilson
+    f.write(driver.page_source)
+            ^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 547, in page_source
+    return self.execute(Command.GET_PAGE_SOURCE)["value"]
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\webdriver.py", line 432, in execute
+    self.error_handler.check_response(response)
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "C:\Users\user\AppData\Local\Programs\Python\Python313\Lib\site-packages\selenium\webdriver\remote\errorhandler.py", line 232, in check_response
+    raise exception_class(message, screen, stacktrace)
+selenium.common.exceptions.WebDriverException: Message: tab crashed
+  (Session info: MicrosoftEdge=143.0.3650.96)
+
+
+2026-01-05 04:32:52,320 - INFO - ============================================================
+2026-01-05 04:32:52,320 - INFO - Wilson County Recent Sales Scraper
+2026-01-05 04:32:52,321 - INFO - ============================================================
+2026-01-05 04:32:54,429 - INFO - Loading Wilson County property search: https://wilsontn.geopowered.com/propertysearch/
+2026-01-05 04:32:56,514 - INFO - Waiting for JavaScript framework to load...
+2026-01-05 04:33:11,526 - INFO - Searching for sales from 12/29/2025 to 01/05/2026
+2026-01-05 04:33:16,736 - INFO - Page content preview: MT. JULIET
+Esri, HERE, Garmin, NGA, USGS, NPS | City of Mt. Juliet - GIS Division
++
+–
+20mi
+36.161359 -86.300898 Degrees
+Disclaimer
+Please note, the scheduled maintenance for this application will take
+2026-01-05 04:33:16,750 - INFO - Looking for any visible data...
+2026-01-05 04:33:16,753 - INFO - Looking for results...
+2026-01-05 04:33:26,843 - INFO - Found 1 elements with selector: table tbody tr
+2026-01-05 04:33:26,885 - INFO - Found 1 elements with selector: [role='row']
+2026-01-05 04:33:26,970 - WARNING - Could not find property results with any selector
+2026-01-05 04:33:26,970 - INFO - Wilson County site may not be showing data or requires manual interaction
+2026-01-05 04:33:26,971 - WARNING - No sales data found
+2026-01-05 04:33:26,972 - INFO - Wilson County site may require JavaScript interaction or different approach
+2026-01-05 04:33:27,007 - INFO - Saved page source to output/wilson_debug.html for debugging
+2026-01-05 04:33:29,928 - INFO - Browser closed
