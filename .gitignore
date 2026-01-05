@@ -1,38 +1,5 @@
-# Exclude CSV files
-*.csv
-
-# Exclude log files
-*.log
-
-# Exclude database files
-*.db
-*.sqlite
-*.sqlite3
-
-# Exclude temporary files
-*.tmp
-*.temp
-
-# Exclude macOS files
-.DS_Store
-
-# Exclude Python cache
-__pycache__/
+.env
+__pycache__
 *.pyc
-*.pyo
-*.pyd
-
-# Exclude output directories
-output/
-logs/
-
-# Exclude compressed files
-*.gz
-*.zip
-
-# Exclude Excel files
-*.xlsx
-*.xls
-
-# Exclude TSV files
-*.tsv
+creds.json
+.env.local
