@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Wilson County Recent Sales Scraper
-Scrapes property sales from Wilson County assessor (GeoPowered platform)
+Scrapes property sales from Wilson County (GeoPowered platform)
 Cron-ready: Runs daily, handles errors, logs output
 """
 
@@ -42,168 +42,197 @@ def scrape_wilson():
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_experimental_option("excludeSwitches", ["enable-automation"])
     options.add_experimental_option('useAutomationExtension', False)
-    options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36")
 
     driver = None
+    all_sales = []
 
     try:
         driver = webdriver.Edge(options=options)
-        driver.set_page_load_timeout(90)  # Increase timeout for slow site
+        driver.set_page_load_timeout(90)
 
         url = "https://wilsontn.geopowered.com/propertysearch/"
-        logging.info(f"Loading: {url}")
+        logging.info(f"Loading Wilson County property search: {url}")
+        driver.get(url)
+        time.sleep(10)  # Give extra time for JavaScript framework to load
 
-        # Try to load the page with timeout handling
-        try:
-            driver.get(url)
-        except Exception as e:
-            logging.warning(f"Page load timeout/error: {e}")
-            logging.info("Continuing anyway - page may be partially loaded")
-
-        time.sleep(10)  # Give extra time for JavaScript to load
-
-        # Calculate date range (last 180 days to get more data)
+        # Calculate date range (last 7 days)
         end_date = datetime.now()
-        start_date = end_date - timedelta(days=180)
+        start_date = end_date - timedelta(days=7)
 
-        start_date_str = start_date.strftime("%m/%d/%Y")
-        end_date_str = end_date.strftime("%m/%d/%Y")
+        logging.info(f"Searching for sales from {start_date.strftime('%m/%d/%Y')} to {end_date.strftime('%m/%d/%Y')}")
 
-        logging.info(f"Searching for sales from {start_date_str} to {end_date_str}")
-
-        # Try to find and use the search - simplified approach
+        # Wait for page to fully load
         try:
-            # Wait for page to be ready
             WebDriverWait(driver, 20).until(
                 EC.presence_of_element_located((By.TAG_NAME, "body"))
             )
-
-            logging.info("Page loaded, looking for search interface...")
-
-            # Debug: Print page text to see what's there
-            page_text = driver.find_element(By.TAG_NAME, "body").text
-            logging.info(f"Page preview: {page_text[:500]}")
-
-            # Try to find and submit search
-            # For now, just try to search without filters to see if we can get ANY data
-            search_buttons = driver.find_elements(By.CSS_SELECTOR, "button[type='submit'], input[type='submit'], button")
-
-            logging.info(f"Found {len(search_buttons)} potential search buttons")
-
-            if search_buttons:
-                for btn in search_buttons[:3]:
-                    btn_text = btn.text or btn.get_attribute("value") or ""
-                    logging.info(f"  Button: {btn_text[:50]}")
-
-                # Click the first likely search button
-                driver.execute_script("arguments[0].scrollIntoView(true);", search_buttons[0])
-                time.sleep(1)
-                driver.execute_script("arguments[0].click();", search_buttons[0])
-                logging.info("Search submitted")
-                time.sleep(10)
-            else:
-                logging.warning("Could not find search button - may already be showing results")
-
+            time.sleep(5)
+            
+            # Try to find search fields/buttons
+            # GeoPowered uses JavaScript framework, so we need to wait and interact carefully
+            
+            # Look for any search/filter controls
+            try:
+                # Try clicking on search tab or sales search if available
+                search_tabs = driver.find_elements(By.XPATH, "//*[contains(text(), 'Search')] | //*[contains(text(), 'Sales')]")
+                if search_tabs:
+                    driver.execute_script("arguments[0].click();", search_tabs[0])
+                    logging.info("Clicked search/sales tab")
+                    time.sleep(3)
+            except Exception as e:
+                logging.warning(f"No search tab found: {e}")
+            
+            # Look for date fields
+            try:
+                date_inputs = driver.find_elements(By.CSS_SELECTOR, "input[type='date'], input[type='text']")
+                logging.info(f"Found {len(date_inputs)} input fields")
+                
+                # Try to fill any date-related fields
+                for field in date_inputs:
+                    field_name = (field.get_attribute('name') or field.get_attribute('id') or '').lower()
+                    placeholder = (field.get_attribute('placeholder') or '').lower()
+                    
+                    if 'date' in field_name or 'date' in placeholder:
+                        try:
+                            if 'from' in field_name or 'start' in field_name or 'from' in placeholder:
+                                field.clear()
+                                field.send_keys(start_date.strftime('%m/%d/%Y'))
+                                logging.info(f"Filled start date field")
+                            elif 'to' in field_name or 'end' in field_name or 'to' in placeholder:
+                                field.clear()
+                                field.send_keys(end_date.strftime('%m/%d/%Y'))
+                                logging.info(f"Filled end date field")
+                        except:
+                            pass
+                            
+                time.sleep(2)
+            except Exception as e:
+                logging.warning(f"Could not fill date fields: {e}")
+            
+            # Try to submit search
+            try:
+                search_buttons = driver.find_elements(By.CSS_SELECTOR, "button[type='submit'], input[type='submit'], button")
+                for btn in search_buttons:
+                    btn_text = (btn.text or btn.get_attribute('value') or '').lower()
+                    if 'search' in btn_text or 'submit' in btn_text or 'find' in btn_text:
+                        driver.execute_script("arguments[0].click();", btn)
+                        logging.info("Submitted search")
+                        time.sleep(5)
+                        break
+            except Exception as e:
+                logging.warning(f"Could not submit search: {e}")
+            
         except Exception as e:
-            logging.error(f"Error with search form: {e}")
-            import traceback
-            logging.error(traceback.format_exc())
+            logging.error(f"Error interacting with search form: {e}")
 
-        # Extract results
-        logging.info("Extracting results...")
+        # Try to extract results
+        logging.info("Looking for results...")
+        time.sleep(5)
 
-        try:
-            # Wait for results to load
-            time.sleep(3)
+        # Collect data from pages
+        page_num = 1
+        max_pages = 100
 
-            # Try different result container selectors
-            results = None
-            selectors = [
-                "table tbody tr",
-                "div[class*='result']",
-                "div[class*='property']",
-                ".search-result",
-                "[data-property]"
-            ]
+        while page_num <= max_pages:
+            logging.info(f"Processing page {page_num}")
+            
+            try:
+                # Try multiple selectors for results
+                rows = driver.find_elements(By.CSS_SELECTOR, "table tr, .property-result, .search-result, [data-property]")
+                logging.info(f"Found {len(rows)} potential result elements")
+                
+                if len(rows) == 0:
+                    # No results found, log page source snippet for debugging
+                    page_text = driver.find_element(By.TAG_NAME, "body").text[:500]
+                    logging.warning(f"No results found. Page preview: {page_text}")
+                    break
+                
+                for row in rows:
+                    try:
+                        text = row.text.strip()
+                        if len(text) < 10:  # Skip empty/small elements
+                            continue
+                            
+                        # Try to extract from table structure
+                        cells = row.find_elements(By.TAG_NAME, "td")
+                        
+                        if len(cells) >= 2:
+                            # Table structure - extract cells
+                            row_data = [cell.text.strip() for cell in cells]
+                            sale_data = {
+                                'Owner Name': row_data[0] if len(row_data) > 0 else '',
+                                'Address': row_data[1] if len(row_data) > 1 else '',
+                                'City': row_data[2] if len(row_data) > 2 else '',
+                                'Info': row_data[3] if len(row_data) > 3 else ''
+                            }
+                        else:
+                            # Non-table structure - use text parsing
+                            sale_data = {
+                                'Owner Name': '',
+                                'Address': text[:100],
+                                'City': '',
+                                'Info': ''
+                            }
+                        
+                        if sale_data['Address'] or sale_data['Owner Name']:
+                            all_sales.append(sale_data)
+                            
+                    except Exception as e:
+                        continue
 
-            for selector in selectors:
-                elements = driver.find_elements(By.CSS_SELECTOR, selector)
-                if elements:
-                    results = elements
-                    logging.info(f"Found {len(results)} results using selector: {selector}")
+                logging.info(f"Collected {len(all_sales)} sales so far")
+
+                # Try to go to next page
+                try:
+                    next_buttons = driver.find_elements(By.XPATH, "//a[contains(text(), 'Next')] | //button[contains(text(), 'Next')] | //*[contains(@class, 'next')]")
+                    if next_buttons:
+                        next_btn = next_buttons[0]
+                        if 'disabled' not in next_btn.get_attribute('class'):
+                            driver.execute_script("arguments[0].click();", next_btn)
+                            logging.info(f"Clicked Next to page {page_num + 1}")
+                            time.sleep(3)
+                            page_num += 1
+                        else:
+                            logging.info("Next button disabled")
+                            break
+                    else:
+                        logging.info("No Next button found")
+                        break
+                except Exception as e:
+                    logging.info(f"No more pages: {e}")
                     break
 
-            if not results:
-                logging.warning("No results found")
-                return None
+            except Exception as e:
+                logging.error(f"Error processing page {page_num}: {e}")
+                break
 
-            data = []
+        # Save results
+        if all_sales:
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            output_file = f"output/wilson_sales_{timestamp}.csv"
 
-            # Try to extract data from results
-            for idx, result in enumerate(results):
-                try:
-                    result_text = result.text
-
-                    # Try to parse structured data if it's a table row
-                    if result.tag_name == "tr":
-                        cells = result.find_elements(By.TAG_NAME, "td")
-                        if len(cells) >= 3:
-                            # Attempt to map cells to our fields
-                            # This will need adjustment based on actual site structure
-                            address = cells[0].text.strip()
-                            owner = cells[1].text.strip() if len(cells) > 1 else "N/A"
-                            sale_info = cells[2].text.strip() if len(cells) > 2 else "N/A"
-
-                            data.append({
-                                'Date': "N/A",  # Will need to find in actual data
-                                'Address': address,
-                                'Owner Name': owner,
-                                'Amount': sale_info
-                            })
-                    else:
-                        # For non-table results, try to parse text
-                        # This is a fallback and may need customization
-                        if len(result_text) > 10:  # Skip empty results
-                            data.append({
-                                'Date': "N/A",
-                                'Address': result_text[:100],  # Truncate for safety
-                                'Owner Name': "N/A",
-                                'Amount': "N/A"
-                            })
-
-                except Exception as e:
-                    logging.debug(f"Error parsing result {idx}: {e}")
-                    continue
-
-            if not data:
-                logging.warning("No sales data extracted")
-                logging.info("Wilson County may require manual configuration")
-                logging.info("Site structure may have changed or require different approach")
-                return None
-
-            # Create DataFrame
-            df = pd.DataFrame(data)
-
-            # Save to CSV
-            output_file = f"output/wilson_sales_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv"
+            df = pd.DataFrame(all_sales)
             df.to_csv(output_file, index=False)
 
             logging.info("="*60)
-            logging.info(f"✓ SUCCESS: Saved {len(df)} sales")
-            logging.info(f"  Output: {output_file}")
-            logging.info("  NOTE: May need manual verification of data fields")
+            logging.info(f"SUCCESS: Found {len(all_sales)} sales")
+            logging.info(f"Saved to: {output_file}")
             logging.info("="*60)
 
             return output_file
-
-        except Exception as e:
-            logging.error(f"Error extracting results: {e}")
-            import traceback
-            logging.error(traceback.format_exc())
+        else:
+            logging.warning("No sales data found")
+            logging.info("Wilson County site may require JavaScript interaction or different approach")
+            
+            # Save page source for debugging
+            with open("output/wilson_debug.html", "w", encoding="utf-8") as f:
+                f.write(driver.page_source)
+            logging.info("Saved page source to output/wilson_debug.html for debugging")
+            
             return None
 
     except Exception as e:
-        logging.error(f"Error: {e}")
+        logging.error(f"Critical error: {e}")
         import traceback
         logging.error(traceback.format_exc())
         return None
@@ -211,6 +240,16 @@ def scrape_wilson():
     finally:
         if driver:
             driver.quit()
+            logging.info("Browser closed")
 
 if __name__ == "__main__":
-    scrape_wilson()
+    try:
+        result = scrape_wilson()
+        if result:
+            print(f"\nSuccess! Output: {result}")
+        else:
+            print("\nFailed to get data - check logs and debug.html")
+    except Exception as e:
+        print(f"\nError: {e}")
+        import traceback
+        traceback.print_exc()
