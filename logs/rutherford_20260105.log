@@ -343,3 +343,89 @@ Building Type:
 2026-01-05 02:56:34,445 - INFO -   Found 6 rows on page 1
 2026-01-05 02:56:34,696 - INFO -   No more pages
 2026-01-05 02:56:34,696 - INFO - Total records collected: 1
+2026-01-05 04:39:02,082 - INFO - ============================================================
+2026-01-05 04:39:02,082 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:39:02,083 - INFO - ============================================================
+2026-01-05 04:39:04,166 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:39:13,052 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 04:39:13,279 - INFO - Clicked Advanced Search
+2026-01-05 04:39:16,357 - INFO - Found 22 input fields
+2026-01-05 04:39:16,940 - INFO - Found date field: SaleDateStart
+2026-01-05 04:39:16,978 - INFO - Found date field: SaleDateEnd
+2026-01-05 04:39:18,260 - INFO - Submitted search
+2026-01-05 04:39:23,262 - INFO - Waiting for results...
+2026-01-05 04:39:28,264 - INFO - Processing page 1
+2026-01-05 04:39:28,327 - INFO - Found 6 potential result elements
+2026-01-05 04:39:28,575 - INFO - Collected 0 sales so far
+2026-01-05 04:39:28,591 - INFO - No Next button found
+2026-01-05 04:39:28,592 - WARNING - No sales data found
+2026-01-05 04:39:28,593 - INFO - Saving page source for debugging...
+2026-01-05 04:39:28,609 - INFO - Saved to output/rutherford_debug.html
+2026-01-05 04:39:30,950 - INFO - Browser closed
+2026-01-05 04:41:49,641 - INFO - ============================================================
+2026-01-05 04:41:49,642 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:41:49,642 - INFO - ============================================================
+2026-01-05 04:41:51,543 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:42:00,447 - INFO - Searching for sales from 12/29/2025 to 01/05/2026
+2026-01-05 04:42:00,698 - INFO - Clicked Advanced Search
+2026-01-05 04:42:04,203 - INFO - Filled sale date fields
+2026-01-05 04:42:06,260 - WARNING - Could not submit search: Message: no such element: Unable to locate element: {"method":"css selector","selector":"button[type='submit']"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 04:42:06,291 - INFO - Waiting for results...
+2026-01-05 04:42:11,409 - INFO - Found 6 result rows in grid
+2026-01-05 04:42:11,468 - INFO - Table columns: []
+2026-01-05 04:42:11,663 - INFO - Extracted 0 sales from grid
+2026-01-05 04:42:11,664 - INFO - Processing page 1
+2026-01-05 04:42:11,681 - INFO - Found 6 potential result elements
+2026-01-05 04:42:11,842 - INFO - Collected 0 sales so far
+2026-01-05 04:42:11,859 - INFO - No Next button found
+2026-01-05 04:42:11,860 - WARNING - No sales data found
+2026-01-05 04:42:11,864 - INFO - Saving page source for debugging...
+2026-01-05 04:42:11,880 - INFO - Saved to output/rutherford_debug.html
+2026-01-05 04:42:14,198 - INFO - Browser closed
+2026-01-05 04:42:37,586 - INFO - ============================================================
+2026-01-05 04:42:37,587 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:42:37,588 - INFO - ============================================================
+2026-01-05 04:42:39,602 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:42:48,602 - INFO - Searching for sales from 12/29/2025 to 01/05/2026
+2026-01-05 04:42:48,849 - INFO - Clicked Advanced Search
+2026-01-05 04:42:52,558 - INFO - Filled sale date fields
+2026-01-05 04:42:55,736 - INFO - Submitted search
+2026-01-05 04:43:10,794 - INFO - Results grid loaded
+2026-01-05 04:43:15,796 - INFO - Waiting for results...
+2026-01-05 04:43:20,891 - INFO - Found 7 result rows in grid
+2026-01-05 04:43:20,942 - INFO - Table columns: []
+2026-01-05 04:43:21,281 - INFO - Extracted 1 sales from grid
+2026-01-05 04:43:21,281 - INFO - Processing page 1
+2026-01-05 04:43:21,299 - INFO - Found 7 potential result elements
+2026-01-05 04:43:21,595 - INFO - Collected 2 sales so far
+2026-01-05 04:43:21,612 - INFO - No Next button found
+2026-01-05 04:43:21,623 - INFO - ============================================================
+2026-01-05 04:43:21,628 - INFO - SUCCESS: Found 2 sales
+2026-01-05 04:43:21,631 - INFO - Saved to: output/rutherford_sales_20260105_044321.csv
+2026-01-05 04:43:21,633 - INFO - ============================================================
+2026-01-05 04:43:23,922 - INFO - Browser closed

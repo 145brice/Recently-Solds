@@ -56,13 +56,13 @@ def scrape_rutherford():
         driver.get(url)
         time.sleep(5)
 
-        # Calculate date range (last 30 days)
+        # Calculate date range (last 7 days)
         end_date = datetime.now()
-        start_date = end_date - timedelta(days=30)
+        start_date = end_date - timedelta(days=7)
 
         logging.info(f"Searching for sales from {start_date.strftime('%m/%d/%Y')} to {end_date.strftime('%m/%d/%Y')}")
 
-        # Try to click Advanced Search
+        # Click Advanced Search
         try:
             adv_search = driver.find_element(By.LINK_TEXT, "Advanced Search")
             adv_search.click()
@@ -71,36 +71,86 @@ def scrape_rutherford():
         except Exception as e:
             logging.warning(f"Could not click Advanced Search: {e}")
 
-        # Look for date fields or sale date filters
+        # Fill in sale date fields
         try:
-            # Search for any date-related input fields
-            date_inputs = driver.find_elements(By.CSS_SELECTOR, "input[type='text'], input[type='date']")
-            logging.info(f"Found {len(date_inputs)} input fields")
+            date_start = driver.find_element(By.ID, "SaleDateStart")
+            date_start.clear()
+            date_start.send_keys(start_date.strftime('%m/%d/%Y'))
             
-            # Try to fill in dates if we find relevant fields
-            for field in date_inputs:
-                field_id = field.get_attribute('id') or ''
-                field_name = field.get_attribute('name') or ''
-                if 'date' in field_id.lower() or 'date' in field_name.lower():
-                    logging.info(f"Found date field: {field_id or field_name}")
+            date_end = driver.find_element(By.ID, "SaleDateEnd")
+            date_end.clear()
+            date_end.send_keys(end_date.strftime('%m/%d/%Y'))
+            
+            logging.info(f"Filled sale date fields")
+            time.sleep(2)
         except Exception as e:
-            logging.warning(f"Error checking date fields: {e}")
+            logging.error(f"Could not fill date fields: {e}")
 
-        # Just submit the search to get recent sales
+        # Submit the search
         try:
-            # Look for search button
-            search_btn = driver.find_element(By.CSS_SELECTOR, "button[type='submit'], input[type='submit']")
+            search_btn = driver.find_element(By.CSS_SELECTOR, "input[type='submit'][value='Search']")
             driver.execute_script("arguments[0].scrollIntoView(true);", search_btn)
             time.sleep(1)
             driver.execute_script("arguments[0].click();", search_btn)
             logging.info("Submitted search")
-            time.sleep(5)
+            
+            # Wait for AJAX results to load
+            time.sleep(15)  # Longer wait for AJAX
+            
+            # Wait for results grid to populate
+            try:
+                WebDriverWait(driver, 30).until(
+                    EC.presence_of_element_located((By.ID, "gridSearchResults2"))
+                )
+                logging.info("Results grid loaded")
+                time.sleep(5)  # Extra wait for content
+            except:
+                logging.warning("Results grid did not load in time")
+                
         except Exception as e:
             logging.warning(f"Could not submit search: {e}")
 
         # Wait for results to load
         logging.info("Waiting for results...")
         time.sleep(5)
+
+        # Look for results in the grid
+        try:
+            # The results load into #gridSearchResults2
+            results_grid = driver.find_element(By.ID, "gridSearchResults2")
+            
+            # Look for table rows within the results grid
+            rows = results_grid.find_elements(By.CSS_SELECTOR, "table tbody tr")
+            logging.info(f"Found {len(rows)} result rows in grid")
+            
+            if len(rows) > 0:
+                # Get table headers to understand column structure
+                headers = driver.find_elements(By.CSS_SELECTOR, "#gridSearchResults2 table thead th")
+                header_names = [h.text.strip() for h in headers]
+                logging.info(f"Table columns: {header_names}")
+                
+                # Extract data from each row
+                for row in rows:
+                    cells = row.find_elements(By.TAG_NAME, "td")
+                    if len(cells) >= 3:
+                        cell_data = [cell.text.strip() for cell in cells]
+                        
+                        # Map based on typical structure: Parcel, Owner, Address, Sale Date, Sale Price, etc.
+                        sale_data = {
+                            'Parcel': cell_data[0] if len(cell_data) > 0 else '',
+                            'Owner Name': cell_data[1] if len(cell_data) > 1 else '',
+                            'Address': cell_data[2] if len(cell_data) > 2 else '',
+                            'Sale Date': cell_data[3] if len(cell_data) > 3 else '',
+                            'Sale Price': cell_data[4] if len(cell_data) > 4 else ''
+                        }
+                        
+                        if sale_data['Address'] or sale_data['Owner Name']:
+                            all_sales.append(sale_data)
+                
+                logging.info(f"Extracted {len(all_sales)} sales from grid")
+            
+        except Exception as e:
+            logging.error(f"Error extracting from results grid: {e}")
 
         # Collect data from pages
         page_num = 1
