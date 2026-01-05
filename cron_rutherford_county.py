@@ -56,9 +56,9 @@ def scrape_rutherford():
         driver.get(url)
         time.sleep(5)
 
-        # Calculate date range (last 7 days)
+        # Calculate date range (last 30 days for more results)
         end_date = datetime.now()
-        start_date = end_date - timedelta(days=7)
+        start_date = end_date - timedelta(days=30)
 
         logging.info(f"Searching for sales from {start_date.strftime('%m/%d/%Y')} to {end_date.strftime('%m/%d/%Y')}")
 

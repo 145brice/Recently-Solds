@@ -429,3 +429,25 @@ Symbols not available. Dumping unresolved backtrace:
 2026-01-05 04:43:21,631 - INFO - Saved to: output/rutherford_sales_20260105_044321.csv
 2026-01-05 04:43:21,633 - INFO - ============================================================
 2026-01-05 04:43:23,922 - INFO - Browser closed
+2026-01-05 04:48:18,101 - INFO - ============================================================
+2026-01-05 04:48:18,102 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:48:18,103 - INFO - ============================================================
+2026-01-05 04:48:20,320 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:49:06,815 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 04:49:07,080 - INFO - Clicked Advanced Search
+2026-01-05 04:49:10,498 - INFO - Filled sale date fields
+2026-01-05 04:49:13,554 - INFO - Submitted search
+2026-01-05 04:49:28,592 - INFO - Results grid loaded
+2026-01-05 04:49:33,593 - INFO - Waiting for results...
+2026-01-05 04:49:38,641 - INFO - Found 7 result rows in grid
+2026-01-05 04:49:38,665 - INFO - Table columns: []
+2026-01-05 04:49:38,999 - INFO - Extracted 1 sales from grid
+2026-01-05 04:49:39,001 - INFO - Processing page 1
+2026-01-05 04:49:39,025 - INFO - Found 7 potential result elements
+2026-01-05 04:49:39,432 - INFO - Collected 2 sales so far
+2026-01-05 04:49:39,461 - INFO - No Next button found
+2026-01-05 04:49:39,474 - INFO - ============================================================
+2026-01-05 04:49:39,480 - INFO - SUCCESS: Found 2 sales
+2026-01-05 04:49:39,484 - INFO - Saved to: output/rutherford_sales_20260105_044939.csv
+2026-01-05 04:49:39,490 - INFO - ============================================================
+2026-01-05 04:49:41,953 - INFO - Browser closed
