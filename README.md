@@ -1,14 +1,34 @@
-# Wilson & Sumner County Property Scraper
+# Nashville Area Multi-County Property Scraper
 
-Complete toolkit for scraping recently sold homes data from Wilson and Sumner County, Tennessee property records.
+Complete toolkit for scraping recently sold homes data from 6 counties surrounding Nashville, Tennessee.
 
 ## 🎯 What This Does
 
-- ✅ Scrapes recent property sales from both counties
+- ✅ Scrapes recent property sales from 6 counties around Nashville
 - ✅ Extracts new owner names and addresses
 - ✅ Gets sale prices and dates
 - ✅ Exports to CSV/Excel for easy analysis
-- ✅ Works with the same code for Wilson AND Sumner counties
+- ✅ Automated daily runs for fresh leads
+- ✅ Combined master database of all counties
+
+## 📍 Counties Covered
+
+| County | Status | Records (30 days) | Avg Price |
+|--------|--------|-------------------|-----------|
+| **Williamson** (Brentwood, Franklin) | ✅ **WORKING** | ~342 | $1,176,076 |
+| **Wilson** (Mt. Juliet) | ⚠️ Disabled | - | - |
+| **Sumner** (Hendersonville, Gallatin) | ⚠️ Disabled | - | - |
+| **Rutherford** (Murfreesboro) | ⚠️ Disabled | - | - |
+| **Robertson** (Springfield) | ⚠️ Disabled | - | - |
+| **Cheatham** (Ashland City) | ⚠️ Disabled | - | - |
+
+### Status Notes
+- **Williamson County**: ✅ Fully functional (Fixed: 2026-01-20)
+  - Fixed date format issue (MM/DD/YYYY required)
+  - Added pagination support (now captures all 342 properties vs. only 10)
+- **Wilson & Sumner**: Platform changed, needs redevelopment
+- **Rutherford**: Search interface not interactable
+- **Robertson & Cheatham**: URLs not resolving
 
 ## 📋 Prerequisites
 
@@ -27,228 +47,277 @@ python --version
 pip install selenium pandas webdriver-manager openpyxl
 ```
 
-### 2. Run the Scraper
+### 2. Run All Counties (Automated)
 
 ```bash
-# For Wilson County
-python wilson_sumner_scraper.py
-
-# For Sumner County (edit the script and change county="sumner")
+# Run all working county scrapers
+python all_counties_daily.py
 ```
 
-### 3. Output Files
+### 3. Run Individual County
 
-The scraper creates two files:
-- `wilson_county_sales_YYYYMMDD_HHMMSS.csv`
-- `wilson_county_sales_YYYYMMDD_HHMMSS.xlsx`
+```bash
+# Williamson County only
+python williamson_scraper.py
+
+# Wilson/Sumner (currently disabled)
+python wilson_sumner_scraper.py
+
+# Rutherford (currently disabled)
+python rutherford_scraper.py
+```
+
+### 4. Output Files
+
+Files are saved to the `output/` folder:
+- `output/williamson_YYYYMMDD_HHMMSS.csv`
+- `output/williamson/williamson_sales_YYYYMMDD.csv`
+- Combined files: `all_counties_YYYYMMDD.csv` and `.xlsx`
 
 ## 📊 Data Fields Extracted
 
 | Field | Description |
 |-------|-------------|
-| `parcel_id` | Unique property identifier |
 | `owner_name` | Current owner's name |
-| `owner_address` | Owner's mailing address |
 | `address` | Property address |
+| `city` | City |
+| `parcel_id` | Unique property identifier |
+| `lot_number` | Lot number |
 | `sale_date` | Date of sale |
 | `sale_price` | Sale price |
-| `property_type` | Residential, Commercial, etc. |
-| `bedrooms` | Number of bedrooms |
-| `bathrooms` | Number of bathrooms |
-| `square_feet` | Property square footage |
-| `year_built` | Year property was built |
+| `sale_price_clean` | Numeric sale price for filtering |
+| `county` | County name |
+| `scrape_date` | Date data was scraped |
+| `scrape_timestamp` | Full timestamp of scrape |
+
+## 🔧 Recent Fixes & Updates
+
+### Williamson County (2026-01-20)
+
+**Fixed Two Critical Issues:**
+
+1. **Date Format Bug**: The website requires dates in `MM/DD/YYYY` format, but scraper was sending `YYYY-MM-DD`
+   - **Impact**: Search was returning 0 results
+   - **Fix**: Added automatic date conversion in both `search_by_date_only()` and `search_by_subdivision_and_date()`
+
+2. **Pagination Missing**: Scraper only captured first page (10 properties out of 342)
+   - **Impact**: Missing 97% of available data
+   - **Fix**: Implemented pagination loop to click through all pages
+   - **Result**: Now captures all 342 properties across 35 pages
+
+**Results After Fix:**
+- Properties found: **342** (was 1)
+- Properties with valid prices: **220**
+- Price range: $232,200 - $14,031,707
+- Average price: $1,176,076
+- Median price: $851,585
 
 ## 🔧 Configuration Options
 
 ### Change Search Date Range
 
-```python
-# Last 60 days instead of 30
-df = scraper.scrape_recent_sales(days_back=60, max_results=100)
-```
-
-### Switch Counties
+Edit `all_counties_daily.py`:
 
 ```python
-# In main() function, change:
-county = "wilson"  # to
-county = "sumner"
+# Last 60 days instead of 30 for Williamson
+WILLIAMSON_DAYS = 60
 ```
 
 ### Run Without Browser Window
 
 ```python
-# Change headless=False to headless=True
-with CountyPropertyScraper(county=county, headless=True) as scraper:
+# In all_counties_daily.py
+HEADLESS = True  # Change to False to see browser
+```
+
+### Price Filtering
+
+```python
+# In all_counties_daily.py
+MIN_PRICE = 150000
+MAX_PRICE = 1500000
 ```
 
 ## 📝 Example Usage
 
+### Williamson County - Custom Date Range
+
 ```python
-from wilson_sumner_scraper import CountyPropertyScraper
+from williamson_scraper import WilliamsonCountyScraper
+from datetime import datetime, timedelta
+
+with WilliamsonCountyScraper(headless=True) as scraper:
+    end_date = datetime.now()
+    start_date = end_date - timedelta(days=30)
+
+    # Search by date only
+    properties = scraper.search_by_date_only(
+        start_date=start_date.strftime('%Y-%m-%d'),
+        end_date=end_date.strftime('%Y-%m-%d')
+    )
+
+    print(f"Found {len(properties)} properties")
+```
+
+### Filter Results After Scraping
+
+```python
 import pandas as pd
 
-# Wilson County - Last 90 days
-with CountyPropertyScraper(county="wilson", headless=True) as scraper:
-    df = scraper.scrape_recent_sales(days_back=90)
-    scraper.save_to_file(df, filename="wilson_q4_2024")
+# Load the CSV
+df = pd.read_csv('output/williamson_20260120_132943.csv')
 
-# Sumner County - Last 30 days
-with CountyPropertyScraper(county="sumner", headless=True) as scraper:
-    df = scraper.scrape_recent_sales(days_back=30)
-    scraper.save_to_file(df, filename="sumner_december")
+# Filter by price range
+target_range = df[
+    (df['sale_price_clean'] >= 400000) &
+    (df['sale_price_clean'] <= 800000)
+]
+
+# Filter by city
+brentwood_only = df[df['city'] == 'Brentwood']
+
+# Filter by date
+recent = df[df['sale_date'] >= '12/20/2025']
 ```
 
 ## 🛠 Troubleshooting
 
 ### Chrome Driver Issues
 
-If you get ChromeDriver errors:
-
 ```bash
-# Manually install specific version
 pip install webdriver-manager --upgrade
 ```
 
 ### Page Load Timeout
 
-Increase wait time in the code:
+If you see timeout errors, increase the wait time:
 
 ```python
+# In the scraper file
 self.wait = WebDriverWait(self.driver, 30)  # Increase from 20 to 30
 ```
 
-### Network Restrictions
+### No Results Found
 
-If running on a server with network restrictions, you may need to:
-1. Run locally on your computer
-2. Use a proxy
-3. Download ChromeDriver manually
+Check that:
+1. Date range is valid (not in the future)
+2. Website hasn't changed structure
+3. Network connection is stable
 
-### Element Not Found
+### Pagination Not Working
 
-The website structure might have changed. To debug:
+The Williamson County scraper looks for the "Next" button with ID `results_table_next`. If this changes, update the pagination logic in `extract_search_results()`.
 
-```python
-# Add this to see the page
-scraper = CountyPropertyScraper(county="wilson", headless=False)
-# Browser will stay open so you can inspect
-```
+## 💡 Daily Automation
 
-## 🔍 Advanced Features
+### Setup Cron Job (macOS/Linux)
 
-### Get Detailed Property Info
-
-Uncomment this section in `scrape_recent_sales()`:
-
-```python
-# Optionally get detailed info for each property
-for prop in properties[:max_results]:
-    if 'detail_url' in prop:
-        details = scraper.get_property_details(prop['detail_url'])
-        prop.update(details)
-```
-
-⚠️ **Warning**: This makes the scraper significantly slower (1-2 seconds per property)
-
-### Filter Results
-
-```python
-# After scraping
-df = scraper.scrape_recent_sales(days_back=30)
-
-# Filter by price range
-expensive_homes = df[df['sale_price_clean'] > 500000]
-
-# Filter by date
-recent = df[df['sale_date_parsed'] > '2024-12-01']
-
-# Filter by owner name (find specific buyer)
-specific_buyer = df[df['owner_name'].str.contains('Smith', case=False)]
-```
-
-## 📦 Other Counties
-
-The same approach works for these surrounding counties:
-
-### Williamson County
-```python
-# URL: https://inigo.williamson-tn.org/property_search/
-# Different platform - requires separate scraper
-```
-
-### Rutherford County
-```python
-# URL: https://secured.rutherfordcountytn.gov/propertydata/
-# Different platform - requires separate scraper
-```
-
-### Robertson & Cheatham Counties
-```python
-# URL: https://tnmap.tn.gov/assessment/
-# State portal - requires separate scraper
-```
-
-## 💡 Tips for Your Lead Generation Business
-
-### 1. Run Daily for Fresh Leads
 ```bash
-# Add to cron job (runs daily at 6am)
-0 6 * * * /usr/bin/python3 /path/to/wilson_sumner_scraper.py
+# Edit crontab
+crontab -e
+
+# Add this line to run daily at 6am
+0 6 * * * cd /path/to/Property-Managers---Back-End-Recents && /usr/bin/python3 all_counties_daily.py >> logs/daily.log 2>&1
 ```
 
-### 2. Combine with Your Existing Systems
+### Setup Task Scheduler (Windows)
+
+1. Open Task Scheduler
+2. Create Basic Task
+3. Set trigger: Daily at 6:00 AM
+4. Action: Start a program
+5. Program: `python`
+6. Arguments: `all_counties_daily.py`
+7. Start in: `[path to project folder]`
+
+## 📊 Database Integration
+
+### Save to SQLite
+
+The automation script automatically saves to SQLite:
+
 ```python
-# Export to your database
+# In all_counties_daily.py
+SAVE_TO_DATABASE = True
+DATABASE_FILE = "all_counties_leads.db"
+```
+
+### Query the Database
+
+```python
 import sqlite3
+import pandas as pd
 
-conn = sqlite3.connect('leads.db')
-df.to_sql('wilson_sales', conn, if_exists='append', index=False)
-```
+conn = sqlite3.connect('all_counties_leads.db')
 
-### 3. Filter for Your Target Market
-```python
-# Example: Find properties sold in last 7 days over $300k
-recent_df = df[
-    (df['sale_date_parsed'] > datetime.now() - timedelta(days=7)) &
-    (df['sale_price_clean'] > 300000)
-]
-```
+# Get all Williamson County sales
+df = pd.read_sql_query(
+    "SELECT * FROM all_county_sales WHERE county = 'Williamson'",
+    conn
+)
 
-### 4. Cross-Reference with Your Permit Data
-```python
-# Match with your building permit scraper
-permits_df = pd.read_csv('nashville_permits.csv')
-merged = df.merge(permits_df, left_on='address', right_on='permit_address')
+# Get high-value properties
+df = pd.read_sql_query(
+    "SELECT * FROM all_county_sales WHERE sale_price_clean > 1000000",
+    conn
+)
 ```
 
 ## 🔐 Legal & Ethical Use
 
 - ✅ Public records are legally accessible
-- ✅ Don't overwhelm the server (use delays)
-- ✅ Respect robots.txt
+- ✅ Built-in delays to avoid overwhelming servers
+- ✅ Respects website rate limits
 - ✅ Use data ethically for legitimate business purposes
 - ⚠️ Check local regulations for data usage
+- ⚠️ Do not use for harassment or spam
 
-## 📞 Support
+## 📞 Support & Maintenance
 
-If you encounter issues:
-1. Check the Troubleshooting section above
-2. Verify the website hasn't changed structure
-3. Ensure Chrome and ChromeDriver are up to date
+### Common Issues
+
+1. **"No data available in table"**: Date format or search parameters incorrect
+2. **Timeout errors**: Website slow, increase timeout or run with `headless=True`
+3. **Missing pagination**: Website structure changed, update selectors
+4. **Element not found**: Website redesign, scraper needs updating
+
+### Debugging
+
+Run with visible browser to see what's happening:
+
+```python
+scraper = WilliamsonCountyScraper(headless=False)
+```
 
 ## 🎓 Next Steps
 
-Once you have Wilson/Sumner working, you can:
-1. Build scrapers for the other counties (Williamson, Rutherford, etc.)
-2. Automate daily runs
-3. Integrate with your CRM
-4. Build a dashboard to visualize the data
+1. **Re-enable other counties**: Update scrapers for Wilson, Sumner, Rutherford, Robertson, and Cheatham
+2. **Add more data fields**: Extract property details (bedrooms, bathrooms, sqft)
+3. **Build dashboard**: Visualize trends and statistics
+4. **Integrate with CRM**: Auto-import leads to your system
+5. **Add email alerts**: Get notified of high-value properties
+
+## 📂 Project Structure
+
+```
+Property-Managers---Back-End-Recents/
+├── all_counties_daily.py          # Master automation script
+├── williamson_scraper.py           # Williamson County (WORKING)
+├── wilson_sumner_scraper.py        # Wilson/Sumner (needs update)
+├── rutherford_scraper.py           # Rutherford (needs update)
+├── tn_state_portal_scraper.py      # Robertson/Cheatham (needs update)
+├── output/                         # CSV/Excel output files
+│   ├── williamson/                 # Williamson County folder
+│   └── [other county folders]
+├── all_counties_leads.db           # SQLite database
+└── README.md                       # This file
+```
 
 ## 📄 License
 
-Use for your business purposes. Public data scraping for legitimate business use.
+Public data scraping for legitimate business use. Use responsibly.
 
 ---
 
-**Need scrapers for the other counties?** Let me know and I'll help you build them!
+**Last Updated**: 2026-01-20
+**Version**: 2.0 - Williamson County Fix (Date Format + Pagination)

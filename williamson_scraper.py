@@ -78,8 +78,8 @@ class WilliamsonCountyScraper:
 
         Args:
             subdivision (str): Subdivision name
-            start_date (str): Start date 'YYYY-MM-DD'
-            end_date (str): End date 'YYYY-MM-DD'
+            start_date (str): Start date 'YYYY-MM-DD' (will be converted to MM/DD/YYYY)
+            end_date (str): End date 'YYYY-MM-DD' (will be converted to MM/DD/YYYY)
 
         Returns:
             list: List of property dictionaries
@@ -101,14 +101,17 @@ class WilliamsonCountyScraper:
                 return []
 
             # Find and fill date fields
+            # Convert YYYY-MM-DD to MM/DD/YYYY format
             try:
                 start_field = self.driver.find_element(By.ID, "sales_date_start")
                 start_field.clear()
-                start_field.send_keys(start_date)
+                start_converted = datetime.strptime(start_date, '%Y-%m-%d').strftime('%m/%d/%Y')
+                start_field.send_keys(start_converted)
 
                 end_field = self.driver.find_element(By.ID, "sales_date_end")
                 end_field.clear()
-                end_field.send_keys(end_date)
+                end_converted = datetime.strptime(end_date, '%Y-%m-%d').strftime('%m/%d/%Y')
+                end_field.send_keys(end_converted)
                 time.sleep(1)
             except Exception as e:
                 print(f"  ⚠ Could not find date fields: {str(e)}")
@@ -135,11 +138,11 @@ class WilliamsonCountyScraper:
     def search_by_date_only(self, start_date, end_date):
         """
         Search for properties by date range only (no subdivision filter)
-        
+
         Args:
-            start_date (str): Start date 'YYYY-MM-DD'
-            end_date (str): End date 'YYYY-MM-DD'
-            
+            start_date (str): Start date 'YYYY-MM-DD' (will be converted to MM/DD/YYYY)
+            end_date (str): End date 'YYYY-MM-DD' (will be converted to MM/DD/YYYY)
+
         Returns:
             list: List of property dictionaries
         """
@@ -148,14 +151,17 @@ class WilliamsonCountyScraper:
             self.navigate_to_search()
 
             # Fill date fields only (skip subdivision)
+            # Convert YYYY-MM-DD to MM/DD/YYYY format
             try:
                 start_field = self.driver.find_element(By.ID, "sales_date_start")
                 start_field.clear()
-                start_field.send_keys(start_date)
+                start_converted = datetime.strptime(start_date, '%Y-%m-%d').strftime('%m/%d/%Y')
+                start_field.send_keys(start_converted)
 
                 end_field = self.driver.find_element(By.ID, "sales_date_end")
                 end_field.clear()
-                end_field.send_keys(end_date)
+                end_converted = datetime.strptime(end_date, '%Y-%m-%d').strftime('%m/%d/%Y')
+                end_field.send_keys(end_converted)
                 time.sleep(1)
             except Exception as e:
                 print(f"  ⚠ Could not find date fields: {str(e)}")
@@ -180,64 +186,126 @@ class WilliamsonCountyScraper:
             return []
 
     def extract_search_results(self):
-        """Extract property data from search results"""
-        properties = []
+        """Extract property data from search results with pagination support"""
+        all_properties = []
+        page_num = 1
 
         try:
             # Wait for results table
-            # Wait additional time for dynamic content to load
             time.sleep(5)
             results_table = self.wait.until(
                 EC.presence_of_element_located((By.ID, "results_table"))
             )
 
-            # Find all result rows
-            rows = results_table.find_elements(By.TAG_NAME, "tr")[1:]  # Skip header
+            # Wait for actual data rows to load (not just empty table)
+            # Poll for data rows for up to 30 seconds
+            max_wait = 30
+            wait_time = 0
+            rows = []
 
-            print(f"  Found {len(rows)} properties")
-
-            for idx, row in enumerate(rows, 1):
+            while wait_time < max_wait and len(rows) <= 1:  # 1 or fewer rows means no data (just header)
+                time.sleep(2)
+                wait_time += 2
                 try:
-                    cols = row.find_elements(By.TAG_NAME, "td")
-
-                    property_data = {
-                        'owner_name': cols[0].text if len(cols) > 0 else '',
-                        'address': cols[1].text if len(cols) > 1 else '',
-                        'city': cols[2].text if len(cols) > 2 else '',
-                        'parcel_id': cols[3].text if len(cols) > 3 else '',
-                        'lot_number': cols[4].text if len(cols) > 4 else '',
-                        'sale_date': cols[5].text if len(cols) > 5 else '',
-                        'sale_price': cols[6].text if len(cols) > 6 else '',
-                        'property_type': '',
-                        'bedrooms': '',
-                        'bathrooms': '',
-                        'square_feet': '',
-                        'year_built': '',
-                    }
-
-                    # Clean up price
-                    if property_data.get('sale_price'):
-                        property_data['sale_price_clean'] = property_data['sale_price'].replace('$', '').replace(',', '')
-                        try:
-                            property_data['sale_price_clean'] = float(property_data['sale_price_clean'])
-                        except:
-                            property_data['sale_price_clean'] = None
-
-                    properties.append(property_data)
-
-                    if idx % 10 == 0:
-                        print(f"    Processed {idx}/{len(rows)} properties...")
-
-                except Exception as e:
-                    print(f"    Error extracting row {idx}: {str(e)}")
+                    rows = results_table.find_elements(By.TAG_NAME, "tr")
+                    print(f"  Waiting for data... found {len(rows)} rows after {wait_time}s")
+                except:
                     continue
 
-            print(f"  ✓ Extracted {len(properties)} properties")
-            return properties
+            if len(rows) <= 1:
+                print("  ⚠ No data rows found in table after waiting")
+                return []
+
+            # Check for total count in DataTables info
+            try:
+                info_element = self.driver.find_element(By.CLASS_NAME, "dataTables_info")
+                info_text = info_element.text
+                print(f"  {info_text}")
+
+                # Extract total from "Showing X to Y of Z entries"
+                if "of" in info_text and "entries" in info_text:
+                    total_str = info_text.split("of")[1].split("entries")[0].strip()
+                    total_count = int(total_str.replace(',', ''))
+                    print(f"  Total properties in search: {total_count}")
+            except:
+                pass
+
+            # Process all pages
+            while True:
+                print(f"  Processing page {page_num}...")
+
+                # Get current page data
+                results_table = self.driver.find_element(By.ID, "results_table")
+                rows = results_table.find_elements(By.TAG_NAME, "tr")
+                data_rows = rows[1:]  # Skip header
+
+                # Extract data from current page
+                for idx, row in enumerate(data_rows, 1):
+                    try:
+                        cols = row.find_elements(By.TAG_NAME, "td")
+
+                        # Check if this is a "no data" message row
+                        if len(cols) > 0 and "no data available" in cols[0].text.lower():
+                            print(f"  ⚠ No data available in table")
+                            return []
+
+                        property_data = {
+                            'owner_name': cols[0].text if len(cols) > 0 else '',
+                            'address': cols[1].text if len(cols) > 1 else '',
+                            'city': cols[2].text if len(cols) > 2 else '',
+                            'parcel_id': cols[3].text if len(cols) > 3 else '',
+                            'lot_number': cols[4].text if len(cols) > 4 else '',
+                            'sale_date': cols[5].text if len(cols) > 5 else '',
+                            'sale_price': cols[6].text if len(cols) > 6 else '',
+                            'property_type': '',
+                            'bedrooms': '',
+                            'bathrooms': '',
+                            'square_feet': '',
+                            'year_built': '',
+                        }
+
+                        # Clean up price
+                        if property_data.get('sale_price'):
+                            property_data['sale_price_clean'] = property_data['sale_price'].replace('$', '').replace(',', '')
+                            try:
+                                property_data['sale_price_clean'] = float(property_data['sale_price_clean'])
+                            except:
+                                property_data['sale_price_clean'] = None
+
+                        all_properties.append(property_data)
+
+                    except Exception as e:
+                        print(f"    Error extracting row {idx}: {str(e)}")
+                        continue
+
+                print(f"    Page {page_num}: extracted {len(data_rows)} properties (total so far: {len(all_properties)})")
+
+                # Try to click "Next" button
+                try:
+                    # Find Next button - DataTables uses "next" class
+                    next_button = self.driver.find_element(By.ID, "results_table_next")
+
+                    # Check if Next button is disabled (last page)
+                    if "disabled" in next_button.get_attribute("class"):
+                        print(f"  ✓ Reached last page")
+                        break
+
+                    # Click Next
+                    next_link = next_button.find_element(By.TAG_NAME, "a")
+                    next_link.click()
+                    time.sleep(2)  # Wait for page to load
+                    page_num += 1
+
+                except Exception as e:
+                    print(f"  No more pages or error with pagination: {str(e)}")
+                    break
+
+            print(f"  ✓ Extracted {len(all_properties)} total properties from {page_num} pages")
+            return all_properties
 
         except Exception as e:
             print(f"  ⚠ Error extracting results: {str(e)}")
-            return []
+            return all_properties if all_properties else []
 
     def get_property_details(self, property_url):
         """
