@@ -18,6 +18,7 @@ from selenium.common.exceptions import TimeoutException, NoSuchElementException
 from webdriver_manager.chrome import ChromeDriverManager
 import pandas as pd
 import time
+import random
 from datetime import datetime
 
 
@@ -26,19 +27,30 @@ class WilliamsonCountyScraper:
     Scraper for Williamson County property records
     """
 
-    def __init__(self, headless=True):
+    def __init__(self, headless=True, human_like=True):
         """
         Initialize the scraper
 
         Args:
             headless (bool): Run browser in headless mode
+            human_like (bool): Add human-like delays and behaviors
         """
         self.base_url = "https://inigo.williamson-tn.org/property_search/"
+        self.human_like = human_like
 
-        # Setup Chrome options
+        # Setup Chrome options with realistic user agent
         chrome_options = Options()
         if headless:
             chrome_options.add_argument("--headless=new")
+
+        # More realistic user agent
+        user_agents = [
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        ]
+        chrome_options.add_argument(f"user-agent={random.choice(user_agents)}")
+
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--window-size=1920,1080")
@@ -51,6 +63,18 @@ class WilliamsonCountyScraper:
         self.driver = webdriver.Chrome(service=service, options=chrome_options)
         self.wait = WebDriverWait(self.driver, 20)
 
+        # Execute CDP commands to mask automation (optional, may timeout)
+        try:
+            self.driver.execute_cdp_cmd("Page.addScriptToEvaluateOnNewDocument", {
+                "source": """
+                    Object.defineProperty(navigator, 'webdriver', {
+                        get: () => undefined
+                    })
+                """
+            })
+        except:
+            pass  # CDP command optional, continue if it fails
+
         print("✓ Initialized Williamson County scraper")
 
     def __enter__(self):
@@ -59,11 +83,25 @@ class WilliamsonCountyScraper:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.driver.quit()
 
+    def human_delay(self, min_seconds=1, max_seconds=3):
+        """
+        Add a human-like random delay
+
+        Args:
+            min_seconds (float): Minimum delay in seconds
+            max_seconds (float): Maximum delay in seconds
+        """
+        if self.human_like:
+            delay = random.uniform(min_seconds, max_seconds)
+            time.sleep(delay)
+        else:
+            time.sleep(min_seconds)
+
     def navigate_to_search(self):
         """Navigate to the property search page"""
         print(f"Loading {self.base_url}...")
         self.driver.get(self.base_url)
-        time.sleep(3)
+        self.human_delay(2, 4)  # Human-like page load wait
 
         # Wait for page to fully load
         try:
@@ -94,8 +132,9 @@ class WilliamsonCountyScraper:
                     EC.presence_of_element_located((By.ID, "subdivision"))
                 )
                 subdiv_field.clear()
+                self.human_delay(0.3, 0.7)  # Pause before typing
                 subdiv_field.send_keys(subdivision)
-                time.sleep(1)
+                self.human_delay(0.5, 1.2)  # Pause after typing
             except Exception as e:
                 print(f"  ⚠ Could not find subdivision field: {str(e)}")
                 return []
@@ -105,14 +144,17 @@ class WilliamsonCountyScraper:
             try:
                 start_field = self.driver.find_element(By.ID, "sales_date_start")
                 start_field.clear()
+                self.human_delay(0.3, 0.6)
                 start_converted = datetime.strptime(start_date, '%Y-%m-%d').strftime('%m/%d/%Y')
                 start_field.send_keys(start_converted)
+                self.human_delay(0.4, 0.8)
 
                 end_field = self.driver.find_element(By.ID, "sales_date_end")
                 end_field.clear()
+                self.human_delay(0.3, 0.6)
                 end_converted = datetime.strptime(end_date, '%Y-%m-%d').strftime('%m/%d/%Y')
                 end_field.send_keys(end_converted)
-                time.sleep(1)
+                self.human_delay(0.5, 1.0)
             except Exception as e:
                 print(f"  ⚠ Could not find date fields: {str(e)}")
                 return []
@@ -123,7 +165,7 @@ class WilliamsonCountyScraper:
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit'].button"))
                 )
                 search_btn.click()
-                time.sleep(3)
+                self.human_delay(3, 5)  # Wait for results to load
             except Exception as e:
                 print(f"  ⚠ Could not find search button: {str(e)}")
                 return []
@@ -155,14 +197,17 @@ class WilliamsonCountyScraper:
             try:
                 start_field = self.driver.find_element(By.ID, "sales_date_start")
                 start_field.clear()
+                self.human_delay(0.3, 0.6)
                 start_converted = datetime.strptime(start_date, '%Y-%m-%d').strftime('%m/%d/%Y')
                 start_field.send_keys(start_converted)
+                self.human_delay(0.4, 0.8)
 
                 end_field = self.driver.find_element(By.ID, "sales_date_end")
                 end_field.clear()
+                self.human_delay(0.3, 0.6)
                 end_converted = datetime.strptime(end_date, '%Y-%m-%d').strftime('%m/%d/%Y')
                 end_field.send_keys(end_converted)
-                time.sleep(1)
+                self.human_delay(0.5, 1.0)
             except Exception as e:
                 print(f"  ⚠ Could not find date fields: {str(e)}")
                 return []
@@ -173,7 +218,7 @@ class WilliamsonCountyScraper:
                     EC.element_to_be_clickable((By.CSS_SELECTOR, "input[type='submit'].button"))
                 )
                 search_btn.click()
-                time.sleep(3)
+                self.human_delay(3, 5)  # Wait for results to load
             except Exception as e:
                 print(f"  ⚠ Could not find search button: {str(e)}")
                 return []
@@ -192,7 +237,7 @@ class WilliamsonCountyScraper:
 
         try:
             # Wait for results table
-            time.sleep(5)
+            self.human_delay(4, 6)
             results_table = self.wait.until(
                 EC.presence_of_element_located((By.ID, "results_table"))
             )
@@ -204,7 +249,7 @@ class WilliamsonCountyScraper:
             rows = []
 
             while wait_time < max_wait and len(rows) <= 1:  # 1 or fewer rows means no data (just header)
-                time.sleep(2)
+                self.human_delay(1.5, 2.5)
                 wait_time += 2
                 try:
                     rows = results_table.find_elements(By.TAG_NAME, "tr")
@@ -290,10 +335,11 @@ class WilliamsonCountyScraper:
                         print(f"  ✓ Reached last page")
                         break
 
-                    # Click Next
+                    # Click Next with human-like delay
                     next_link = next_button.find_element(By.TAG_NAME, "a")
+                    self.human_delay(1.5, 3.5)  # Pause before clicking (like reading the page)
                     next_link.click()
-                    time.sleep(2)  # Wait for page to load
+                    self.human_delay(2, 4)  # Wait for page to load with variation
                     page_num += 1
 
                 except Exception as e:
