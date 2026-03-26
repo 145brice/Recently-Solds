@@ -34,9 +34,11 @@ pipeline_status = {
     'last_result': None,
     'log': ''
 }
+pipeline_process = None  # Store subprocess for kill functionality
 
 
 def run_pipeline_thread(config):
+    global pipeline_process
     pipeline_status['running'] = True
     pipeline_status['log'] = ''
     pipeline_status['last_result'] = None
@@ -60,6 +62,7 @@ def run_pipeline_thread(config):
             env=env,
             bufsize=1
         )
+        pipeline_process = process
 
         for line in process.stdout:
             pipeline_status['log'] += line
@@ -77,8 +80,22 @@ def run_pipeline_thread(config):
         pipeline_status['last_result'] = 'error'
         pipeline_status['log'] += f'\n--- Error: {e} ---\n'
 
+    pipeline_process = None
     pipeline_status['running'] = False
     pipeline_status['last_run'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+def kill_pipeline():
+    global pipeline_process
+    if pipeline_process and pipeline_process.poll() is None:
+        pipeline_process.kill()
+        pipeline_status['log'] += '\n--- KILLED BY USER ---\n'
+        pipeline_status['last_result'] = 'killed'
+        pipeline_status['running'] = False
+        pipeline_status['last_run'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        pipeline_process = None
+        return True
+    return False
 
 
 class Handler(http.server.BaseHTTPRequestHandler):
@@ -154,6 +171,16 @@ class Handler(http.server.BaseHTTPRequestHandler):
                 thread = threading.Thread(target=run_pipeline_thread, args=(config,), daemon=True)
                 thread.start()
                 self.wfile.write(json.dumps({'status': 'started'}).encode())
+
+        elif self.path == '/api/kill':
+            self.send_response(200)
+            self.send_header('Content-Type', 'application/json')
+            self._cors_headers()
+            self.end_headers()
+
+            killed = kill_pipeline()
+            self.wfile.write(json.dumps({'killed': killed}).encode())
+
         else:
             self.send_response(404)
             self.end_headers()

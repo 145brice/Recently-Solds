@@ -47,13 +47,13 @@ import sqlite3
 # All values can be overridden via environment variables (set by the control panel).
 
 # Davidson (Excel download from padctn.org)
-DAVIDSON_DAYS = int(os.environ.get('DAVIDSON_DAYS', 60))
+DAVIDSON_DAYS = int(os.environ.get('DAVIDSON_DAYS', 7))
 
 # Wilson & Sumner (date-based search)
 WILSON_SUMNER_DAYS = int(os.environ.get('WILSON_SUMNER_DAYS', 7))
 
 # Williamson (date-based search)
-WILLIAMSON_DAYS = int(os.environ.get('WILLIAMSON_DAYS', 30))
+WILLIAMSON_DAYS = int(os.environ.get('WILLIAMSON_DAYS', 7))
 
 # Rutherford, Robertson, Cheatham (name-based search)
 # Using top 100 surnames for better coverage (~25-30% of population)
@@ -197,15 +197,31 @@ def main():
     def scrape_williamson():
         from williamson_scraper import WilliamsonCountyScraper
         with WilliamsonCountyScraper(headless=HEADLESS) as scraper:
+            # Portal data lags behind real time (often months behind).
+            # Search a wide window (180 days back) to capture whatever's
+            # available, then filter down to the most recent N days of actual data.
             end_date = datetime.now()
-            start_date = end_date - timedelta(days=WILLIAMSON_DAYS)
+            start_date = end_date - timedelta(days=180)
             results = scraper.search_by_date_only(
                 start_date=start_date.strftime("%Y-%m-%d"),
                 end_date=end_date.strftime("%Y-%m-%d")
             )
-            if results:
-                return pd.DataFrame(results)
-            return pd.DataFrame()
+            if not results:
+                return pd.DataFrame()
+            df = pd.DataFrame(results)
+            # Filter to most recent WILLIAMSON_DAYS of available data
+            if 'sale_date' in df.columns:
+                df['sale_date_parsed'] = pd.to_datetime(df['sale_date'], errors='coerce')
+                valid = df['sale_date_parsed'].dropna()
+                if not valid.empty:
+                    most_recent = valid.max()
+                    cutoff = most_recent - timedelta(days=WILLIAMSON_DAYS)
+                    before = len(df)
+                    df = df[df['sale_date_parsed'] >= cutoff]
+                    print(f"  Date range: {cutoff.strftime('%Y-%m-%d')} to {most_recent.strftime('%Y-%m-%d')}")
+                    print(f"  Filtered to last {WILLIAMSON_DAYS} days of data: {before} -> {len(df)} records")
+                df = df.drop(columns=['sale_date_parsed'], errors='ignore')
+            return df
 
     df = scrape_county("Williamson", 4, total_counties, scrape_williamson)
     county_stats['Williamson'] = len(df)
