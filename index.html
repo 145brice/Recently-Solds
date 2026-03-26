@@ -18,11 +18,45 @@
         }
         .table-container {
             margin: 2rem auto;
-            max-width: 1200px;
+            max-width: 1400px;
             background: white;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             overflow: hidden;
+            padding: 1.5rem;
+        }
+        .nav-tabs .nav-link {
+            font-weight: 600;
+            color: #495057;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            position: relative;
+        }
+        .nav-tabs .nav-link.active {
+            color: white;
+            background: none;
+            border: none;
+        }
+        .nav-tabs .nav-link .badge {
+            font-size: 0.7rem;
+            margin-left: 0.4rem;
+            vertical-align: middle;
+        }
+        .county-tab-davidson.active { background-color: #0d6efd !important; }
+        .county-tab-williamson.active { background-color: #6f42c1 !important; }
+        .county-tab-wilson.active { background-color: #198754 !important; }
+        .county-tab-sumner.active { background-color: #fd7e14 !important; }
+        .county-tab-rutherford.active { background-color: #dc3545 !important; }
+        .county-tab-robertson.active { background-color: #20c997 !important; }
+        .county-tab-cheatham.active { background-color: #6610f2 !important; }
+        .county-tab-all.active { background-color: #343a40 !important; }
+        .nav-tabs .nav-link:not(.active):hover {
+            background-color: #e9ecef;
+            border: none;
+        }
+        .nav-tabs {
+            border-bottom: 2px solid #dee2e6;
+            gap: 0.25rem;
         }
         .table th {
             background-color: #343a40;
@@ -30,7 +64,6 @@
             border: none;
             cursor: pointer;
             user-select: none;
-            position: relative;
         }
         .table tbody tr:nth-child(even) {
             background-color: #f8f9fa;
@@ -39,28 +72,20 @@
             background-color: #e3f2fd;
         }
         .table th.sort-asc::after {
-            content: ' ▲';
+            content: ' \u25B2';
             font-size: 12px;
         }
         .table th.sort-desc::after {
-            content: ' ▼';
+            content: ' \u25BC';
             font-size: 12px;
         }
         .table th.sortable::after {
-            content: ' ⇅';
+            content: ' \u21C5';
             font-size: 12px;
             opacity: 0.5;
         }
         .table td {
             vertical-align: middle;
-        }
-        .btn-call {
-            background-color: #28a745;
-            border: none;
-            color: white;
-        }
-        .btn-call:hover {
-            background-color: #218838;
         }
         .sold-badge {
             background-color: #dc3545;
@@ -69,6 +94,28 @@
             border-radius: 0.25rem;
             font-size: 0.75rem;
         }
+        .stats-bar {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: #f1f3f5;
+            border-radius: 8px;
+        }
+        .stat-item {
+            font-size: 0.85rem;
+            color: #495057;
+        }
+        .stat-item strong {
+            color: #212529;
+        }
+        .empty-tab {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        .empty-tab h5 { margin-bottom: 0.5rem; }
     </style>
 </head>
 <body>
@@ -84,10 +131,7 @@
                         <a class="nav-link active" href="index.html">Dashboard</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pricing.html">Pricing</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="counties.html">Browse Counties</a>
+                        <a class="nav-link" href="admin.html">Admin</a>
                     </li>
                 </ul>
             </div>
@@ -96,27 +140,32 @@
 
     <div class="header">
         <h1>Fresh Cash Leads Dashboard</h1>
-        <p>County-Level Real Estate Leads</p>
+        <p>Nashville Metro Area - 7 Counties</p>
     </div>
 
     <div class="container table-container">
+        <!-- County Tabs -->
+        <ul class="nav nav-tabs mb-3" id="countyTabs" role="tablist">
+            <!-- Tabs are generated dynamically -->
+        </ul>
+
+        <!-- Toolbar -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3 class="mb-0">Williamson County Sales Leads</h3>
-            <div class="d-flex gap-2 align-items-center">
-                <div class="d-flex gap-2">
-                    <select id="priceFilter" class="form-select" style="width: 150px;">
-                        <option value="">All Prices</option>
-                        <option value="0-100000">$0 - $100K</option>
-                        <option value="100000-500000">$100K - $500K</option>
-                        <option value="500000-1000000">$500K - $1M</option>
-                        <option value="1000000+">$1M+</option>
-                    </select>
-                    <input type="text" id="searchInput" class="form-control" placeholder="Search leads..." style="width: 200px;">
-                    <button id="clearFilters" class="btn btn-outline-secondary">Clear All</button>
-                    <button id="exportBtn" class="btn btn-success">Export CSV</button>
-                </div>
+            <div class="stats-bar flex-grow-1" id="statsBar"></div>
+            <div class="d-flex gap-2 ms-3">
+                <select id="priceFilter" class="form-select form-select-sm" style="width: 150px;">
+                    <option value="">All Prices</option>
+                    <option value="0-100000">$0 - $100K</option>
+                    <option value="100000-500000">$100K - $500K</option>
+                    <option value="500000-1000000">$500K - $1M</option>
+                    <option value="1000000+">$1M+</option>
+                </select>
+                <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search leads..." style="width: 180px;">
+                <button id="exportBtn" class="btn btn-success btn-sm">Export CSV</button>
             </div>
         </div>
+
+        <!-- Table -->
         <div class="table-responsive">
             <table class="table table-striped table-hover">
                 <thead>
@@ -126,304 +175,326 @@
                         <th data-column="2" data-type="price" class="sortable">Price</th>
                         <th data-column="3" data-type="date" class="sortable">Sold Date</th>
                         <th data-column="4">Agent Phone</th>
-                        <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody id="tableBody">
-                    <!-- Data will be loaded dynamically -->
-                </tbody>
+                <tbody id="tableBody"></tbody>
             </table>
         </div>
-        <div class="mt-3 text-muted">
-            <small>Showing <span id="recordCount">0</span> records | Click column headers to sort</small>
+        <div class="mt-2 text-muted">
+            <small>Showing <span id="recordCount">0</span> records</small>
         </div>
     </div>
 
     <script>
-        let allTableData = [];
-        let filteredData = [];
+        const COUNTIES = ['Davidson', 'Williamson', 'Wilson', 'Sumner', 'Rutherford', 'Robertson', 'Cheatham'];
+        const COUNTY_COLORS = {
+            Davidson: '#0d6efd', Williamson: '#6f42c1', Wilson: '#198754',
+            Sumner: '#fd7e14', Rutherford: '#dc3545', Robertson: '#20c997', Cheatham: '#6610f2'
+        };
+
+        let allData = [];          // every row from CSV
+        let countyData = {};       // { countyName: [rows] }
+        let activeCounty = 'all';  // current tab
+        let filteredData = [];     // what's shown in table
         let currentSortColumn = -1;
         let currentSortDirection = 'asc';
 
-        // Load CSV data dynamically
+        // ---- Load CSV ----
         fetch('nashville_cash_leads_clean.csv')
-            .then(response => response.text())
-            .then(data => {
-                const rows = data.split('\n').slice(1); // Skip header
-
-                // Store data for sorting and filtering
-                allTableData = rows.filter(row => row.trim()).map(row => {
-                    // Proper CSV parsing that handles quoted fields
-                    const cols = parseCSVRow(row);
+            .then(r => r.text())
+            .then(csv => {
+                const rows = csv.split('\n').slice(1);
+                allData = rows.filter(r => r.trim()).map(r => {
+                    const cols = parseCSVRow(r);
                     return {
                         ownerName: cols[0] || '',
-                        address: cols[1] || '',
-                        price: cols[2] || '',
-                        soldDate: cols[3] || '',
-                        agentPhone: cols[4] || ''
+                        county: cols[1] || '',
+                        address: cols[2] || '',
+                        price: cols[3] || '',
+                        soldDate: cols[4] || '',
+                        agentPhone: cols[5] || ''
                     };
                 });
 
-                console.log('Loaded data:', allTableData.length, 'records');
-                console.log('Sample record:', allTableData[0]);
-
-                filteredData = [...allTableData];
-                renderTable();
-
-                // Add sorting event listeners
-                document.querySelectorAll('th.sortable').forEach(header => {
-                    header.addEventListener('click', () => {
-                        console.log('Header clicked:', header.dataset.column);
-                        const column = parseInt(header.dataset.column);
-                        const type = header.dataset.type || 'text';
-                        sortTable(column, type);
-                    });
+                // Group by county
+                countyData = {};
+                COUNTIES.forEach(c => countyData[c] = []);
+                allData.forEach(row => {
+                    if (countyData[row.county]) {
+                        countyData[row.county].push(row);
+                    }
                 });
 
-                // Add search and filter functionality
-                document.getElementById('searchInput').addEventListener('input', applyFilters);
-                document.getElementById('priceFilter').addEventListener('change', applyFilters);
-                document.getElementById('clearFilters').addEventListener('click', clearAllFilters);
-                document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+                buildTabs();
+                switchTab('all');
+                attachListeners();
             })
-            .catch(error => console.error('Error loading CSV:', error));
+            .catch(err => console.error('Error loading CSV:', err));
 
-        function parseCSVRow(row) {
-            const result = [];
-            let current = '';
-            let inQuotes = false;
+        // ---- Build county tabs ----
+        function buildTabs() {
+            const tabContainer = document.getElementById('countyTabs');
+            let html = '';
 
-            for (let i = 0; i < row.length; i++) {
-                const char = row[i];
+            // "All" tab
+            const totalCount = allData.length;
+            html += `<li class="nav-item" role="presentation">
+                <button class="nav-link county-tab-all active" data-county="all" type="button" role="tab">
+                    All <span class="badge bg-secondary">${totalCount}</span>
+                </button>
+            </li>`;
 
-                if (char === '"') {
-                    if (inQuotes && row[i + 1] === '"') {
-                        // Escaped quote
-                        current += '"';
-                        i++; // Skip next quote
-                    } else {
-                        // Toggle quote state
-                        inQuotes = !inQuotes;
-                    }
-                } else if (char === ',' && !inQuotes) {
-                    // Field separator
-                    result.push(current.trim());
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
+            // Per-county tabs (only show counties that have data)
+            COUNTIES.forEach(county => {
+                const count = countyData[county].length;
+                if (count === 0) return;
+                const tabClass = 'county-tab-' + county.toLowerCase();
+                html += `<li class="nav-item" role="presentation">
+                    <button class="nav-link ${tabClass}" data-county="${county}" type="button" role="tab">
+                        ${county} <span class="badge bg-secondary">${count}</span>
+                    </button>
+                </li>`;
+            });
 
-            // Add the last field
-            result.push(current.trim());
+            tabContainer.innerHTML = html;
 
-            return result;
+            // Tab click handlers
+            tabContainer.querySelectorAll('.nav-link').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabContainer.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    switchTab(tab.dataset.county);
+                });
+            });
         }
 
+        // ---- Switch active tab ----
+        function switchTab(county) {
+            activeCounty = county;
+            currentSortColumn = -1;
+            currentSortDirection = 'asc';
+            document.querySelectorAll('th.sortable').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+            document.getElementById('searchInput').value = '';
+            document.getElementById('priceFilter').value = '';
+            applyFilters();
+            updateStats();
+        }
+
+        // ---- Stats bar ----
+        function updateStats() {
+            const data = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
+            const bar = document.getElementById('statsBar');
+            if (data.length === 0) {
+                bar.innerHTML = '<span class="stat-item">No data available</span>';
+                return;
+            }
+
+            const prices = data.map(r => parsePrice(r.price)).filter(p => p > 0);
+            const avgPrice = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
+            const minPrice = prices.length ? Math.min(...prices) : 0;
+            const maxPrice = prices.length ? Math.max(...prices) : 0;
+
+            // Date range
+            const dates = data.map(r => new Date(r.soldDate)).filter(d => !isNaN(d));
+            let dateRange = '';
+            if (dates.length) {
+                const earliest = new Date(Math.min(...dates));
+                const latest = new Date(Math.max(...dates));
+                dateRange = `${earliest.toLocaleDateString()} - ${latest.toLocaleDateString()}`;
+            }
+
+            bar.innerHTML = `
+                <span class="stat-item"><strong>${data.length}</strong> total leads</span>
+                <span class="stat-item">Avg: <strong>$${Math.round(avgPrice).toLocaleString()}</strong></span>
+                <span class="stat-item">Range: <strong>$${Math.round(minPrice).toLocaleString()}</strong> - <strong>$${Math.round(maxPrice).toLocaleString()}</strong></span>
+                ${dateRange ? `<span class="stat-item">Dates: <strong>${dateRange}</strong></span>` : ''}
+            `;
+        }
+
+        // ---- Filtering ----
         function applyFilters() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
             const priceRange = document.getElementById('priceFilter').value;
 
-            filteredData = allTableData.filter(row => {
-                // Search filter
+            const sourceData = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
+
+            filteredData = sourceData.filter(row => {
+                // Search
                 const matchesSearch = searchTerm === '' ||
                     row.ownerName.toLowerCase().includes(searchTerm) ||
                     row.address.toLowerCase().includes(searchTerm) ||
                     row.price.toLowerCase().includes(searchTerm) ||
                     row.soldDate.toLowerCase().includes(searchTerm);
 
-                // Price filter
+                // Price
                 let matchesPrice = true;
                 if (priceRange) {
-                    const priceValue = parsePrice(row.price);
+                    const pv = parsePrice(row.price);
                     switch (priceRange) {
-                        case '0-100000':
-                            matchesPrice = priceValue >= 0 && priceValue <= 100000;
-                            break;
-                        case '100000-500000':
-                            matchesPrice = priceValue > 100000 && priceValue <= 500000;
-                            break;
-                        case '500000-1000000':
-                            matchesPrice = priceValue > 500000 && priceValue <= 1000000;
-                            break;
-                        case '1000000+':
-                            matchesPrice = priceValue > 1000000;
-                            break;
+                        case '0-100000': matchesPrice = pv >= 0 && pv <= 100000; break;
+                        case '100000-500000': matchesPrice = pv > 100000 && pv <= 500000; break;
+                        case '500000-1000000': matchesPrice = pv > 500000 && pv <= 1000000; break;
+                        case '1000000+': matchesPrice = pv > 1000000; break;
                     }
                 }
 
                 return matchesSearch && matchesPrice;
             });
 
-            // Re-apply current sort
             if (currentSortColumn >= 0) {
                 const header = document.querySelector(`th[data-column="${currentSortColumn}"]`);
-                const type = header.dataset.type || 'text';
-                sortTable(currentSortColumn, type, false);
-            } else {
-                renderTable();
+                sortData(currentSortColumn, header ? header.dataset.type || 'text' : 'text');
             }
+            renderTable();
         }
 
-        function clearAllFilters() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('priceFilter').value = '';
-            applyFilters();
+        function attachListeners() {
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            document.getElementById('priceFilter').addEventListener('change', applyFilters);
+            document.getElementById('exportBtn').addEventListener('click', exportToCSV);
+
+            document.querySelectorAll('th.sortable').forEach(header => {
+                header.addEventListener('click', () => {
+                    const col = parseInt(header.dataset.column);
+                    const type = header.dataset.type || 'text';
+
+                    if (currentSortColumn === col) {
+                        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSortColumn = col;
+                        currentSortDirection = 'asc';
+                    }
+
+                    document.querySelectorAll('th.sortable').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+                    header.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+
+                    sortData(col, type);
+                    renderTable();
+                });
+            });
         }
 
-        function exportToCSV() {
+        // ---- Sorting ----
+        function sortData(column, type) {
+            filteredData.sort((a, b) => {
+                let va, vb;
+                switch (column) {
+                    case 0: va = a.ownerName.toLowerCase(); vb = b.ownerName.toLowerCase(); break;
+                    case 1: va = a.address.toLowerCase(); vb = b.address.toLowerCase(); break;
+                    case 2: va = parsePrice(a.price); vb = parsePrice(b.price); break;
+                    case 3: va = parseDate(a.soldDate); vb = parseDate(b.soldDate); break;
+                    default: return 0;
+                }
+                if (va < vb) return currentSortDirection === 'asc' ? -1 : 1;
+                if (va > vb) return currentSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        // ---- Render ----
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const countEl = document.getElementById('recordCount');
+
             if (filteredData.length === 0) {
-                alert('No data to export');
+                tbody.innerHTML = `<tr><td colspan="5" class="empty-tab">
+                    <h5>No leads found</h5>
+                    <p>Try adjusting your filters or run the pipeline from the Admin panel.</p>
+                </td></tr>`;
+                countEl.textContent = '0';
                 return;
             }
 
-            // Create CSV content
-            const headers = ['Owner Name', 'Address', 'Price', 'Sold Date', 'Agent Phone'];
-            let csvContent = headers.join(',') + '\n';
-
-            filteredData.forEach(row => {
-                const csvRow = [
-                    `"${row.ownerName}"`,
-                    `"${row.address}"`,
-                    `"${row.price}"`,
-                    `"${row.soldDate}"`,
-                    `"${row.agentPhone}"`
-                ];
-                csvContent += csvRow.join(',') + '\n';
-            });
-
-            // Create and download file
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-            const link = document.createElement('a');
-            const url = URL.createObjectURL(blob);
-            link.setAttribute('href', url);
-            link.setAttribute('download', `williamson_leads_${new Date().toISOString().split('T')[0]}.csv`);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
-        function renderTable() {
-            const tableBody = document.getElementById('tableBody');
-            const recordCount = document.getElementById('recordCount');
-
-            tableBody.innerHTML = '';
-            recordCount.textContent = filteredData.length;
+            countEl.textContent = filteredData.length;
+            const fragment = document.createDocumentFragment();
 
             filteredData.forEach(row => {
                 const tr = document.createElement('tr');
 
                 // Owner Name
-                const ownerTd = document.createElement('td');
-                ownerTd.textContent = row.ownerName;
-                tr.appendChild(ownerTd);
+                const td0 = document.createElement('td');
+                td0.textContent = row.ownerName;
+                tr.appendChild(td0);
 
                 // Address
-                const addressTd = document.createElement('td');
-                addressTd.textContent = row.address;
-                tr.appendChild(addressTd);
+                const td1 = document.createElement('td');
+                td1.textContent = row.address;
+                tr.appendChild(td1);
 
                 // Price
-                const priceTd = document.createElement('td');
-                priceTd.textContent = row.price;
-                tr.appendChild(priceTd);
+                const td2 = document.createElement('td');
+                td2.textContent = row.price;
+                tr.appendChild(td2);
 
                 // Sold Date
-                const dateTd = document.createElement('td');
-                if (row.soldDate === 'N/A') {
-                    dateTd.textContent = 'N/A';
+                const td3 = document.createElement('td');
+                if (row.soldDate && row.soldDate !== 'N/A') {
+                    td3.innerHTML = `<span class="sold-badge">SOLD</span> ${row.soldDate}`;
                 } else {
-                    dateTd.innerHTML = `<span class="sold-badge">SOLD</span> ${row.soldDate}`;
+                    td3.textContent = 'N/A';
                 }
-                tr.appendChild(dateTd);
+                tr.appendChild(td3);
 
                 // Agent Phone
-                const phoneTd = document.createElement('td');
-                phoneTd.textContent = row.agentPhone;
-                tr.appendChild(phoneTd);
+                const td4 = document.createElement('td');
+                td4.textContent = row.agentPhone || 'N/A';
+                tr.appendChild(td4);
 
-                // Actions
-                const actionsTd = document.createElement('td');
-                if (row.agentPhone && row.agentPhone !== 'N/A') {
-                    actionsTd.innerHTML = `<button class="btn btn-call btn-sm" onclick="window.location.href='tel:${row.agentPhone}'">Call Agent</button>`;
+                fragment.appendChild(tr);
+            });
+
+            tbody.innerHTML = '';
+            tbody.appendChild(fragment);
+        }
+
+        // ---- Export ----
+        function exportToCSV() {
+            if (filteredData.length === 0) { alert('No data to export'); return; }
+            const countyLabel = activeCounty === 'all' ? 'all_counties' : activeCounty.toLowerCase();
+            const headers = ['Owner Name', 'County', 'Address', 'Price', 'Sold Date', 'Agent Phone'];
+            let csv = headers.join(',') + '\n';
+            filteredData.forEach(row => {
+                csv += [
+                    `"${row.ownerName}"`, `"${row.county}"`, `"${row.address}"`,
+                    `"${row.price}"`, `"${row.soldDate}"`, `"${row.agentPhone}"`
+                ].join(',') + '\n';
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `leads_${countyLabel}_${new Date().toISOString().split('T')[0]}.csv`;
+            link.click();
+        }
+
+        // ---- Helpers ----
+        function parseCSVRow(row) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < row.length; i++) {
+                const ch = row[i];
+                if (ch === '"') {
+                    if (inQuotes && row[i + 1] === '"') { current += '"'; i++; }
+                    else inQuotes = !inQuotes;
+                } else if (ch === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
                 } else {
-                    actionsTd.textContent = 'No Phone';
+                    current += ch;
                 }
-                tr.appendChild(actionsTd);
-
-                tableBody.appendChild(tr);
-            });
+            }
+            result.push(current.trim());
+            return result;
         }
 
-        function sortTable(column, type, shouldRender = true) {
-            console.log('Sorting column:', column, 'type:', type, 'direction:', currentSortDirection);
-            // Update sort direction
-            if (currentSortColumn === column) {
-                currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                currentSortColumn = column;
-                currentSortDirection = 'asc';
-            }
-
-            // Clear previous sort indicators
-            document.querySelectorAll('th.sortable').forEach(header => {
-                header.classList.remove('sort-asc', 'sort-desc');
-            });
-
-            // Add current sort indicator
-            const currentHeader = document.querySelector(`th[data-column="${column}"]`);
-            currentHeader.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
-
-            // Sort data
-            filteredData.sort((a, b) => {
-                let valueA, valueB;
-
-                switch (column) {
-                    case 0: // Owner Name
-                        valueA = a.ownerName.toLowerCase();
-                        valueB = b.ownerName.toLowerCase();
-                        break;
-                    case 1: // Address
-                        valueA = a.address.toLowerCase();
-                        valueB = b.address.toLowerCase();
-                        break;
-                    case 2: // Price
-                        valueA = parsePrice(a.price);
-                        valueB = parsePrice(b.price);
-                        break;
-                    case 3: // Sold Date
-                        valueA = parseDate(a.soldDate);
-                        valueB = parseDate(b.soldDate);
-                        break;
-                    default:
-                        return 0;
-                }
-
-                if (valueA < valueB) return currentSortDirection === 'asc' ? -1 : 1;
-                if (valueA > valueB) return currentSortDirection === 'asc' ? 1 : -1;
-                return 0;
-            });
-
-            console.log('Data sorted, rendering table');
-            if (shouldRender) {
-                renderTable();
-            }
+        function parsePrice(p) {
+            if (!p || p === 'N/A') return 0;
+            return parseFloat(p.replace(/[$,]/g, '')) || 0;
         }
 
-        function parsePrice(price) {
-            if (price === 'Contact Agent') return 0;
-            if (price.includes('&')) {
-                // Handle multiple prices like "$20,000 & $21,000"
-                const prices = price.split('&').map(p => parseFloat(p.replace(/[$,]/g, '')));
-                return Math.min(...prices); // Sort by lowest price
-            }
-            return parseFloat(price.replace(/[$,]/g, '')) || 0;
-        }
-
-        function parseDate(date) {
-            if (date === 'N/A' || date === 'Recent Sale') return new Date(0);
-            return new Date(date);
+        function parseDate(d) {
+            if (!d || d === 'N/A') return new Date(0);
+            return new Date(d);
         }
     </script>
 
