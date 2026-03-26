@@ -136,9 +136,14 @@
                 <strong id="statusText">Idle</strong>
                 <span id="lastRun" class="text-muted small ms-3"></span>
             </div>
-            <button id="runBtn" class="btn btn-run" onclick="runPipeline()">
-                Run Pipeline
-            </button>
+            <div class="d-flex gap-2">
+                <button id="runBtn" class="btn btn-run" onclick="runPipeline()">
+                    Run Pipeline
+                </button>
+                <button id="killBtn" class="btn btn-danger" onclick="killPipeline()" style="display:none; font-size:1.1rem; padding:0.75rem 1.5rem;">
+                    Kill
+                </button>
+            </div>
         </div>
     </div>
 
@@ -151,31 +156,31 @@
             <div class="county-grid">
                 <div class="county-toggle active" data-county="Davidson" onclick="toggleCounty(this)">
                     <div class="dot"></div>
-                    <div><div class="name">Davidson</div><div class="method">Excel download - padctn.org</div></div>
-                </div>
-                <div class="county-toggle active" data-county="Wilson" onclick="toggleCounty(this)">
-                    <div class="dot"></div>
-                    <div><div class="name">Wilson</div><div class="method">Date search - geopowered.com</div></div>
-                </div>
-                <div class="county-toggle active" data-county="Sumner" onclick="toggleCounty(this)">
-                    <div class="dot"></div>
-                    <div><div class="name">Sumner</div><div class="method">Date search - geopowered.com</div></div>
+                    <div><div class="name">Davidson</div><div class="method">Excel download - padctn.org (~60s)</div></div>
                 </div>
                 <div class="county-toggle active" data-county="Williamson" onclick="toggleCounty(this)">
                     <div class="dot"></div>
-                    <div><div class="name">Williamson</div><div class="method">Date search - williamson-tn.org</div></div>
+                    <div><div class="name">Williamson</div><div class="method">Selenium - williamson-tn.org (~5 min)</div></div>
                 </div>
-                <div class="county-toggle active" data-county="Rutherford" onclick="toggleCounty(this)">
+                <div class="county-toggle" data-county="Wilson" onclick="toggleCounty(this)">
                     <div class="dot"></div>
-                    <div><div class="name">Rutherford</div><div class="method">Name search - rutherfordcountytn.gov</div></div>
+                    <div><div class="name">Wilson</div><div class="method">TN State Portal (~3 min)</div></div>
                 </div>
-                <div class="county-toggle active" data-county="Robertson" onclick="toggleCounty(this)">
+                <div class="county-toggle" data-county="Sumner" onclick="toggleCounty(this)">
                     <div class="dot"></div>
-                    <div><div class="name">Robertson</div><div class="method">Name search - robertson-tn.gov</div></div>
+                    <div><div class="name">Sumner</div><div class="method">TN State Portal (~3 min)</div></div>
                 </div>
-                <div class="county-toggle active" data-county="Cheatham" onclick="toggleCounty(this)">
+                <div class="county-toggle" data-county="Rutherford" onclick="toggleCounty(this)">
                     <div class="dot"></div>
-                    <div><div class="name">Cheatham</div><div class="method">Name search - cheathamcounty-tn.gov</div></div>
+                    <div><div class="name">Rutherford</div><div class="method">Name search - slow (~15 min)</div></div>
+                </div>
+                <div class="county-toggle" data-county="Robertson" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Robertson</div><div class="method">TN State Portal (~2 min)</div></div>
+                </div>
+                <div class="county-toggle" data-county="Cheatham" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Cheatham</div><div class="method">TN State Portal (~1 min)</div></div>
                 </div>
                 <div class="county-toggle toggle-all" onclick="toggleAll()">
                     <div class="name">Toggle All</div>
@@ -188,8 +193,8 @@
             <h5>Lookback Period</h5>
             <div class="config-row">
                 <label>Davidson</label>
-                <input type="range" id="davidsonDays" min="7" max="180" value="60" oninput="updateVal(this)">
-                <span class="val" id="davidsonDays_val">60 days</span>
+                <input type="range" id="davidsonDays" min="7" max="180" value="7" oninput="updateVal(this)">
+                <span class="val" id="davidsonDays_val">7 days</span>
             </div>
             <div class="config-row">
                 <label>Wilson / Sumner</label>
@@ -198,8 +203,8 @@
             </div>
             <div class="config-row">
                 <label>Williamson</label>
-                <input type="range" id="williamsonDays" min="7" max="365" value="30" oninput="updateVal(this)">
-                <span class="val" id="williamsonDays_val">30 days</span>
+                <input type="range" id="williamsonDays" min="7" max="365" value="7" oninput="updateVal(this)">
+                <span class="val" id="williamsonDays_val">7 days</span>
             </div>
 
             <hr>
@@ -259,11 +264,26 @@
             };
         }
 
+        function killPipeline() {
+            fetch(API_BASE + '/api/kill', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('logBox').textContent += '\n--- KILLED BY USER ---\n';
+                    document.getElementById('killBtn').style.display = 'none';
+                    document.getElementById('runBtn').disabled = false;
+                    document.getElementById('statusDot').className = 'status-dot dot-error';
+                    document.getElementById('statusText').textContent = 'Killed';
+                    if (polling) { clearInterval(polling); polling = null; }
+                })
+                .catch(() => {});
+        }
+
         function runPipeline() {
             const config = getConfig();
             if (config.enabled_counties === 'none') { alert('Select at least one county.'); return; }
 
             document.getElementById('runBtn').disabled = true;
+            document.getElementById('killBtn').style.display = 'inline-block';
             document.getElementById('statusDot').className = 'status-dot dot-running';
             document.getElementById('statusText').textContent = 'Running...';
             document.getElementById('logBox').textContent =
@@ -312,6 +332,7 @@
                         clearInterval(polling);
                         polling = null;
                         document.getElementById('runBtn').disabled = false;
+                        document.getElementById('killBtn').style.display = 'none';
 
                         if (data.last_result === 'success') {
                             document.getElementById('statusDot').className = 'status-dot dot-success';
@@ -335,6 +356,7 @@
                 document.getElementById('statusDot').className = 'status-dot dot-running';
                 document.getElementById('statusText').textContent = 'Running...';
                 document.getElementById('runBtn').disabled = true;
+                document.getElementById('killBtn').style.display = 'inline-block';
                 polling = setInterval(checkStatus, 1000);
             } else if (data.last_result === 'success') {
                 document.getElementById('statusDot').className = 'status-dot dot-success';
