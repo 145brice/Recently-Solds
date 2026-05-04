@@ -383,21 +383,25 @@
         let currentPage = 1;
         let pageSize = 50;
 
-        // ---- Load CSV ----
-        fetch('nashville_cash_leads_clean.csv')
-            .then(r => r.text())
-            .then(csv => {
+        // ---- Load CSV + property type cache ----
+        let propertyTypeCache = {};
+        Promise.all([
+            fetch('nashville_cash_leads_clean.csv').then(r => r.text()),
+            fetch('/api/property-types').then(r => r.json()).catch(() => ({}))
+        ]).then(([csv, ptCache]) => {
+                propertyTypeCache = ptCache || {};
                 const rows = csv.split('\n').slice(1);
                 allData = rows.filter(r => r.trim()).map(r => {
                     const cols = parseCSVRow(r);
+                    const addr = cols[2] || '';
                     return {
                         ownerName: cols[0] || '',
                         county: cols[1] || '',
-                        address: cols[2] || '',
+                        address: addr,
                         price: cols[3] || '',
                         soldDate: cols[4] || '',
                         agentPhone: cols[5] || '',
-                        propertyType: cols[7] || 'N/A'
+                        propertyType: propertyTypeCache[addr] || cols[7] || ''
                     };
                 });
 
@@ -414,7 +418,7 @@
                 switchTab('all');
                 attachListeners();
             })
-            .catch(err => console.error('Error loading CSV:', err));
+            .catch(err => console.error('Error loading data:', err));
 
         // ---- Build county tabs ----
         function buildTabs() {
@@ -430,15 +434,12 @@
 
             // Per-state groups with separator labels
             STATE_GROUPS.forEach(group => {
-                const groupCounties = group.counties.filter(c => (countyData[c] || []).length > 0);
-                if (groupCounties.length === 0) return;
-
                 html += `<li class="nav-item tab-state-sep" role="presentation">
                     <span class="tab-state-label">${group.state}</span>
                 </li>`;
 
-                groupCounties.forEach(county => {
-                    const count = countyData[county].length;
+                group.counties.forEach(county => {
+                    const count = (countyData[county] || []).length;
                     const tabClass = 'county-tab-' + county.toLowerCase();
                     html += `<li class="nav-item" role="presentation">
                         <button class="nav-link ${tabClass}" data-county="${county}" type="button" role="tab">
@@ -768,7 +769,7 @@
             filteredData.forEach(row => {
                 csv += [
                     `"${row.ownerName}"`, `"${row.county}"`, `"${row.address}"`,
-                    `"${row.price}"`, `"${row.soldDate}"`, `"${row.propertyType || 'N/A'}"`, `"${row.agentPhone}"`
+                    `"${row.price}"`, `"${row.soldDate}"`, `"${row.propertyType || ''}"`, `"${row.agentPhone}"`
                 ].join(',') + '\n';
             });
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
