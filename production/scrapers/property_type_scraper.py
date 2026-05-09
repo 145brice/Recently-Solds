@@ -86,7 +86,7 @@ class PropertyTypeScraper:
         detected = "Unknown"
         for query in build_query_candidates(address, county=county):
             snippet_text = self._google_snippet_text(query)
-            detected = classify_property_type(snippet_text)
+            detected = classify_property_type_for_address(snippet_text, address)
             if detected != "Unknown":
                 break
 
@@ -114,7 +114,7 @@ class PropertyTypeScraper:
             if meta_addr and not matched_address:
                 matched_address = meta_addr
                 used_query = query
-            detected = classify_property_type(snippet_text)
+            detected = classify_property_type_for_address(snippet_text, address, meta_addr)
             if detected != "Unknown":
                 if not used_query:
                     used_query = query
@@ -190,7 +190,7 @@ class PropertyTypeScraper:
             return self._google_search_data_browser(query)
         return {
             "snippet_text": " ".join(text_chunks),
-            "meta_address": best_address_from_chunks(text_chunks),
+            "meta_address": best_address_from_chunks(extract_google_snippets(raw, include_body=False)),
         }
 
     def _get_browser_driver(self):
@@ -234,12 +234,13 @@ class PropertyTypeScraper:
                 page_text = driver.find_element("tag name", "body").text
             except Exception:
                 pass
-            chunks = extract_google_snippets(driver.page_source)
+            snippet_chunks = extract_google_snippets(driver.page_source, include_body=False)
+            chunks = list(snippet_chunks)
             if page_text:
                 chunks.insert(0, page_text)
             return {
                 "snippet_text": " ".join(chunks),
-                "meta_address": best_address_from_chunks(chunks),
+                "meta_address": best_address_from_chunks(snippet_chunks),
             }
         except Exception as exc:
             logger.debug('Browser Google lookup failed for query "%s": %s', query, exc)
@@ -347,7 +348,7 @@ def county_context_suffix(county: str | None) -> str:
     return f"\"{c}, TN\""
 
 
-def extract_google_snippets(page_html: str) -> List[str]:
+def extract_google_snippets(page_html: str, include_body: bool = True) -> List[str]:
     """
     Parse likely Google snippet/meta containers from search HTML.
     """
@@ -370,7 +371,7 @@ def extract_google_snippets(page_html: str) -> List[str]:
             if txt:
                 chunks.append(txt)
     body = re.search(r"<body[^>]*>(.*?)</body>", page_html, flags=re.I | re.S)
-    if body:
+    if include_body and body:
         fallback_text = clean_html_text(body.group(1))
         if fallback_text:
             chunks.append(fallback_text[:20000])
@@ -430,32 +431,91 @@ def classify_property_type(snippet_text: str) -> str:
     if not snippet_text:
         return "Unknown"
 
+    candidates = []
     for pattern, label in MULTI_PATTERNS:
-        if pattern.search(snippet_text):
-            return label
+        m = pattern.search(snippet_text)
+        if m:
+            candidates.append((m.start(), label))
 
-    if TOWNHOUSE_PATTERN.search(snippet_text):
-        return "Townhouse"
+    for pattern, label in [
+        (TOWNHOUSE_PATTERN, "Townhouse"),
+        (CONDO_PATTERN, "Condo"),
+        (MOBILE_PATTERN, "Mobile Home"),
+        (LAND_PATTERN, "Land"),
+        (COMMERCIAL_PATTERN, "Commercial"),
+        (SINGLE_PATTERN, "Single Family"),
+        (RESIDENTIAL_PATTERN, "Single Family"),
+    ]:
+        m = pattern.search(snippet_text)
+        if m:
+            candidates.append((m.start(), label))
 
-    if CONDO_PATTERN.search(snippet_text):
-        return "Condo"
-
-    if MOBILE_PATTERN.search(snippet_text):
-        return "Mobile Home"
-
-    if LAND_PATTERN.search(snippet_text):
-        return "Land"
-
-    if COMMERCIAL_PATTERN.search(snippet_text):
-        return "Commercial"
-
-    if SINGLE_PATTERN.search(snippet_text):
-        return "Single Family"
-
-    if RESIDENTIAL_PATTERN.search(snippet_text):
-        return "Single Family"
+    if candidates:
+        return sorted(candidates, key=lambda item: item[0])[0][1]
 
     return "Unknown"
+
+
+def classify_property_type_for_address(snippet_text: str, address: str, meta_address: str = "") -> str:
+    """
+    Classify from text near the target address first. Whole Google pages often
+    contain unrelated result text, so a random "triplex" elsewhere should not
+    override the actual property snippet.
+    """
+    if not snippet_text:
+        return "Unknown"
+
+    address_context = address_specific_context(snippet_text, address, meta_address)
+    if address_context:
+        ptype = classify_property_type(address_context)
+        if ptype != "Unknown":
+            return ptype
+
+    return "Unknown"
+
+
+def address_specific_context(text: str, address: str, meta_address: str = "") -> str:
+    norm_text = re.sub(r"\s+", " ", text or "")
+    if not norm_text:
+        return ""
+
+    patterns = address_context_patterns(address)
+    patterns += address_context_patterns(meta_address)
+    windows = []
+    for pat in dedupe_keep_order(patterns):
+        if not pat:
+            continue
+        for match in re.finditer(pat, norm_text, flags=re.I):
+            start = max(0, match.start() - 260)
+            end = min(len(norm_text), match.end() + 360)
+            windows.append(norm_text[start:end])
+
+    return " ".join(windows)
+
+
+def address_context_patterns(address: str) -> List[str]:
+    clean = normalize_address_for_google(address)
+    if not clean:
+        return []
+
+    first_part = clean.split(",")[0].strip()
+    flipped = flip_street_number_order(first_part)
+    patterns = []
+    for candidate in [first_part, flipped]:
+        candidate = re.sub(r"\s+", " ", candidate or "").strip()
+        if not candidate:
+            continue
+        escaped = re.escape(candidate).replace(r"\ ", r"\s+")
+        patterns.append(escaped)
+
+    m = re.match(r"^(\d+[A-Za-z\-]*)\s+(.+)$", flipped or first_part)
+    if m:
+        number = re.escape(m.group(1))
+        street = re.escape(m.group(2)).replace(r"\ ", r"\s+")
+        patterns.append(rf"{number}\s+{street}")
+        patterns.append(rf"{street}\s+{number}")
+
+    return patterns
 
 
 def load_addresses(path: str) -> List[str]:
