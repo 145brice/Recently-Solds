@@ -46,10 +46,11 @@ class PropertyTypeScraper:
     """
 
     def __init__(self, headless: bool = True, min_delay: float = 5.0, max_delay: float = 8.0):
-        del headless  # kept for interface compatibility
         self._stop = False
         self.min_delay = min_delay
         self.max_delay = max_delay
+        self.headless = headless
+        self._driver = None
         self._ua = (
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
             "AppleWebKit/537.36 (KHTML, like Gecko) "
@@ -63,9 +64,16 @@ class PropertyTypeScraper:
         return self
 
     def __exit__(self, *args):
+        self.close()
         return None
 
     def close(self):
+        if self._driver:
+            try:
+                self._driver.quit()
+            except Exception:
+                pass
+            self._driver = None
         return None
 
     def lookup(self, address: str, delay: float | None = None, county: str | None = None) -> str:
@@ -148,10 +156,11 @@ class PropertyTypeScraper:
                 raw = resp.read().decode("utf-8", errors="ignore")
         except Exception as exc:
             logger.debug('Google lookup failed for query "%s": %s', query, exc)
-            return ""
+            return self._google_snippet_text_browser(query)
 
         text_chunks = extract_google_snippets(raw)
-        return " ".join(text_chunks)
+        snippet_text = " ".join(text_chunks)
+        return snippet_text or self._google_snippet_text_browser(query)
 
     def _google_search_data(self, query: str) -> Dict[str, str]:
         """
@@ -174,13 +183,70 @@ class PropertyTypeScraper:
                 raw = resp.read().decode("utf-8", errors="ignore")
         except Exception as exc:
             logger.debug('Google lookup failed for query "%s": %s', query, exc)
-            return {"snippet_text": "", "meta_address": ""}
+            return self._google_search_data_browser(query)
 
         text_chunks = extract_google_snippets(raw)
+        if not text_chunks:
+            return self._google_search_data_browser(query)
         return {
             "snippet_text": " ".join(text_chunks),
             "meta_address": best_address_from_chunks(text_chunks),
         }
+
+    def _get_browser_driver(self):
+        if self._driver:
+            return self._driver
+        try:
+            from selenium import webdriver
+            from selenium.webdriver.chrome.service import Service
+            from selenium.webdriver.chrome.options import Options
+            from webdriver_manager.chrome import ChromeDriverManager
+        except Exception as exc:
+            logger.debug("Selenium Google fallback unavailable: %s", exc)
+            return None
+
+        opts = Options()
+        if self.headless:
+            opts.add_argument("--headless=new")
+        opts.add_argument("--no-sandbox")
+        opts.add_argument("--disable-dev-shm-usage")
+        opts.add_argument("--window-size=1600,1200")
+        opts.add_argument("--disable-blink-features=AutomationControlled")
+        opts.add_experimental_option("excludeSwitches", ["enable-automation"])
+        opts.add_argument(f"user-agent={self._ua}")
+        try:
+            self._driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=opts)
+        except Exception as exc:
+            logger.debug("Could not start Selenium Google fallback: %s", exc)
+            self._driver = None
+        return self._driver
+
+    def _google_search_data_browser(self, query: str) -> Dict[str, str]:
+        driver = self._get_browser_driver()
+        if not driver:
+            return {"snippet_text": "", "meta_address": ""}
+        try:
+            params = {"q": query, "hl": "en", "num": "10", "pws": "0"}
+            driver.get("https://www.google.com/search?" + urllib.parse.urlencode(params))
+            time.sleep(2.0)
+            page_text = ""
+            try:
+                page_text = driver.find_element("tag name", "body").text
+            except Exception:
+                pass
+            chunks = extract_google_snippets(driver.page_source)
+            if page_text:
+                chunks.insert(0, page_text)
+            return {
+                "snippet_text": " ".join(chunks),
+                "meta_address": best_address_from_chunks(chunks),
+            }
+        except Exception as exc:
+            logger.debug('Browser Google lookup failed for query "%s": %s', query, exc)
+            return {"snippet_text": "", "meta_address": ""}
+
+    def _google_snippet_text_browser(self, query: str) -> str:
+        return self._google_search_data_browser(query).get("snippet_text", "")
 
 
 def build_query(address: str) -> str:

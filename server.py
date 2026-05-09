@@ -400,6 +400,10 @@ def run_enrich_thread(addresses):
     except Exception as e:
         enrich_status['log'] += f'\n--- ERROR: {e} ---\n'
     finally:
+        try:
+            scraper.close()
+        except Exception:
+            pass
         conn.close()
         _enrich_scraper = None
 
