@@ -254,6 +254,12 @@ def _flip_street_num(addr_key):
     return f"{m.group(2)} {m.group(1)}"
 
 
+def _canonical_enrichment_address(address):
+    key = _normalize_addr_key(address)
+    flipped = _flip_street_num(key)
+    return flipped if flipped and flipped != key else (address or '').strip()
+
+
 def _latest_county_csv(county):
     county_dir = os.path.join(OUTPUT_DIR, county.lower())
     if not os.path.isdir(county_dir):
@@ -369,22 +375,25 @@ def run_enrich_thread(addresses):
                     meta_address = (result.get('meta_address') or '').strip()
                 else:
                     ptype = scraper.lookup(address, county=county)
-                display_address = meta_address or address
+                canonical_address = _canonical_enrichment_address(address)
+                display_address = meta_address or canonical_address or address
                 now_iso = datetime.now().isoformat()
                 enrich_status['done'] = i + 1
                 if meta_address and _normalize_addr_key(meta_address) != _normalize_addr_key(address):
                     enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}  (Google meta from {address})\n'
+                elif _normalize_addr_key(display_address) != _normalize_addr_key(address):
+                    enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}  (normalized from {address})\n'
                 else:
                     enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}\n'
                 conn.execute(
                     'INSERT OR REPLACE INTO property_type_cache (address, property_type, looked_up_at) VALUES (?, ?, ?)',
                     (address, ptype, now_iso)
                 )
-                if meta_address and _normalize_addr_key(meta_address) != _normalize_addr_key(address):
-                    # Also cache by the Google-metadata address so UI lookups can resolve either form.
+                if _normalize_addr_key(display_address) != _normalize_addr_key(address):
+                    # Also cache by the display address so UI lookups can resolve either form.
                     conn.execute(
                         'INSERT OR REPLACE INTO property_type_cache (address, property_type, looked_up_at) VALUES (?, ?, ?)',
-                        (meta_address, ptype, now_iso)
+                        (display_address, ptype, now_iso)
                     )
                 conn.commit()
 
