@@ -185,34 +185,50 @@ class PropertyTypeScraper:
 
 def build_query(address: str) -> str:
     cleaned = normalize_address_for_google(address)
-    return f"\"{cleaned}\" (single family OR duplex OR triplex OR fourplex OR \"multi family\" OR multifamily)"
+    return f"{cleaned} property type"
 
 
 def build_query_candidates(address: str, county: str | None = None) -> List[str]:
     """
-    Generate progressively broader Google queries to reduce Unknowns:
-    1) Exact quoted normalized address
-    2) Exact quoted with house-number moved to front if needed
-    3) Unquoted normalized address (broader recall)
+    Generate Google queries that match a normal manual search first.
     """
     base = normalize_address_for_google(address)
     flipped = flip_street_number_order(base)
     with_state = ensure_state_suffix(base)
     flipped_with_state = ensure_state_suffix(flipped)
 
-    county_context = county_context_suffix(county)
+    county_name = simple_county_name(county)
     variants = []
     for v in [base, flipped, with_state, flipped_with_state]:
         if v and v not in variants:
             variants.append(v)
 
-    keyword_tail = '(single family OR duplex OR triplex OR fourplex OR "multi family" OR multifamily)'
-    quoted = [f"\"{v}\" {keyword_tail}" for v in variants]
-    unquoted = [f"{v} {keyword_tail}" for v in variants]
-    if county_context:
-        quoted += [f"\"{v}\" {county_context} {keyword_tail}" for v in variants]
-        unquoted += [f"{v} {county_context} {keyword_tail}" for v in variants]
-    return quoted + unquoted
+    queries = []
+    for v in variants:
+        if county_name:
+            queries.append(f"{county_name} {v} property type")
+        queries.append(f"{v} property type")
+    for v in variants:
+        queries.append(f"{v} single family duplex triplex multifamily property type")
+    return dedupe_keep_order(queries)
+
+
+def dedupe_keep_order(values: List[str]) -> List[str]:
+    out = []
+    seen = set()
+    for value in values:
+        key = re.sub(r"\s+", " ", value or "").strip().lower()
+        if key and key not in seen:
+            seen.add(key)
+            out.append(value)
+    return out
+
+
+def simple_county_name(county: str | None) -> str:
+    c = (county or "").strip()
+    c = re.sub(r"\s+county\b", "", c, flags=re.I)
+    c = re.sub(r",\s*[A-Z]{2}\b", "", c)
+    return c.strip()
 
 
 def normalize_address_for_google(address: str) -> str:
@@ -287,13 +303,11 @@ def extract_google_snippets(page_html: str) -> List[str]:
             txt = clean_html_text(m)
             if txt:
                 chunks.append(txt)
-    if not chunks:
-        # Last-resort fallback: use visible page text when Google markup shifts.
-        body = re.search(r"<body[^>]*>(.*?)</body>", page_html, flags=re.I | re.S)
-        if body:
-            fallback_text = clean_html_text(body.group(1))
-            if fallback_text:
-                chunks.append(fallback_text[:12000])
+    body = re.search(r"<body[^>]*>(.*?)</body>", page_html, flags=re.I | re.S)
+    if body:
+        fallback_text = clean_html_text(body.group(1))
+        if fallback_text:
+            chunks.append(fallback_text[:20000])
     return chunks
 
 
