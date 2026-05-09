@@ -343,7 +343,7 @@ def run_enrich_thread(addresses):
              open(latest_csv_file, 'w', newline='', encoding='utf-8') as latest_f:
             run_writer = csv.writer(run_f)
             latest_writer = csv.writer(latest_f)
-            headers = ['timestamp', 'address', 'google_meta_address', 'property_type']
+            headers = ['timestamp', 'input_address', 'address', 'property_type']
             run_writer.writerow(headers)
             latest_writer.writerow(headers)
             run_f.flush()
@@ -369,9 +369,13 @@ def run_enrich_thread(addresses):
                     meta_address = (result.get('meta_address') or '').strip()
                 else:
                     ptype = scraper.lookup(address, county=county)
+                display_address = meta_address or address
                 now_iso = datetime.now().isoformat()
                 enrich_status['done'] = i + 1
-                enrich_status['log'] += f'[{i+1}/{len(addresses)}] {address}  ->  {ptype}\n'
+                if meta_address and _normalize_addr_key(meta_address) != _normalize_addr_key(address):
+                    enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}  (Google meta from {address})\n'
+                else:
+                    enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}\n'
                 conn.execute(
                     'INSERT OR REPLACE INTO property_type_cache (address, property_type, looked_up_at) VALUES (?, ?, ?)',
                     (address, ptype, now_iso)
@@ -384,7 +388,7 @@ def run_enrich_thread(addresses):
                     )
                 conn.commit()
 
-                row = [now_iso, address, meta_address, ptype]
+                row = [now_iso, address, display_address, ptype]
                 run_writer.writerow(row)
                 latest_writer.writerow(row)
                 run_f.flush()
