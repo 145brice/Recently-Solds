@@ -337,6 +337,7 @@ def run_enrich_thread(addresses):
     conn = sqlite3.connect(DB_FILE)
     scraper = PropertyTypeScraper()
     _enrich_scraper = scraper
+    county_scrapers = {}
 
     os.makedirs(ENRICH_OUTPUT_DIR, exist_ok=True)
     ts = datetime.now().strftime('%Y%m%d_%H%M%S')
@@ -377,14 +378,22 @@ def run_enrich_thread(addresses):
                     ptype = scraper.lookup(address, county=county)
                 canonical_address = _canonical_enrichment_address(address)
                 display_address = meta_address or canonical_address or address
+                county_key = (county or '').strip().lower()
+                if ptype == 'Unknown' and county_key in ('wilson', 'sumner') and not scraper._stop:
+                    try:
+                        if county_key not in county_scrapers:
+                            from production.scrapers.wilson_sumner_scraper import CountyPropertyScraper
+                            county_scraper = CountyPropertyScraper(county=county_key, headless=True)
+                            county_scraper.navigate_to_search()
+                            county_scrapers[county_key] = county_scraper
+                        county_type = county_scrapers[county_key].lookup_property_type(display_address)
+                        if county_type and county_type != 'Unknown':
+                            ptype = county_type
+                    except Exception:
+                        pass
                 now_iso = datetime.now().isoformat()
                 enrich_status['done'] = i + 1
-                if meta_address and _normalize_addr_key(meta_address) != _normalize_addr_key(address):
-                    enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}  (Google meta from {address})\n'
-                elif _normalize_addr_key(display_address) != _normalize_addr_key(address):
-                    enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}  (normalized from {address})\n'
-                else:
-                    enrich_status['log'] += f'[{i+1}/{len(addresses)}] {display_address}  ->  {ptype}\n'
+                enrich_status['log'] += f'[{i+1}/{len(addresses)}] {ptype}  <-  {display_address}\n'
                 conn.execute(
                     'INSERT OR REPLACE INTO property_type_cache (address, property_type, looked_up_at) VALUES (?, ?, ?)',
                     (address, ptype, now_iso)
@@ -405,6 +414,11 @@ def run_enrich_thread(addresses):
     except Exception as e:
         enrich_status['log'] += f'\n--- ERROR: {e} ---\n'
     finally:
+        for county_scraper in county_scrapers.values():
+            try:
+                county_scraper.__exit__(None, None, None)
+            except Exception:
+                pass
         conn.close()
         _enrich_scraper = None
 

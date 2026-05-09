@@ -29,9 +29,15 @@ MULTI_PATTERNS = [
     (re.compile(r"\bfour[\s-]?plex\b|\b4[\s-]?unit\b|\b4[\s-]?family\b", re.I), "4-Unit"),
     (re.compile(r"\btriplex\b|\b3[\s-]?unit\b|\b3[\s-]?family\b", re.I), "Triplex"),
     (re.compile(r"\bduplex\b|\b2[\s-]?unit\b|\b2[\s-]?family\b", re.I), "Duplex"),
-    (re.compile(r"\bmulti[\s-]?family\b|\bmultifamily\b", re.I), "Unknown"),
+    (re.compile(r"\bmulti[\s-]?family\b|\bmultifamily\b|\bapartment\b|\bapartments\b", re.I), "Multi Family"),
 ]
 SINGLE_PATTERN = re.compile(r"\bsingle[\s-]?family\b|\bsfh\b", re.I)
+CONDO_PATTERN = re.compile(r"\bcondo(?:minium)?\b|\bco[- ]?op\b", re.I)
+TOWNHOUSE_PATTERN = re.compile(r"\btown\s?house\b|\btownhome\b", re.I)
+LAND_PATTERN = re.compile(r"\bvacant land\b|\bresidential lot\b|\blot/land\b|\braw land\b|\bunimproved\b", re.I)
+MOBILE_PATTERN = re.compile(r"\bmobile home\b|\bmanufactured home\b", re.I)
+COMMERCIAL_PATTERN = re.compile(r"\bcommercial\b|\boffice\b|\bretail\b|\bindustrial\b", re.I)
+RESIDENTIAL_PATTERN = re.compile(r"\bresidential\b|\buse description[:\s]+res\b|\bpt[:\s]+res\b", re.I)
 
 
 class PropertyTypeScraper:
@@ -348,7 +354,25 @@ def classify_property_type(snippet_text: str) -> str:
         if pattern.search(snippet_text):
             return label
 
+    if TOWNHOUSE_PATTERN.search(snippet_text):
+        return "Townhouse"
+
+    if CONDO_PATTERN.search(snippet_text):
+        return "Condo"
+
+    if MOBILE_PATTERN.search(snippet_text):
+        return "Mobile Home"
+
+    if LAND_PATTERN.search(snippet_text):
+        return "Land"
+
+    if COMMERCIAL_PATTERN.search(snippet_text):
+        return "Commercial"
+
     if SINGLE_PATTERN.search(snippet_text):
+        return "Single Family"
+
+    if RESIDENTIAL_PATTERN.search(snippet_text):
         return "Single Family"
 
     return "Unknown"
