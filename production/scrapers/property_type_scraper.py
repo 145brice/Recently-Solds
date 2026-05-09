@@ -25,8 +25,6 @@ from typing import Iterable, List, Dict
 
 logger = logging.getLogger(__name__)
 
-GOOGLE_BLOCKED_TYPE = "Google Blocked"
-
 MULTI_PATTERNS = [
     (re.compile(r"\bfour[\s-]?plex\b|\b4[\s-]?unit\b|\b4[\s-]?family\b", re.I), "4-Unit"),
     (re.compile(r"\btriplex\b|\b3[\s-]?unit\b|\b3[\s-]?family\b", re.I), "Triplex"),
@@ -47,21 +45,10 @@ class PropertyTypeScraper:
     Backward-compatible class used by server.py for Type Admin enrichment.
     """
 
-    def __init__(
-        self,
-        headless: bool = True,
-        min_delay: float = 12.0,
-        max_delay: float = 28.0,
-        max_queries_per_address: int = 3,
-    ):
+    def __init__(self, headless: bool = True, min_delay: float = 5.0, max_delay: float = 8.0):
         self._stop = False
-        self._blocked = False
         self.min_delay = min_delay
         self.max_delay = max_delay
-        self.max_queries_per_address = max(1, int(max_queries_per_address or 1))
-        self._lookups_done = 0
-        self._next_cooldown_after = random.randint(17, 29)
-        self._browser_only = False
         self.headless = headless
         self._driver = None
         self._ua = (
@@ -95,15 +82,10 @@ class PropertyTypeScraper:
         """
         if self._stop:
             return "Stopped"
-        if self._blocked:
-            return GOOGLE_BLOCKED_TYPE
 
         detected = "Unknown"
-        for query in build_query_candidates(address, county=county)[: self.max_queries_per_address]:
+        for query in build_query_candidates(address, county=county):
             snippet_text = self._google_snippet_text(query)
-            if self._blocked:
-                detected = GOOGLE_BLOCKED_TYPE
-                break
             detected = classify_property_type(snippet_text)
             if detected != "Unknown":
                 break
@@ -111,7 +93,6 @@ class PropertyTypeScraper:
         pause = random.uniform(self.min_delay, self.max_delay) if delay is None else delay
         if pause > 0:
             time.sleep(pause)
-        self._cooldown_if_needed()
 
         return detected
 
@@ -122,18 +103,12 @@ class PropertyTypeScraper:
         """
         if self._stop:
             return {"property_type": "Stopped", "meta_address": "", "query": ""}
-        if self._blocked:
-            return {"property_type": GOOGLE_BLOCKED_TYPE, "meta_address": "", "query": ""}
 
         detected = "Unknown"
         matched_address = ""
         used_query = ""
-        for query in build_query_candidates(address, county=county)[: self.max_queries_per_address]:
+        for query in build_query_candidates(address, county=county):
             search_data = self._google_search_data(query)
-            if self._blocked:
-                detected = GOOGLE_BLOCKED_TYPE
-                used_query = query
-                break
             snippet_text = search_data.get("snippet_text", "")
             meta_addr = search_data.get("meta_address", "")
             if meta_addr and not matched_address:
@@ -148,7 +123,6 @@ class PropertyTypeScraper:
         pause = random.uniform(self.min_delay, self.max_delay) if delay is None else delay
         if pause > 0:
             time.sleep(pause)
-        self._cooldown_if_needed()
 
         return {"property_type": detected, "meta_address": matched_address, "query": used_query}
 
@@ -167,8 +141,6 @@ class PropertyTypeScraper:
         Does not request result URLs.
         """
         params = {"q": query, "hl": "en", "num": "10", "pws": "0"}
-        if self._browser_only:
-            return self._google_snippet_text_browser(query)
         url = "https://www.google.com/search?" + urllib.parse.urlencode(params)
 
         req = urllib.request.Request(
@@ -184,12 +156,8 @@ class PropertyTypeScraper:
                 raw = resp.read().decode("utf-8", errors="ignore")
         except Exception as exc:
             logger.debug('Google lookup failed for query "%s": %s', query, exc)
-            self._browser_only = True
             return self._google_snippet_text_browser(query)
 
-        if is_google_block_page(raw):
-            self._blocked = True
-            return ""
         text_chunks = extract_google_snippets(raw)
         snippet_text = " ".join(text_chunks)
         return snippet_text or self._google_snippet_text_browser(query)
@@ -200,8 +168,6 @@ class PropertyTypeScraper:
         string found in Google metadata/snippets.
         """
         params = {"q": query, "hl": "en", "num": "10", "pws": "0"}
-        if self._browser_only:
-            return self._google_search_data_browser(query)
         url = "https://www.google.com/search?" + urllib.parse.urlencode(params)
 
         req = urllib.request.Request(
@@ -217,12 +183,8 @@ class PropertyTypeScraper:
                 raw = resp.read().decode("utf-8", errors="ignore")
         except Exception as exc:
             logger.debug('Google lookup failed for query "%s": %s', query, exc)
-            self._browser_only = True
             return self._google_search_data_browser(query)
 
-        if is_google_block_page(raw):
-            self._blocked = True
-            return {"snippet_text": "", "meta_address": ""}
         text_chunks = extract_google_snippets(raw)
         if not text_chunks:
             return self._google_search_data_browser(query)
@@ -266,16 +228,12 @@ class PropertyTypeScraper:
         try:
             params = {"q": query, "hl": "en", "num": "10", "pws": "0"}
             driver.get("https://www.google.com/search?" + urllib.parse.urlencode(params))
-            time.sleep(random.uniform(2.4, 5.8))
+            time.sleep(2.0)
             page_text = ""
             try:
                 page_text = driver.find_element("tag name", "body").text
             except Exception:
                 pass
-            if is_google_block_page(page_text) or is_google_block_page(driver.page_source):
-                self._blocked = True
-                return {"snippet_text": "", "meta_address": ""}
-            self._human_page_dwell(driver)
             chunks = extract_google_snippets(driver.page_source)
             if page_text:
                 chunks.insert(0, page_text)
@@ -289,23 +247,6 @@ class PropertyTypeScraper:
 
     def _google_snippet_text_browser(self, query: str) -> str:
         return self._google_search_data_browser(query).get("snippet_text", "")
-
-    def _human_page_dwell(self, driver) -> None:
-        try:
-            if random.random() < 0.75:
-                driver.execute_script("window.scrollBy(0, arguments[0]);", random.randint(120, 520))
-                time.sleep(random.uniform(0.6, 1.8))
-            if random.random() < 0.35:
-                driver.execute_script("window.scrollBy(0, arguments[0]);", random.randint(-220, -60))
-                time.sleep(random.uniform(0.4, 1.2))
-        except Exception:
-            pass
-
-    def _cooldown_if_needed(self) -> None:
-        self._lookups_done += 1
-        if self._lookups_done >= self._next_cooldown_after:
-            time.sleep(random.uniform(45.0, 120.0))
-            self._next_cooldown_after = self._lookups_done + random.randint(17, 29)
 
 
 def build_query(address: str) -> str:
@@ -404,20 +345,6 @@ def county_context_suffix(county: str | None) -> str:
     if not re.search(r"county$", c, flags=re.I):
         c = f"{c} County"
     return f"\"{c}, TN\""
-
-
-def is_google_block_page(text: str) -> bool:
-    t = (text or "").lower()
-    blocked_markers = [
-        "unusual traffic",
-        "our systems have detected",
-        "sorry, but your computer or network",
-        "/sorry/index",
-        "captcha",
-        "recaptcha",
-        "to continue, please type the characters",
-    ]
-    return any(marker in t for marker in blocked_markers)
 
 
 def extract_google_snippets(page_html: str) -> List[str]:
