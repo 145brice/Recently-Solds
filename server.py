@@ -325,7 +325,7 @@ def backfill_property_types_from_county_csv(county, address_items):
 def run_enrich_thread(addresses):
     global _enrich_scraper
     sys.path.insert(0, PROJECT_ROOT)
-    from production.scrapers.property_type_scraper import PropertyTypeScraper
+    from production.scrapers.property_type_scraper import GOOGLE_BLOCKED_TYPE, PropertyTypeScraper
 
     enrich_status['running'] = True
     enrich_status['total'] = len(addresses)
@@ -375,6 +375,12 @@ def run_enrich_thread(addresses):
                     meta_address = (result.get('meta_address') or '').strip()
                 else:
                     ptype = scraper.lookup(address, county=county)
+                if ptype == GOOGLE_BLOCKED_TYPE:
+                    enrich_status['log'] += (
+                        f'\n--- Google is showing a block/CAPTCHA page. '
+                        f'Stopping now so completed rows stay saved and the search cools down. ---\n'
+                    )
+                    break
                 canonical_address = _canonical_enrichment_address(address)
                 display_address = meta_address or canonical_address or address
                 now_iso = datetime.now().isoformat()
