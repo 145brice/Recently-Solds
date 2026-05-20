@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Pipeline Control</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a2e; color: #eee; font-family: 'Segoe UI', sans-serif; }
+
+        /* Nav override for dark theme */
+        .navbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important; }
+
+        .admin-grid {
+            max-width: 1200px; margin: 30px auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+            padding: 0 1rem;
+        }
+        .card-dark {
+            background: #16213e; border-radius: 12px; padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        h5 { color: #667eea; margin-bottom: 1rem; }
+        hr { border-color: #333; }
+
+        /* Status bar */
+        .status-bar {
+            max-width: 1200px; margin: 20px auto 0; padding: 0 1rem;
+        }
+        .status-inner {
+            background: #16213e; border-radius: 12px; padding: 1rem 1.5rem;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .status-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .dot-idle { background: #666; }
+        .dot-running { background: #ffc107; animation: pulse 1s infinite; }
+        .dot-success { background: #28a745; }
+        .dot-error { background: #dc3545; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+        /* County toggles */
+        .county-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .county-toggle {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 8px;
+            background: #1a1a3e; border: 1px solid #333;
+            cursor: pointer; transition: all 0.15s; user-select: none;
+        }
+        .county-toggle:hover { border-color: #667eea; }
+        .county-toggle.active { background: #1e2a4a; border-color: #667eea; }
+        .county-toggle .dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #444; transition: background 0.15s; flex-shrink: 0;
+        }
+        .county-toggle.active .dot { background: #28a745; }
+        .county-toggle .name { font-size: 0.9rem; font-weight: 500; }
+        .county-toggle .method { font-size: 0.7rem; color: #888; }
+        .toggle-all {
+            grid-column: 1 / -1; justify-content: center;
+            border-style: dashed; opacity: 0.6;
+        }
+        .toggle-all:hover { opacity: 1; }
+        .state-group-label {
+            grid-column: 1 / -1;
+            font-size: 0.7rem; font-weight: 700; letter-spacing: 0.08em;
+            text-transform: uppercase; color: #667eea;
+            padding: 6px 0 2px; border-bottom: 1px solid #2a2a4a;
+            margin-top: 4px;
+        }
+        .state-group-label:first-child { margin-top: 0; }
+
+        /* Sliders */
+        .config-row {
+            display: flex; align-items: center; gap: 12px;
+            margin-bottom: 12px;
+        }
+        .config-row label { width: 130px; font-size: 0.85rem; color: #aab; flex-shrink: 0; }
+        .config-row input[type=range] { flex: 1; accent-color: #667eea; }
+        .config-row .val {
+            width: 80px; text-align: right; font-family: 'Consolas', monospace;
+            font-size: 0.85rem; color: #667eea; flex-shrink: 0;
+        }
+
+        /* Run button */
+        .btn-run {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border: none; color: white; font-size: 1.1rem; padding: 0.75rem 2rem;
+            transition: all 0.2s;
+        }
+        .btn-run:hover { opacity: 0.9; color: white; transform: translateY(-1px); }
+        .btn-run:disabled { opacity: 0.5; transform: none; }
+
+        /* Log */
+        .log-box {
+            background: #0f0f23; color: #0f0; font-family: 'Consolas', monospace;
+            font-size: 12px; padding: 1rem; border-radius: 8px;
+            height: 100%; min-height: 300px; overflow-y: auto; white-space: pre-wrap;
+            border: 1px solid #333;
+        }
+
+        /* Full-width bottom row */
+        .full-row { grid-column: 1 / -1; }
+
+        /* Stats badges */
+        .stat-badge {
+            display: inline-block; padding: 4px 12px; border-radius: 20px;
+            font-size: 0.8rem; margin-right: 6px;
+            background: #1a1a3e; border: 1px solid #333;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Investor Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link active" href="admin.html">Sales Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                    <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-inner">
+            <div>
+                <span id="statusDot" class="status-dot dot-idle"></span>
+                <strong id="statusText">Idle</strong>
+                <span id="lastRun" class="text-muted small ms-3"></span>
+            </div>
+            <div class="d-flex gap-2">
+                <button id="runBtn" class="btn btn-run" onclick="runPipeline()">
+                    Run Pipeline
+                </button>
+                <button id="killBtn" class="btn btn-danger" onclick="killPipeline()" style="display:none; font-size:1.1rem; padding:0.75rem 1.5rem;">
+                    Kill
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="admin-grid">
+
+        <!-- Left: Counties -->
+        <div class="card-dark">
+            <h5>Counties</h5>
+            <div class="county-grid">
+
+                <div class="state-group-label">Tennessee</div>
+                <div class="county-toggle active" data-county="Davidson" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Davidson</div><div class="method">Excel download - padctn.org (~60s)</div></div>
+                </div>
+                <div class="county-toggle active" data-county="Williamson" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Williamson</div><div class="method">Selenium - williamson-tn.org (~5 min)</div></div>
+                </div>
+                <div class="county-toggle active" data-county="Wilson" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Wilson</div><div class="method">TN State Portal (~3 min)</div></div>
+                </div>
+                <div class="county-toggle active" data-county="Sumner" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Sumner</div><div class="method">TN State Portal (~3 min)</div></div>
+                </div>
+                <div class="county-toggle active" data-county="Rutherford" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Rutherford</div><div class="method">Name search - slow (~15 min)</div></div>
+                </div>
+                <div class="county-toggle active" data-county="Robertson" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Robertson</div><div class="method">TN State Portal (~2 min)</div></div>
+                </div>
+                <div class="county-toggle active" data-county="Cheatham" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Cheatham</div><div class="method">TN State Portal (~1 min)</div></div>
+                </div>
+
+                <div class="state-group-label">North Carolina</div>
+                <div class="county-toggle active" data-county="Wake" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Wake (Raleigh)</div><div class="method">Excel download - no Selenium (~10s)</div></div>
+                </div>
+
+                <div class="state-group-label">Illinois</div>
+                <div class="county-toggle active" data-county="Cook" onclick="toggleCounty(this)">
+                    <div class="dot"></div>
+                    <div><div class="name">Cook (Chicago)</div><div class="method">Socrata REST API - no Selenium (~25s)</div></div>
+                </div>
+
+                <div class="county-toggle toggle-all" onclick="toggleAll()">
+                    <div class="name">Toggle All</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Settings -->
+        <div class="card-dark">
+            <h5>Lookback Period</h5>
+            <div class="config-row">
+                <label>Davidson</label>
+                <input type="range" id="davidsonDays" min="7" max="180" value="30" oninput="updateVal(this)">
+                <span class="val" id="davidsonDays_val">30 days</span>
+            </div>
+            <div class="config-row">
+                <label>Wilson / Sumner / Robertson / Cheatham / Wake</label>
+                <input type="range" id="wilsonSumnerDays" min="1" max="90" value="30" oninput="updateVal(this)">
+                <span class="val" id="wilsonSumnerDays_val">30 days</span>
+            </div>
+            <div class="config-row">
+                <label>Williamson</label>
+                <input type="range" id="williamsonDays" min="7" max="365" value="30" oninput="updateVal(this)">
+                <span class="val" id="williamsonDays_val">30 days</span>
+            </div>
+
+            <hr>
+
+            <h5>Price Filter</h5>
+            <div class="config-row">
+                <label>Min ($)</label>
+                <input type="range" id="minPrice" min="0" max="1000000" step="25000" value="0" oninput="updatePrice(this)">
+                <span class="val" id="minPrice_val">$0</span>
+            </div>
+            <div class="config-row">
+                <label>Max ($)</label>
+                <input type="range" id="maxPrice" min="0" max="5000000" step="50000" value="850000" oninput="updatePrice(this)">
+                <span class="val" id="maxPrice_val">$850K</span>
+            </div>
+        </div>
+
+        <!-- Full Width: Log Output -->
+        <div class="card-dark full-row">
+            <h5>Pipeline Log</h5>
+            <div class="log-box" id="logBox">Ready. Configure settings above and click "Run Pipeline".</div>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE = '';
+        let polling = null;
+
+        function toggleCounty(el) { el.classList.toggle('active'); }
+
+        function toggleAll() {
+            const toggles = document.querySelectorAll('.county-toggle[data-county]');
+            const allActive = [...toggles].every(t => t.classList.contains('active'));
+            toggles.forEach(t => { if (allActive) t.classList.remove('active'); else t.classList.add('active'); });
+        }
+
+        function updateVal(input) {
+            document.getElementById(input.id + '_val').textContent = input.value + ' days';
+        }
+
+        function updatePrice(input) {
+            const v = parseInt(input.value);
+            document.getElementById(input.id + '_val').textContent =
+                v >= 1000000 ? '$' + (v/1000000).toFixed(1) + 'M' : '$' + (v/1000).toFixed(0) + 'K';
+        }
+
+        function getConfig() {
+            const counties = [...document.querySelectorAll('.county-toggle.active[data-county]')]
+                .map(el => el.dataset.county);
+            return {
+                enabled_counties: counties.join(',') || 'none',
+                davidson_days: document.getElementById('davidsonDays').value,
+                wilson_sumner_days: document.getElementById('wilsonSumnerDays').value,
+                williamson_days: document.getElementById('williamsonDays').value,
+                min_price: document.getElementById('minPrice').value,
+                max_price: document.getElementById('maxPrice').value
+            };
+        }
+
+        function killPipeline() {
+            fetch(API_BASE + '/api/kill', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('logBox').textContent += '\n--- KILLED BY USER ---\n';
+                    document.getElementById('killBtn').style.display = 'none';
+                    document.getElementById('runBtn').disabled = false;
+                    document.getElementById('statusDot').className = 'status-dot dot-error';
+                    document.getElementById('statusText').textContent = 'Killed';
+                    if (polling) { clearInterval(polling); polling = null; }
+                })
+                .catch(() => {});
+        }
+
+        function runPipeline() {
+            const config = getConfig();
+            if (config.enabled_counties === 'none') { alert('Select at least one county.'); return; }
+
+            document.getElementById('runBtn').disabled = true;
+            document.getElementById('killBtn').style.display = 'inline-block';
+            document.getElementById('statusDot').className = 'status-dot dot-running';
+            document.getElementById('statusText').textContent = 'Running...';
+            document.getElementById('logBox').textContent =
+                'Starting pipeline...\n' +
+                '  Counties: ' + config.enabled_counties + '\n' +
+                '  Davidson: ' + config.davidson_days + ' days\n' +
+                '  Wilson/Sumner: ' + config.wilson_sumner_days + ' days\n' +
+                '  Williamson: ' + config.williamson_days + ' days\n' +
+                '  Price: $' + parseInt(config.min_price).toLocaleString() +
+                ' - $' + parseInt(config.max_price).toLocaleString() + '\n\n';
+
+            fetch(API_BASE + '/api/run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(config)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('logBox').textContent += 'Error: ' + data.error;
+                    document.getElementById('runBtn').disabled = false;
+                    return;
+                }
+                polling = setInterval(checkStatus, 1000);
+            })
+            .catch(err => {
+                document.getElementById('logBox').textContent += '\nCannot reach server at ' + API_BASE + '\nMake sure server.py is running.';
+                document.getElementById('runBtn').disabled = false;
+                document.getElementById('statusDot').className = 'status-dot dot-error';
+                document.getElementById('statusText').textContent = 'Server Offline';
+            });
+        }
+
+        function checkStatus() {
+            fetch(API_BASE + '/api/status')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('logBox').textContent = data.log || '';
+                    document.getElementById('logBox').scrollTop = document.getElementById('logBox').scrollHeight;
+
+                    if (data.last_run) {
+                        document.getElementById('lastRun').textContent = 'Last run: ' + data.last_run;
+                    }
+
+                    if (!data.running) {
+                        clearInterval(polling);
+                        polling = null;
+                        document.getElementById('runBtn').disabled = false;
+                        document.getElementById('killBtn').style.display = 'none';
+
+                        if (data.last_result === 'success') {
+                            document.getElementById('statusDot').className = 'status-dot dot-success';
+                            document.getElementById('statusText').textContent = 'Complete';
+                        } else if (data.last_result === 'error') {
+                            document.getElementById('statusDot').className = 'status-dot dot-error';
+                            document.getElementById('statusText').textContent = 'Error';
+                        } else {
+                            document.getElementById('statusDot').className = 'status-dot dot-idle';
+                            document.getElementById('statusText').textContent = 'Idle';
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
+
+        // Check status on load
+        fetch('/api/status').then(r => r.json()).then(data => {
+            if (data.last_run) document.getElementById('lastRun').textContent = 'Last run: ' + data.last_run;
+            if (data.running) {
+                document.getElementById('statusDot').className = 'status-dot dot-running';
+                document.getElementById('statusText').textContent = 'Running...';
+                document.getElementById('runBtn').disabled = true;
+                document.getElementById('killBtn').style.display = 'inline-block';
+                polling = setInterval(checkStatus, 1000);
+            } else if (data.last_result === 'success') {
+                document.getElementById('statusDot').className = 'status-dot dot-success';
+                document.getElementById('statusText').textContent = 'Complete';
+            }
+        }).catch(() => {
+            document.getElementById('statusDot').className = 'status-dot dot-error';
+            document.getElementById('statusText').textContent = 'Server Offline';
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

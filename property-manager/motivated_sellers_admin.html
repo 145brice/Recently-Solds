@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Motivated Sellers Pipeline</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a2e; color: #eee; font-family: 'Segoe UI', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%) !important; }
+
+        .admin-grid {
+            max-width: 1200px; margin: 30px auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+            padding: 0 1rem;
+        }
+        .card-dark {
+            background: #16213e; border-radius: 12px; padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        h5 { color: #e74c3c; margin-bottom: 1rem; }
+        hr { border-color: #333; }
+
+        .status-bar { max-width: 1200px; margin: 20px auto 0; padding: 0 1rem; }
+        .status-inner {
+            background: #16213e; border-radius: 12px; padding: 1rem 1.5rem;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .status-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .dot-idle    { background: #666; }
+        .dot-running { background: #ffc107; animation: pulse 1s infinite; }
+        .dot-success { background: #28a745; }
+        .dot-error   { background: #dc3545; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+        .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .type-toggle {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 8px;
+            background: #1a1a3e; border: 1px solid #333;
+            cursor: pointer; transition: all 0.15s; user-select: none;
+        }
+        .type-toggle:hover  { border-color: #e74c3c; }
+        .type-toggle.active { background: #2a1a3e; border-color: #e74c3c; }
+        .type-toggle .dot {
+            width: 10px; height: 10px; border-radius: 50%;
+            background: #444; transition: background 0.15s; flex-shrink: 0;
+        }
+        .type-toggle.active .dot { background: #28a745; }
+        .type-toggle .name   { font-size: 0.9rem; font-weight: 500; }
+        .type-toggle .method { font-size: 0.7rem; color: #888; }
+        .toggle-all {
+            grid-column: 1 / -1; justify-content: center;
+            border-style: dashed; opacity: 0.6;
+        }
+        .toggle-all:hover { opacity: 1; }
+
+        .config-row {
+            display: flex; align-items: center; gap: 12px; margin-bottom: 12px;
+        }
+        .config-row label { width: 160px; font-size: 0.85rem; color: #aab; flex-shrink: 0; }
+        .config-row input[type=range] { flex: 1; accent-color: #e74c3c; }
+        .config-row .val {
+            width: 80px; text-align: right; font-family: 'Consolas', monospace;
+            font-size: 0.85rem; color: #e74c3c; flex-shrink: 0;
+        }
+
+        .btn-run {
+            background: linear-gradient(135deg, #c0392b, #8e44ad);
+            border: none; color: white; font-size: 1.1rem; padding: 0.75rem 2rem;
+            transition: all 0.2s;
+        }
+        .btn-run:hover { opacity: 0.9; color: white; transform: translateY(-1px); }
+        .btn-run:disabled { opacity: 0.5; transform: none; }
+
+        .log-box {
+            background: #0f0f23; color: #0f0; font-family: 'Consolas', monospace;
+            font-size: 12px; padding: 1rem; border-radius: 8px;
+            height: 100%; min-height: 300px; overflow-y: auto; white-space: pre-wrap;
+            border: 1px solid #333;
+        }
+        .full-row { grid-column: 1 / -1; }
+
+        /* Lead type color dots */
+        .dot-probate      { background: #9b59b6 !important; }
+        .dot-divorce      { background: #e74c3c !important; }
+        .dot-preforeclosure { background: #e67e22 !important; }
+        .dot-codeviolation  { background: #f39c12 !important; }
+        .dot-expiredlisting { background: #1abc9c !important; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Investor Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                    <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <div class="status-inner">
+            <div>
+                <span id="statusDot" class="status-dot dot-idle"></span>
+                <strong id="statusText">Idle</strong>
+                <span id="lastRun" class="text-muted small ms-3"></span>
+            </div>
+            <div class="d-flex gap-2">
+                <button id="runBtn" class="btn btn-run" onclick="runPipeline()">Run Pipeline</button>
+                <button id="killBtn" class="btn btn-danger" onclick="killPipeline()" style="display:none; font-size:1.1rem; padding:0.75rem 1.5rem;">Kill</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Grid -->
+    <div class="admin-grid">
+
+        <!-- Lead Type Toggles -->
+        <div class="card-dark">
+            <h5>Lead Types</h5>
+            <div class="type-grid">
+                <div class="type-toggle active" data-type="Probate" onclick="toggleType(this)">
+                    <div class="dot dot-probate"></div>
+                    <div>
+                        <div class="name">Probate / Estate</div>
+                        <div class="method">TN Probate Court + Register of Deeds</div>
+                    </div>
+                </div>
+                <div class="type-toggle active" data-type="Divorce" onclick="toggleType(this)">
+                    <div class="dot dot-divorce"></div>
+                    <div>
+                        <div class="name">Divorce Filings</div>
+                        <div class="method">TN Courts public docket</div>
+                    </div>
+                </div>
+                <div class="type-toggle active" data-type="PreForeclosure" onclick="toggleType(this)">
+                    <div class="dot dot-preforeclosure"></div>
+                    <div>
+                        <div class="name">Pre-Foreclosure</div>
+                        <div class="method">Lis pendens / NOD — Register of Deeds</div>
+                    </div>
+                </div>
+                <div class="type-toggle active" data-type="CodeViolation" onclick="toggleType(this)">
+                    <div class="dot dot-codeviolation"></div>
+                    <div>
+                        <div class="name">Code Violations</div>
+                        <div class="method">Nashville Metro open data API</div>
+                    </div>
+                </div>
+                <div class="type-toggle active" data-type="ExpiredListing" onclick="toggleType(this)">
+                    <div class="dot dot-expiredlisting"></div>
+                    <div>
+                        <div class="name">Expired Listings</div>
+                        <div class="method">Redfin (not yet integrated)</div>
+                    </div>
+                </div>
+                <div class="type-toggle active" data-type="RealEstateLit" onclick="toggleType(this)">
+                    <div class="dot" style="background:#34495e;"></div>
+                    <div>
+                        <div class="name">Real Estate Litigation</div>
+                        <div class="method">Chancery partition / quiet title / disputes</div>
+                    </div>
+                </div>
+                <div class="type-toggle toggle-all" onclick="toggleAll()">
+                    <div class="name">Toggle All</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings -->
+        <div class="card-dark">
+            <h5>Lookback Period</h5>
+            <div class="config-row">
+                <label>Probate / Estate</label>
+                <input type="range" id="probateDays" min="30" max="365" value="90" oninput="updateVal(this)">
+                <span class="val" id="probateDays_val">90 days</span>
+            </div>
+            <div class="config-row">
+                <label>Divorce</label>
+                <input type="range" id="divorceDays" min="14" max="180" value="60" oninput="updateVal(this)">
+                <span class="val" id="divorceDays_val">60 days</span>
+            </div>
+            <div class="config-row">
+                <label>Pre-Foreclosure</label>
+                <input type="range" id="foreclosureDays" min="14" max="180" value="60" oninput="updateVal(this)">
+                <span class="val" id="foreclosureDays_val">60 days</span>
+            </div>
+            <div class="config-row">
+                <label>Code Violations</label>
+                <input type="range" id="codeDays" min="7" max="180" value="60" oninput="updateVal(this)">
+                <span class="val" id="codeDays_val">60 days</span>
+            </div>
+            <div class="config-row">
+                <label>Expired Listings (DOM)</label>
+                <input type="range" id="expiredDom" min="30" max="365" value="90" oninput="updateVal(this)">
+                <span class="val" id="expiredDom_val">90 days</span>
+            </div>
+
+            <hr>
+
+            <h5>Global Lookback Override</h5>
+            <p class="text-muted" style="font-size:0.8rem;">Sets a single fallback value sent to the pipeline for any types that don't have per-type config yet.</p>
+            <div class="config-row">
+                <label>Default Days Back</label>
+                <input type="range" id="globalDays" min="7" max="365" value="60" oninput="updateVal(this)">
+                <span class="val" id="globalDays_val">60 days</span>
+            </div>
+        </div>
+
+        <!-- Log -->
+        <div class="card-dark full-row">
+            <h5>Pipeline Log</h5>
+            <div class="log-box" id="logBox">Ready. Select lead types above and click "Run Pipeline".</div>
+        </div>
+    </div>
+
+    <script>
+        let polling = null;
+
+        function toggleType(el) { el.classList.toggle('active'); }
+
+        function toggleAll() {
+            const toggles = document.querySelectorAll('.type-toggle[data-type]');
+            const allActive = [...toggles].every(t => t.classList.contains('active'));
+            toggles.forEach(t => { if (allActive) t.classList.remove('active'); else t.classList.add('active'); });
+        }
+
+        function updateVal(input) {
+            document.getElementById(input.id + '_val').textContent = input.value + ' days';
+        }
+
+        function getConfig() {
+            const types = [...document.querySelectorAll('.type-toggle.active[data-type]')]
+                .map(el => el.dataset.type);
+            return {
+                enabled_types: types.join(',') || 'none',
+                days_back: document.getElementById('globalDays').value,
+                probate_days: document.getElementById('probateDays').value,
+                divorce_days: document.getElementById('divorceDays').value,
+                foreclosure_days: document.getElementById('foreclosureDays').value,
+                code_days: document.getElementById('codeDays').value,
+                expired_dom: document.getElementById('expiredDom').value,
+            };
+        }
+
+        function runPipeline() {
+            const config = getConfig();
+            if (config.enabled_types === 'none') { alert('Select at least one lead type.'); return; }
+
+            document.getElementById('runBtn').disabled = true;
+            document.getElementById('killBtn').style.display = 'inline-block';
+            document.getElementById('statusDot').className = 'status-dot dot-running';
+            document.getElementById('statusText').textContent = 'Running...';
+            document.getElementById('logBox').textContent =
+                'Starting motivated sellers pipeline...\n' +
+                '  Types: ' + config.enabled_types + '\n' +
+                '  Days back: ' + config.days_back + '\n\n';
+
+            fetch('/api/motivated-run', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(config)
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('logBox').textContent += 'Error: ' + data.error;
+                    document.getElementById('runBtn').disabled = false;
+                    return;
+                }
+                polling = setInterval(checkStatus, 1500);
+            })
+            .catch(() => {
+                document.getElementById('logBox').textContent += '\nCannot reach server. Make sure server.py is running.';
+                document.getElementById('runBtn').disabled = false;
+                document.getElementById('statusDot').className = 'status-dot dot-error';
+                document.getElementById('statusText').textContent = 'Server Offline';
+            });
+        }
+
+        function killPipeline() {
+            fetch('/api/motivated-kill', { method: 'POST' })
+                .then(r => r.json())
+                .then(() => {
+                    document.getElementById('logBox').textContent += '\n--- KILLED BY USER ---\n';
+                    document.getElementById('killBtn').style.display = 'none';
+                    document.getElementById('runBtn').disabled = false;
+                    document.getElementById('statusDot').className = 'status-dot dot-error';
+                    document.getElementById('statusText').textContent = 'Killed';
+                    if (polling) { clearInterval(polling); polling = null; }
+                });
+        }
+
+        function checkStatus() {
+            fetch('/api/motivated-status')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('logBox').textContent = data.log || '';
+                    document.getElementById('logBox').scrollTop = document.getElementById('logBox').scrollHeight;
+                    if (data.last_run) {
+                        document.getElementById('lastRun').textContent = 'Last run: ' + data.last_run;
+                    }
+                    if (!data.running) {
+                        clearInterval(polling); polling = null;
+                        document.getElementById('runBtn').disabled = false;
+                        document.getElementById('killBtn').style.display = 'none';
+                        if (data.last_result === 'success') {
+                            document.getElementById('statusDot').className = 'status-dot dot-success';
+                            document.getElementById('statusText').textContent = 'Complete';
+                        } else if (data.last_result === 'error') {
+                            document.getElementById('statusDot').className = 'status-dot dot-error';
+                            document.getElementById('statusText').textContent = 'Error';
+                        } else {
+                            document.getElementById('statusDot').className = 'status-dot dot-idle';
+                            document.getElementById('statusText').textContent = 'Idle';
+                        }
+                    }
+                })
+                .catch(() => {});
+        }
+
+        // Check on load
+        fetch('/api/motivated-status').then(r => r.json()).then(data => {
+            if (data.last_run) document.getElementById('lastRun').textContent = 'Last run: ' + data.last_run;
+            if (data.running) {
+                document.getElementById('statusDot').className = 'status-dot dot-running';
+                document.getElementById('statusText').textContent = 'Running...';
+                document.getElementById('runBtn').disabled = true;
+                document.getElementById('killBtn').style.display = 'inline-block';
+                polling = setInterval(checkStatus, 1500);
+            } else if (data.last_result === 'success') {
+                document.getElementById('statusDot').className = 'status-dot dot-success';
+                document.getElementById('statusText').textContent = 'Complete';
+            }
+        }).catch(() => {
+            document.getElementById('statusDot').className = 'status-dot dot-error';
+            document.getElementById('statusText').textContent = 'Server Offline';
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Complete - Fresh Cash Leads</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .success-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 3rem;
+            text-align: center;
+        }
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #198754, #20c997);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .download-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            padding: 0.85rem 2rem;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 1rem;
+        }
+        .download-btn:hover { opacity: 0.9; color: white; }
+        .order-details {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+        .order-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .order-row:last-child { border-bottom: none; }
+        .order-row.total { font-weight: 700; font-size: 1.1rem; border-top: 2px solid #343a40; margin-top: 0.5rem; padding-top: 0.75rem; }
+        .error-container {
+            max-width: 600px;
+            margin: 4rem auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 3rem;
+            text-align: center;
+        }
+        .loading-state { color: #6c757d; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Cash Leads</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                    <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div id="loadingState" class="success-container loading-state">
+        <div class="spinner-border text-primary mb-3" role="status"></div>
+        <p>Verifying your payment...</p>
+    </div>
+
+    <div id="successState" class="success-container" style="display:none;">
+        <div class="success-icon">&#10003;</div>
+        <h2>Purchase Complete!</h2>
+        <p class="text-muted">Your leads are ready for download.</p>
+
+        <div class="order-details" id="orderDetails"></div>
+
+        <a id="downloadBtn" class="download-btn" href="#">Download Leads CSV</a>
+
+        <div class="mt-3">
+            <a href="storefront.html" class="text-decoration-none">Browse more leads &rarr;</a>
+        </div>
+    </div>
+
+    <div id="errorState" class="error-container" style="display:none;">
+        <div style="font-size:3rem; margin-bottom:1rem;">&#9888;</div>
+        <h2>Something went wrong</h2>
+        <p id="errorMessage" class="text-muted">We couldn't verify your payment. Please contact support.</p>
+        <a href="storefront.html" class="btn btn-primary mt-2">Back to Store</a>
+    </div>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const sessionId = params.get('session_id');
+
+        if (!sessionId) {
+            showError('No session ID found. If you completed a purchase, check your email or contact support.');
+        } else {
+            verifyPayment(sessionId);
+        }
+
+        async function verifyPayment(sessionId) {
+            try {
+                const response = await fetch(`/api/verify-payment?session_id=${encodeURIComponent(sessionId)}`);
+                const data = await response.json();
+
+                if (data.error) {
+                    showError(data.error);
+                    return;
+                }
+
+                if (data.status === 'paid') {
+                    showSuccess(data);
+                } else {
+                    showError('Payment has not been completed yet. Status: ' + data.status);
+                }
+            } catch (err) {
+                console.error(err);
+                showError('Could not verify payment. Please make sure the server is running.');
+            }
+        }
+
+        function showSuccess(data) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('successState').style.display = '';
+
+            const details = document.getElementById('orderDetails');
+            details.innerHTML = `
+                <div class="order-row"><span>Leads purchased</span><span>${data.lead_count}</span></div>
+                <div class="order-row"><span>Price per lead</span><span>$2.00</span></div>
+                <div class="order-row total"><span>Total paid</span><span>$${(data.lead_count * 2).toFixed(2)}</span></div>
+            `;
+
+            const downloadBtn = document.getElementById('downloadBtn');
+            downloadBtn.href = `/api/download-leads?session_id=${encodeURIComponent(sessionId)}`;
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = '';
+            document.getElementById('errorMessage').textContent = message;
+        }
+    </script>
+</body>
+</html>

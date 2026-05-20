@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe - Fresh Investor Leads</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2.5rem 0;
+            text-align: center;
+        }
+        .header p { opacity: 0.9; margin-bottom: 0; }
+
+        /* Main layout */
+        .store-layout {
+            display: flex;
+            max-width: 1400px;
+            margin: 2rem auto;
+            gap: 1.5rem;
+            padding: 0 1rem;
+        }
+        .leads-panel {
+            flex: 1;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            padding: 1.5rem;
+            min-width: 0;
+        }
+
+        /* Subscription sidebar */
+        .sub-sidebar {
+            width: 340px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 1rem;
+            align-self: flex-start;
+        }
+        .sub-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(102,126,234,0.2);
+            padding: 1.75rem;
+            border: 2px solid #667eea;
+        }
+        .sub-panel .price-display {
+            text-align: center;
+            margin: 1.25rem 0;
+        }
+        .sub-panel .price-display .amount {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #667eea;
+            line-height: 1;
+        }
+        .sub-panel .price-display .period {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .sub-panel h5 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #212529;
+            margin-bottom: 0;
+            text-align: center;
+        }
+        .sub-panel .badge-pill {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 0.3rem 1rem;
+            font-size: 0.78rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.25rem 0;
+        }
+        .feature-list li {
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .feature-list li:last-child { border-bottom: none; }
+        .feature-list li::before {
+            content: "✓";
+            color: #28a745;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+        .subscribe-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            width: 100%;
+            padding: 0.85rem;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-radius: 8px;
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.1s;
+        }
+        .subscribe-btn:hover { opacity: 0.92; transform: translateY(-1px); }
+        .sub-note {
+            text-align: center;
+            font-size: 0.78rem;
+            color: #6c757d;
+            margin-top: 0.75rem;
+        }
+
+        /* Table styles */
+        .table th {
+            background-color: #343a40;
+            color: white;
+            border: none;
+            cursor: pointer;
+            user-select: none;
+        }
+        .table tbody tr:hover { background-color: #e3f2fd; }
+        .table th.sort-asc::after { content: ' \25B2'; font-size: 12px; }
+        .table th.sort-desc::after { content: ' \25BC'; font-size: 12px; }
+        .table th.sortable::after { content: ' \21C5'; font-size: 12px; opacity: 0.5; }
+        .table td { vertical-align: middle; }
+        .sold-badge {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+        .blurred-row td:not(:first-child):not(:nth-child(2)) {
+            filter: blur(4px);
+            user-select: none;
+        }
+
+        .nav-tabs .nav-link {
+            font-weight: 600;
+            color: #495057;
+            border: none;
+            padding: 0.75rem 1.25rem;
+        }
+        .nav-tabs .nav-link.active {
+            color: white;
+            background: none;
+            border: none;
+        }
+        .nav-tabs .nav-link .badge {
+            font-size: 0.7rem;
+            margin-left: 0.4rem;
+            vertical-align: middle;
+        }
+        .county-tab-all.active { background-color: #343a40 !important; }
+        .county-tab-davidson.active { background-color: #0d6efd !important; }
+        .county-tab-williamson.active { background-color: #6f42c1 !important; }
+        .county-tab-wilson.active { background-color: #198754 !important; }
+        .county-tab-sumner.active { background-color: #fd7e14 !important; }
+        .county-tab-rutherford.active { background-color: #dc3545 !important; }
+        .county-tab-robertson.active { background-color: #20c997 !important; }
+        .county-tab-cheatham.active { background-color: #6610f2 !important; }
+        .county-tab-wake.active  { background-color: #0891b2 !important; }
+        .county-tab-cook.active  { background-color: #059669 !important; }
+        .nav-tabs .nav-link:not(.active):hover { background-color: #e9ecef; border: none; }
+        .nav-tabs { border-bottom: 2px solid #dee2e6; gap: 0.25rem; align-items: center; }
+        .tab-state-sep { display: flex; align-items: center; padding: 0 0.25rem; }
+        .tab-state-label {
+            font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.07em; color: #adb5bd; padding: 0 0.4rem;
+            border-left: 2px solid #dee2e6; line-height: 1; white-space: nowrap;
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+            padding: 0.75rem 1rem;
+            background: #f1f3f5;
+            border-radius: 8px;
+        }
+        .stat-item { font-size: 0.85rem; color: #495057; }
+        .stat-item strong { color: #212529; }
+
+        .preview-label {
+            display: inline-block;
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffc107;
+            border-radius: 6px;
+            padding: 0.35rem 0.85rem;
+            font-size: 0.82rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 992px) {
+            .store-layout { flex-direction: column; }
+            .sub-sidebar { width: 100%; position: static; }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Cash Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="storefront.html">Buy Leads</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Nashville Metro Property Leads</h1>
+        <p>Fresh daily leads from 7 counties &mdash; one flat monthly subscription</p>
+    </div>
+
+    <div class="store-layout">
+        <!-- Leads preview panel -->
+        <div class="leads-panel">
+            <span class="preview-label">Sample Preview — Subscribe to unlock all leads</span>
+            <ul class="nav nav-tabs mb-3" id="countyTabs"></ul>
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <div class="stats-bar flex-grow-1" id="statsBar"></div>
+                <div class="d-flex gap-2 ms-3">
+                    <select id="priceFilter" class="form-select form-select-sm" style="width: 150px;">
+                        <option value="">All Prices</option>
+                        <option value="0-100000">$0 - $100K</option>
+                        <option value="100000-500000">$100K - $500K</option>
+                        <option value="500000-1000000">$500K - $1M</option>
+                        <option value="1000000+">$1M+</option>
+                    </select>
+                    <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search leads..." style="width: 180px;">
+                </div>
+            </div>
+
+            <div class="table-responsive">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th data-column="0" class="sortable">Owner Name</th>
+                            <th data-column="1" class="sortable">County</th>
+                            <th data-column="2" class="sortable">Address</th>
+                            <th data-column="3" data-type="price" class="sortable">Sale Price</th>
+                            <th data-column="4" data-type="date" class="sortable">Sold Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
+            </div>
+            <div class="mt-2 text-muted">
+                <small>Showing <span id="recordCount">0</span> leads (preview — subscribe for full access)</small>
+            </div>
+        </div>
+
+        <!-- Subscription sidebar -->
+        <div class="sub-sidebar">
+            <div class="sub-panel">
+                <div class="text-center">
+                    <span class="badge-pill">ALL COUNTIES INCLUDED</span>
+                </div>
+                <h5>Property Leads Subscription</h5>
+                <div class="price-display">
+                    <div class="amount">$99</div>
+                    <div class="period">/month</div>
+                </div>
+                <ul class="feature-list">
+                    <li>All 7 Nashville-metro counties</li>
+                    <li>Fresh daily data pulls</li>
+                    <li>Owner name &amp; contact info</li>
+                    <li>Sale price &amp; date</li>
+                    <li>Full address on every lead</li>
+                    <li>Unlimited CSV exports</li>
+                    <li>Cancel anytime</li>
+                </ul>
+                <button class="subscribe-btn" id="subscribeBtn" onclick="startCheckout()">
+                    Subscribe Now — $99/mo
+                </button>
+                <p class="sub-note">Month-to-month &bull; No contracts &bull; Cancel anytime</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout loading overlay -->
+    <div id="checkoutOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:white; padding:2rem; border-radius:10px; text-align:center;">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <p class="mb-0 fw-bold">Redirecting to Stripe Checkout...</p>
+        </div>
+    </div>
+
+    <script>
+        const STATE_GROUPS = [
+            { state: 'Tennessee', counties: ['Davidson', 'Williamson', 'Wilson', 'Sumner', 'Rutherford', 'Robertson', 'Cheatham'] },
+            { state: 'North Carolina', counties: ['Wake'] },
+            { state: 'Illinois', counties: ['Cook'] },
+        ];
+        const COUNTIES = STATE_GROUPS.flatMap(g => g.counties);
+        const PREVIEW_LIMIT = 10; // rows to show per county in preview
+
+        let allData = [];
+        let countyData = {};
+        let activeCounty = 'all';
+        let filteredData = [];
+        let currentSortColumn = -1;
+        let currentSortDirection = 'asc';
+
+        fetch('nashville_cash_leads_clean.csv')
+            .then(r => r.text())
+            .then(csv => {
+                const rows = csv.split('\n').slice(1);
+                let id = 0;
+                allData = rows.filter(r => r.trim()).map(r => {
+                    const cols = parseCSVRow(r);
+                    return {
+                        id: id++,
+                        ownerName: cols[0] || '',
+                        county: cols[1] || '',
+                        address: cols[2] || '',
+                        price: cols[3] || '',
+                        soldDate: cols[4] || '',
+                        agentPhone: cols[5] || ''
+                    };
+                });
+
+                countyData = {};
+                COUNTIES.forEach(c => countyData[c] = []);
+                allData.forEach(row => {
+                    if (countyData[row.county]) countyData[row.county].push(row);
+                });
+
+                buildTabs();
+                switchTab('all');
+                attachListeners();
+            })
+            .catch(() => {
+                document.getElementById('tableBody').innerHTML =
+                    '<tr><td colspan="5" class="text-center text-danger py-4">Error loading leads data.</td></tr>';
+            });
+
+        function buildTabs() {
+            const tabContainer = document.getElementById('countyTabs');
+            let html = `<li class="nav-item"><button class="nav-link county-tab-all active" data-county="all" type="button">All <span class="badge bg-secondary">${allData.length}</span></button></li>`;
+            STATE_GROUPS.forEach(group => {
+                const groupCounties = group.counties.filter(c => (countyData[c] || []).length > 0);
+                if (groupCounties.length === 0) return;
+                html += `<li class="nav-item tab-state-sep"><span class="tab-state-label">${group.state}</span></li>`;
+                groupCounties.forEach(county => {
+                    const count = countyData[county].length;
+                    html += `<li class="nav-item"><button class="nav-link county-tab-${county.toLowerCase()}" data-county="${county}" type="button">${county} <span class="badge bg-secondary">${count}</span></button></li>`;
+                });
+            });
+            tabContainer.innerHTML = html;
+            tabContainer.querySelectorAll('.nav-link').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabContainer.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    switchTab(tab.dataset.county);
+                });
+            });
+        }
+
+        function switchTab(county) {
+            activeCounty = county;
+            currentSortColumn = -1;
+            currentSortDirection = 'asc';
+            document.querySelectorAll('th.sortable').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+            document.getElementById('searchInput').value = '';
+            document.getElementById('priceFilter').value = '';
+            applyFilters();
+            updateStats();
+        }
+
+        function updateStats() {
+            const data = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
+            const bar = document.getElementById('statsBar');
+            if (data.length === 0) { bar.innerHTML = '<span class="stat-item">No data available</span>'; return; }
+            const prices = data.map(r => parsePrice(r.price)).filter(p => p > 0);
+            const avgPrice = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
+            bar.innerHTML = `
+                <span class="stat-item"><strong>${data.length}</strong> leads available</span>
+                <span class="stat-item">Avg Sale: <strong>$${Math.round(avgPrice).toLocaleString()}</strong></span>
+            `;
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const priceRange = document.getElementById('priceFilter').value;
+            const sourceData = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
+
+            filteredData = sourceData.filter(row => {
+                const matchesSearch = searchTerm === '' ||
+                    row.ownerName.toLowerCase().includes(searchTerm) ||
+                    row.address.toLowerCase().includes(searchTerm) ||
+                    row.county.toLowerCase().includes(searchTerm);
+
+                let matchesPrice = true;
+                if (priceRange) {
+                    const pv = parsePrice(row.price);
+                    switch (priceRange) {
+                        case '0-100000': matchesPrice = pv >= 0 && pv <= 100000; break;
+                        case '100000-500000': matchesPrice = pv > 100000 && pv <= 500000; break;
+                        case '500000-1000000': matchesPrice = pv > 500000 && pv <= 1000000; break;
+                        case '1000000+': matchesPrice = pv > 1000000; break;
+                    }
+                }
+                return matchesSearch && matchesPrice;
+            });
+
+            if (currentSortColumn >= 0) {
+                const header = document.querySelector(`th[data-column="${currentSortColumn}"]`);
+                sortData(currentSortColumn, header ? header.dataset.type || 'text' : 'text');
+            }
+            renderTable();
+        }
+
+        function attachListeners() {
+            document.getElementById('searchInput').addEventListener('input', applyFilters);
+            document.getElementById('priceFilter').addEventListener('change', applyFilters);
+
+            document.querySelectorAll('th.sortable').forEach(header => {
+                header.addEventListener('click', () => {
+                    const col = parseInt(header.dataset.column);
+                    const type = header.dataset.type || 'text';
+                    if (currentSortColumn === col) {
+                        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSortColumn = col;
+                        currentSortDirection = 'asc';
+                    }
+                    document.querySelectorAll('th.sortable').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
+                    header.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+                    sortData(col, type);
+                    renderTable();
+                });
+            });
+        }
+
+        function sortData(column, type) {
+            filteredData.sort((a, b) => {
+                let va, vb;
+                switch (column) {
+                    case 0: va = a.ownerName.toLowerCase(); vb = b.ownerName.toLowerCase(); break;
+                    case 1: va = a.county.toLowerCase(); vb = b.county.toLowerCase(); break;
+                    case 2: va = a.address.toLowerCase(); vb = b.address.toLowerCase(); break;
+                    case 3: va = parsePrice(a.price); vb = parsePrice(b.price); break;
+                    case 4: va = parseDate(a.soldDate); vb = parseDate(b.soldDate); break;
+                    default: return 0;
+                }
+                if (va < vb) return currentSortDirection === 'asc' ? -1 : 1;
+                if (va > vb) return currentSortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('tableBody');
+            const countEl = document.getElementById('recordCount');
+
+            // Show first PREVIEW_LIMIT rows clearly, blur the rest
+            const previewRows = filteredData.slice(0, PREVIEW_LIMIT);
+            const blurRows = filteredData.slice(PREVIEW_LIMIT, PREVIEW_LIMIT + 5);
+
+            countEl.textContent = filteredData.length;
+
+            if (filteredData.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No leads found. Try adjusting your filters.</td></tr>';
+                return;
+            }
+
+            const fragment = document.createDocumentFragment();
+
+            previewRows.forEach(row => {
+                fragment.appendChild(buildRow(row, false));
+            });
+
+            blurRows.forEach(row => {
+                fragment.appendChild(buildRow(row, true));
+            });
+
+            if (filteredData.length > PREVIEW_LIMIT + 5) {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td colspan="5" class="text-center py-3" style="background:#f8f9fa;">
+                    <strong style="color:#667eea;">${filteredData.length - PREVIEW_LIMIT - 5} more leads hidden</strong>
+                    &mdash; <a href="#" onclick="document.getElementById('subscribeBtn').scrollIntoView({behavior:'smooth'});return false;">Subscribe to unlock all</a>
+                </td>`;
+                fragment.appendChild(tr);
+            }
+
+            tbody.innerHTML = '';
+            tbody.appendChild(fragment);
+        }
+
+        function buildRow(row, blurred) {
+            const tr = document.createElement('tr');
+            if (blurred) tr.classList.add('blurred-row');
+
+            const fields = [row.ownerName, row.county, blurred ? '████████████' : row.address, row.price, row.soldDate];
+            fields.forEach((val, i) => {
+                const td = document.createElement('td');
+                if (i === 4 && val && val !== 'N/A') {
+                    td.innerHTML = `<span class="sold-badge">SOLD</span> ${val}`;
+                } else {
+                    td.textContent = val || 'N/A';
+                }
+                tr.appendChild(td);
+            });
+            return tr;
+        }
+
+        async function startCheckout() {
+            const overlay = document.getElementById('checkoutOverlay');
+            overlay.style.display = 'flex';
+            document.getElementById('subscribeBtn').disabled = true;
+
+            try {
+                const response = await fetch('/api/create-subscription-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    alert('Checkout error: ' + data.error);
+                    overlay.style.display = 'none';
+                    document.getElementById('subscribeBtn').disabled = false;
+                    return;
+                }
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Could not create checkout session. Please try again.');
+                    overlay.style.display = 'none';
+                    document.getElementById('subscribeBtn').disabled = false;
+                }
+            } catch (err) {
+                alert('Could not connect to the server. Make sure the back-end is running.');
+                overlay.style.display = 'none';
+                document.getElementById('subscribeBtn').disabled = false;
+            }
+        }
+
+        function parseCSVRow(row) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < row.length; i++) {
+                const ch = row[i];
+                if (ch === '"') {
+                    if (inQuotes && row[i + 1] === '"') { current += '"'; i++; }
+                    else inQuotes = !inQuotes;
+                } else if (ch === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += ch;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        function parsePrice(p) {
+            if (!p || p === 'N/A') return 0;
+            return parseFloat(p.replace(/[$,]/g, '')) || 0;
+        }
+
+        function parseDate(d) {
+            if (!d || d === 'N/A') return new Date(0);
+            return new Date(d);
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

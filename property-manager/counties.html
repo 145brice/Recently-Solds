@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Browse Counties - Fresh Leads Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        .county-card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .county-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .county-card.active-county {
+            border: 2px solid #28a745;
+            background: linear-gradient(135deg, rgba(40, 167, 69, 0.05) 0%, rgba(40, 167, 69, 0.02) 100%);
+        }
+        .county-name {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+        .county-location {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .state-badge {
+            background-color: #667eea;
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .county-status {
+            font-size: 0.8rem;
+            font-weight: bold;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            display: inline-block;
+        }
+        .status-active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .status-coming-soon {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+        .county-price {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #28a745;
+        }
+        .btn-purchase-county {
+            background-color: #28a745;
+            border: none;
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+        .btn-purchase-county:hover:not(:disabled) {
+            background-color: #218838;
+            color: white;
+        }
+        .btn-purchase-county:disabled {
+            background-color: #6c757d;
+        }
+        .urgency-badge {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            margin-left: 0.5rem;
+        }
+        .trust-bar {
+            background: #fff3cd;
+            border-top: 2px solid #ffc107;
+            border-bottom: 2px solid #ffc107;
+            padding: 0.4rem 0;
+            text-align: center;
+        }
+        .trust-bar small {
+            font-size: 0.75rem;
+            font-weight: bold;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Investor Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                    <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="counties.html">Browse Counties</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Choose Your County & Start Today</h1>
+        <p class="lead mb-2">Fresh leads daily • Beta pricing locked forever • Cancel anytime</p>
+        <div class="mb-2">
+            <span style="font-size: 1.8rem; font-weight: bold; color: #fff;">$79/mo</span>
+            <span style="font-size: 1rem; text-decoration: line-through; color: rgba(255,255,255,0.7); margin-left: 0.5rem;">$99/mo</span>
+        </div>
+        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;">
+            Most guys charge three, four hundred. We do $79.
+        </p>
+        <p class="mb-0" style="font-size: 0.9rem;"><span class="badge bg-danger">LIMITED TIME</span> Lock in beta pricing before it goes to $99/mo</p>
+    </div>
+
+    <!-- Trust Bar -->
+    <div class="trust-bar">
+        <div class="container">
+            <small style="font-size: 0.75rem; font-weight: bold; color: #856404;">
+                ⚡ New leads added daily • 📊 Verified property data • 🔒 Secure checkout • 💯 Cancel anytime
+            </small>
+        </div>
+    </div>
+
+    <div class="container my-2">
+        <!-- Tennessee Counties (Active) -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 0.2rem; font-size: 1rem;">
+                Tennessee Counties (1) <span style="font-size: 0.7rem; color: #dc3545; font-weight: bold;">• 1 ACTIVE NOW</span>
+            </h2>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <div class="county-card active-county">
+                        <div class="county-name">Williamson County <span class="urgency-badge">BETA ONLY</span></div>
+                        <div class="county-location">
+                            <span class="state-badge">TN</span>
+                            Franklin
+                        </div>
+                        <span class="county-status status-active">ACTIVE</span>
+                        <div class="mt-1">
+                            <div class="mb-1 price-highlight">
+                                <span class="county-price">$79/mo</span>
+                                <span class="text-muted" style="text-decoration: line-through; font-size: 0.65rem;">$99/mo</span>
+                                <span style="color: #dc3545; font-size: 0.65rem; font-weight: bold; margin-left: 0.2rem;">Save 20%</span>
+                            </div>
+                            <button class="btn btn-purchase-county w-100" onclick="mockPurchaseCounty('Williamson County', 'TN', 79)">
+                                ✓ Get Instant Access
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function mockPurchaseCounty(name, state, price) {
+            alert(`Mock Purchase: ${name}, ${state} for $${price}/mo\n\nThis is a demo. In production, this would redirect to checkout.\n\nRedirecting to pricing page...`);
+            setTimeout(() => {
+                window.location.href = 'pricing.html';
+            }, 1500);
+        }
+    </script>
+</body>
+</html>

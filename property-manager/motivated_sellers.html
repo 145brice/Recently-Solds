@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motivated Sellers Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        .header {
+            background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);
+            color: white; padding: 2rem 0; text-align: center;
+        }
+        .header p { opacity: 0.9; margin-bottom: 0; }
+
+        .table-container {
+            margin: 2rem auto; max-width: 1400px;
+            background: white; border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden; padding: 1.5rem;
+        }
+
+        /* Tabs */
+        .nav-tabs { border-bottom: 2px solid #dee2e6; gap: 0.25rem; }
+        .nav-tabs .nav-link {
+            font-weight: 600; color: #495057; border: none;
+            padding: 0.75rem 1.25rem;
+        }
+        .nav-tabs .nav-link .badge { font-size: 0.7rem; margin-left: 0.4rem; vertical-align: middle; }
+        .nav-tabs .nav-link:not(.active):hover { background-color: #e9ecef; }
+
+        .tab-probate.active       { background-color: #9b59b6 !important; color: white !important; }
+        .tab-divorce.active       { background-color: #e74c3c !important; color: white !important; }
+        .tab-preforeclosure.active{ background-color: #e67e22 !important; color: white !important; }
+        .tab-codeviolation.active { background-color: #f39c12 !important; color: white !important; }
+        .tab-expiredlisting.active{ background-color: #1abc9c !important; color: white !important; }
+        .tab-all.active           { background-color: #343a40 !important; color: white !important; }
+
+        /* Table */
+        .table th {
+            background-color: #343a40; color: white; border: none;
+            cursor: pointer; user-select: none;
+        }
+        .table tbody tr:nth-child(even) { background-color: #f8f9fa; }
+        .table tbody tr:hover { background-color: #fdf0f0; }
+        .table th.sort-asc::after  { content: ' \25B2'; font-size: 12px; }
+        .table th.sort-desc::after { content: ' \25BC'; font-size: 12px; }
+        .table th.sortable::after  { content: ' \21C5'; font-size: 12px; opacity: 0.5; }
+        .table td { vertical-align: middle; }
+
+        /* Lead type badges */
+        .lead-badge {
+            display: inline-block; padding: 0.2rem 0.55rem;
+            border-radius: 4px; font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+        }
+        .lead-probate       { background: #e8d5ff; color: #5b21b6; }
+        .lead-divorce       { background: #fde8e8; color: #9b1c1c; }
+        .lead-preforeclosure{ background: #fef3c7; color: #92400e; }
+        .lead-codeviolation { background: #fef9c3; color: #713f12; }
+        .lead-expiredlisting{ background: #d1fae5; color: #065f46; }
+        .lead-realestate    { background: #d6dbdf; color: #1c2833; }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex; gap: 1.5rem; flex-wrap: wrap;
+            margin-bottom: 1rem; padding: 0.75rem 1rem;
+            background: #f1f3f5; border-radius: 8px;
+        }
+        .stat-item { font-size: 0.85rem; color: #495057; }
+        .stat-item strong { color: #212529; }
+
+        /* Pagination */
+        .pagination-controls { display: flex; gap: 0.5rem; align-items: center; }
+        .pagination-controls button {
+            padding: 0.25rem 0.75rem; border: 1px solid #dee2e6;
+            background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem;
+        }
+        .pagination-controls button:hover:not(:disabled) { background: #e9ecef; }
+        .pagination-controls button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination-controls button.active-page { background: #c0392b; color: white; border-color: #c0392b; }
+        .page-size-select {
+            padding: 0.25rem 0.5rem; border: 1px solid #dee2e6;
+            border-radius: 4px; font-size: 0.85rem;
+        }
+
+        .source-link { font-size: 0.78rem; color: #0d6efd; }
+        .empty-tab { text-align: center; padding: 3rem; color: #6c757d; }
+
+        /* Signal filter bar */
+        .signal-filter-bar {
+            background: #fff5f5; border: 1px solid #f5c6cb;
+            border-radius: 8px; padding: 0.65rem 1rem; margin-bottom: 0.75rem;
+            display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1.25rem;
+        }
+        .signal-filter-bar .bar-label {
+            font-size: 0.78rem; font-weight: 700; color: #c0392b;
+            text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;
+        }
+        .signal-chip {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            padding: 0.3rem 0.75rem; border-radius: 20px;
+            border: 1.5px solid #f5c6cb; background: white;
+            font-size: 0.8rem; font-weight: 600; color: #495057;
+            cursor: pointer; user-select: none; transition: all 0.15s; white-space: nowrap;
+        }
+        .signal-chip:hover { border-color: #c0392b; color: #c0392b; }
+        .signal-chip.active { background: #c0392b; border-color: #c0392b; color: white; }
+        .signal-chip .chip-dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #c0392b 0%, #8e44ad 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Investor Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="motivated_sellers.html">Motivated Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                    <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Motivated Sellers Dashboard</h1>
+        <p>Probate &bull; Divorce &bull; Pre-Foreclosure &bull; Code Violations &bull; Expired Listings</p>
+    </div>
+
+    <div class="container table-container">
+
+        <!-- Lead Type Tabs -->
+        <ul class="nav nav-tabs mb-3" id="leadTabs" role="tablist">
+            <!-- Generated dynamically -->
+        </ul>
+
+        <!-- Signal / Type quick filters -->
+        <div class="signal-filter-bar">
+            <span class="bar-label">Show only:</span>
+            <span class="signal-chip" id="chip-probate" onclick="toggleSignal('probate')">
+                <span class="chip-dot" style="background:#9b59b6"></span> Probate/Estate
+            </span>
+            <span class="signal-chip" id="chip-divorce" onclick="toggleSignal('divorce')">
+                <span class="chip-dot" style="background:#e74c3c"></span> Divorce
+            </span>
+            <span class="signal-chip" id="chip-preforeclosure" onclick="toggleSignal('preforeclosure')">
+                <span class="chip-dot" style="background:#e67e22"></span> Pre-Foreclosure
+            </span>
+            <span class="signal-chip" id="chip-codeviolation" onclick="toggleSignal('codeviolation')">
+                <span class="chip-dot" style="background:#f39c12"></span> Code Violation
+            </span>
+            <span class="signal-chip" id="chip-expiredlisting" onclick="toggleSignal('expiredlisting')">
+                <span class="chip-dot" style="background:#1abc9c"></span> Expired Listing
+            </span>
+            <span style="font-size:0.75rem;color:#888;margin-left:auto;">Multiple = OR</span>
+        </div>
+
+        <!-- Toolbar -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="stats-bar flex-grow-1" id="statsBar"></div>
+            <div class="d-flex gap-2 ms-3">
+                <select id="statusFilter" class="form-select form-select-sm" style="width:180px;" onchange="applyFilters()">
+                    <option value="">All Statuses</option>
+                    <option value="Probate Open">Probate Open</option>
+                    <option value="Estate Sale">Estate Sale</option>
+                    <option value="Divorce Filed">Divorce Filed</option>
+                    <option value="Lis Pendens">Lis Pendens</option>
+                    <option value="Notice of Default">Notice of Default</option>
+                    <option value="Pre-Foreclosure">Pre-Foreclosure</option>
+                    <option value="Open">Code Violation Open</option>
+                    <option value="Price Reduced">Price Reduced</option>
+                    <option value="Long DOM (90+ days)">Long DOM</option>
+                </select>
+                <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search leads..." style="width:180px;" oninput="applyFilters()">
+                <button id="exportBtn" class="btn btn-danger btn-sm" onclick="exportCSV()">Export CSV</button>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th data-col="0" class="sortable" onclick="sortBy(0)">Lead Type</th>
+                        <th data-col="1" class="sortable" onclick="sortBy(1)">Owner Name</th>
+                        <th data-col="2" class="sortable" onclick="sortBy(2)">Address</th>
+                        <th data-col="3" class="sortable" onclick="sortBy(3)">City</th>
+                        <th data-col="4" class="sortable" onclick="sortBy(4)">County</th>
+                        <th data-col="5" class="sortable" onclick="sortBy(5)">Status</th>
+                        <th data-col="6" data-type="date" class="sortable" onclick="sortBy(6)">Filed Date</th>
+                        <th>Details</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+        </div>
+
+        <div class="mt-2 text-muted d-flex justify-content-between align-items-center">
+            <small>Showing <span id="recordCount">0</span> of <span id="totalCount">0</span> records</small>
+            <div class="pagination-controls">
+                <small class="me-2">Per page:</small>
+                <select id="pageSize" class="page-size-select" onchange="changePageSize()">
+                    <option value="25">25</option>
+                    <option value="50" selected>50</option>
+                    <option value="100">100</option>
+                </select>
+                <button id="prevPage" onclick="changePage(-1)">← Prev</button>
+                <span id="pageInfo" class="small">Page 1</span>
+                <button id="nextPage" onclick="changePage(1)">Next →</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const LEAD_TYPES = ['Probate/Estate', 'Divorce', 'Pre-Foreclosure', 'Code Violation', 'Expired Listing', 'Real Estate Litigation'];
+        const TYPE_COLORS = {
+            'Probate/Estate':  '#9b59b6',
+            'Divorce':         '#e74c3c',
+            'Pre-Foreclosure': '#e67e22',
+            'Code Violation':  '#f39c12',
+            'Expired Listing': '#1abc9c',
+            'Real Estate Litigation': '#34495e',
+        };
+        const TYPE_CSS = {
+            'Probate/Estate':  'lead-probate',
+            'Divorce':         'lead-divorce',
+            'Pre-Foreclosure': 'lead-preforeclosure',
+            'Code Violation':  'lead-codeviolation',
+            'Expired Listing': 'lead-expiredlisting',
+            'Real Estate Litigation': 'lead-realestate',
+        };
+        const SIGNAL_MAP = {
+            'probate':       'Probate/Estate',
+            'divorce':       'Divorce',
+            'preforeclosure':'Pre-Foreclosure',
+            'codeviolation': 'Code Violation',
+            'expiredlisting':'Expired Listing',
+            'realestate':    'Real Estate Litigation',
+        };
+
+        let allData      = [];
+        let typeData     = {};
+        let activeTab    = 'all';
+        let filteredData = [];
+        let sortCol      = -1;
+        let sortDir      = 'asc';
+        let currentPage  = 1;
+        let pageSize     = 50;
+        let activeSignals = new Set();
+
+        // ---- Parse CSV ----
+        function parseCSVRow(row) {
+            const cols = [];
+            let cur = '', inQ = false;
+            for (let i = 0; i < row.length; i++) {
+                const ch = row[i];
+                if (ch === '"') {
+                    if (inQ && row[i+1] === '"') { cur += '"'; i++; }
+                    else inQ = !inQ;
+                } else if (ch === ',' && !inQ) { cols.push(cur); cur = ''; }
+                else cur += ch;
+            }
+            cols.push(cur);
+            return cols;
+        }
+
+        fetch('motivated_sellers.csv')
+            .then(r => {
+                if (!r.ok) throw new Error('CSV not found');
+                return r.text();
+            })
+            .then(csv => {
+                const lines = csv.split('\n');
+                const headers = parseCSVRow(lines[0]);
+                allData = lines.slice(1).filter(l => l.trim()).map(l => {
+                    const c = parseCSVRow(l);
+                    return {
+                        leadType:  c[0] || '',
+                        ownerName: c[1] || '',
+                        address:   c[2] || '',
+                        city:      c[3] || '',
+                        county:    c[4] || '',
+                        status:    c[5] || '',
+                        filedDate: c[6] || '',
+                        details:   c[7] || '',
+                        sourceUrl: c[8] || '',
+                    };
+                });
+
+                // Group by lead type
+                typeData = { all: allData };
+                LEAD_TYPES.forEach(t => {
+                    typeData[t] = allData.filter(r => r.leadType === t);
+                });
+
+                buildTabs();
+                applyFilters();
+            })
+            .catch(() => {
+                document.getElementById('tableBody').innerHTML =
+                    '<tr><td colspan="9" class="text-center text-muted py-4">' +
+                    'No data yet — run the Motivated Sellers pipeline from ' +
+                    '<a href="motivated_sellers_admin.html">Motivated Admin</a>.</td></tr>';
+                buildTabs();
+                updateStats([]);
+            });
+
+        function buildTabs() {
+            const ul = document.getElementById('leadTabs');
+            ul.innerHTML = '';
+
+            // All tab
+            const allCount = allData.length;
+            ul.innerHTML += tabHTML('all', 'All', allCount, '#343a40', 'tab-all');
+
+            LEAD_TYPES.forEach(t => {
+                const count = (typeData[t] || []).length;
+                const key = t.toLowerCase().replace(/[^a-z]/g, '');
+                ul.innerHTML += tabHTML(t, t, count, TYPE_COLORS[t], `tab-${key}`);
+            });
+
+            // Set active
+            ul.querySelector('[data-tab="all"]').classList.add('active', 'tab-all');
+        }
+
+        function tabHTML(key, label, count, color, cls) {
+            return `<li class="nav-item">
+                <a class="nav-link ${cls}" data-tab="${key}" href="#"
+                   onclick="switchTab('${key}');return false;">
+                   ${label} <span class="badge rounded-pill text-white" style="background:${color}">${count}</span>
+                </a></li>`;
+        }
+
+        function switchTab(key) {
+            activeTab = key;
+            currentPage = 1;
+            document.querySelectorAll('#leadTabs .nav-link').forEach(el => el.classList.remove('active'));
+            document.querySelector(`[data-tab="${key}"]`).classList.add('active');
+            applyFilters();
+        }
+
+        function toggleSignal(key) {
+            const chip = document.getElementById('chip-' + key);
+            if (activeSignals.has(key)) {
+                activeSignals.delete(key);
+                chip.classList.remove('active');
+            } else {
+                activeSignals.add(key);
+                chip.classList.add('active');
+            }
+            currentPage = 1;
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const base = activeTab === 'all' ? allData : (typeData[activeTab] || []);
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const statusF = document.getElementById('statusFilter').value.toLowerCase();
+
+            let data = base.filter(r => {
+                if (search && !Object.values(r).join(' ').toLowerCase().includes(search)) return false;
+                if (statusF && !r.status.toLowerCase().includes(statusF)) return false;
+                if (activeSignals.size > 0) {
+                    const matched = [...activeSignals].some(sig => {
+                        const mapped = SIGNAL_MAP[sig];
+                        return r.leadType === mapped;
+                    });
+                    if (!matched) return false;
+                }
+                return true;
+            });
+
+            if (sortCol >= 0) {
+                const cols = ['leadType','ownerName','address','city','county','status','filedDate','details','sourceUrl'];
+                data = [...data].sort((a, b) => {
+                    let av = a[cols[sortCol]] || '', bv = b[cols[sortCol]] || '';
+                    if (sortCol === 6) { av = new Date(av); bv = new Date(bv); }
+                    return sortDir === 'asc' ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+                });
+            }
+
+            filteredData = data;
+            document.getElementById('totalCount').textContent = data.length;
+            renderPage();
+            updateStats(base);
+        }
+
+        function renderPage() {
+            const start = (currentPage - 1) * pageSize;
+            const page  = filteredData.slice(start, start + pageSize);
+            const tbody = document.getElementById('tableBody');
+
+            if (!filteredData.length) {
+                tbody.innerHTML = '<tr><td colspan="9" class="empty-tab"><h5>No leads found</h5><p>Adjust filters or run the pipeline.</p></td></tr>';
+                document.getElementById('recordCount').textContent = 0;
+                document.getElementById('pageInfo').textContent = 'Page 1';
+                document.getElementById('prevPage').disabled = true;
+                document.getElementById('nextPage').disabled = true;
+                return;
+            }
+
+            tbody.innerHTML = page.map(r => {
+                const badgeCls = TYPE_CSS[r.leadType] || '';
+                const srcLink = r.sourceUrl
+                    ? `<a class="source-link" href="${escHtml(r.sourceUrl)}" target="_blank" rel="noopener">View</a>`
+                    : '';
+                return `<tr>
+                    <td><span class="lead-badge ${badgeCls}">${escHtml(r.leadType)}</span></td>
+                    <td>${escHtml(r.ownerName)}</td>
+                    <td>${escHtml(r.address)}</td>
+                    <td>${escHtml(r.city)}</td>
+                    <td>${escHtml(r.county)}</td>
+                    <td>${escHtml(r.status)}</td>
+                    <td>${escHtml(r.filedDate)}</td>
+                    <td style="max-width:260px;font-size:0.82rem;">${escHtml(r.details)}</td>
+                    <td>${srcLink}</td>
+                </tr>`;
+            }).join('');
+
+            const totalPages = Math.max(1, Math.ceil(filteredData.length / pageSize));
+            document.getElementById('recordCount').textContent = Math.min(start + pageSize, filteredData.length);
+            document.getElementById('pageInfo').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+        }
+
+        function updateStats(base) {
+            const counts = {};
+            LEAD_TYPES.forEach(t => { counts[t] = 0; });
+            base.forEach(r => { if (counts[r.leadType] !== undefined) counts[r.leadType]++; });
+            document.getElementById('statsBar').innerHTML =
+                `<div class="stat-item"><strong>${base.length}</strong> total</div>` +
+                LEAD_TYPES.map(t =>
+                    `<div class="stat-item"><span style="color:${TYPE_COLORS[t]};font-weight:700;">${t.split('/')[0]}</span>: <strong>${counts[t]}</strong></div>`
+                ).join('');
+        }
+
+        function sortBy(col) {
+            const th = document.querySelectorAll('thead th')[col];
+            document.querySelectorAll('thead th').forEach(h => {
+                h.classList.remove('sort-asc','sort-desc');
+                if (!h.classList.contains('sortable')) return;
+                h.classList.add('sortable');
+            });
+            if (sortCol === col) {
+                sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortCol = col; sortDir = 'asc';
+            }
+            th.classList.remove('sortable');
+            th.classList.add(sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
+            currentPage = 1;
+            applyFilters();
+        }
+
+        function changePage(dir) {
+            const total = Math.ceil(filteredData.length / pageSize);
+            currentPage = Math.max(1, Math.min(total, currentPage + dir));
+            renderPage();
+        }
+
+        function changePageSize() {
+            pageSize = parseInt(document.getElementById('pageSize').value);
+            currentPage = 1;
+            renderPage();
+        }
+
+        function exportCSV() {
+            const cols = ['Lead Type','Owner Name','Address','City','County','Status','Filed Date','Details','Source URL'];
+            const keys = ['leadType','ownerName','address','city','county','status','filedDate','details','sourceUrl'];
+            const rows = [cols.join(',')];
+            filteredData.forEach(r => {
+                rows.push(keys.map(k => `"${(r[k]||'').replace(/"/g,'""')}"`).join(','));
+            });
+            const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `motivated_sellers_${activeTab.replace(/[^a-z0-9]/gi,'_')}_${new Date().toISOString().slice(0,10)}.csv`;
+            a.click();
+        }
+
+        function escHtml(s) {
+            return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

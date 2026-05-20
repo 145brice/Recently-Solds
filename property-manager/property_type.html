@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Type Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+
+        .header {
+            background: linear-gradient(135deg, #0891b2 0%, #059669 100%);
+            color: white; padding: 2rem 0; text-align: center;
+        }
+        .header p { opacity: 0.9; margin-bottom: 0; }
+
+        .table-container {
+            margin: 2rem auto; max-width: 1400px;
+            background: white; border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow: hidden; padding: 1.5rem;
+        }
+
+        /* Tabs */
+        .nav-tabs { border-bottom: 2px solid #dee2e6; gap: 0.25rem; align-items: center; }
+        .nav-tabs .nav-link {
+            font-weight: 600; color: #495057; border: none;
+            padding: 0.75rem 1.25rem; position: relative;
+        }
+        .nav-tabs .nav-link .badge { font-size: 0.7rem; margin-left: 0.4rem; vertical-align: middle; }
+        .nav-tabs .nav-link:not(.active):hover { background-color: #e9ecef; border: none; }
+        .tab-all.active        { background-color: #343a40 !important; color: white !important; }
+        .tab-davidson.active   { background-color: #0d6efd !important; color: white !important; }
+        .tab-williamson.active { background-color: #6f42c1 !important; color: white !important; }
+        .tab-wilson.active     { background-color: #198754 !important; color: white !important; }
+        .tab-sumner.active     { background-color: #fd7e14 !important; color: white !important; }
+        .tab-rutherford.active { background-color: #dc3545 !important; color: white !important; }
+        .tab-robertson.active  { background-color: #20c997 !important; color: white !important; }
+        .tab-cheatham.active   { background-color: #6610f2 !important; color: white !important; }
+        .tab-wake.active       { background-color: #0891b2 !important; color: white !important; }
+        .tab-cook.active       { background-color: #059669 !important; color: white !important; }
+
+        /* Table */
+        .table th {
+            background-color: #0e7490; color: white; border: none;
+            cursor: pointer; user-select: none; white-space: nowrap;
+        }
+        .table tbody tr:nth-child(even) { background-color: #f8f9fa; }
+        .table tbody tr:hover { background-color: #e0f7fa; }
+        .table th.sort-asc::after  { content: ' ▲'; font-size: 12px; }
+        .table th.sort-desc::after { content: ' ▼'; font-size: 12px; }
+        .table th.sortable::after  { content: ' ⇅'; font-size: 12px; opacity: 0.5; }
+        .table td { vertical-align: middle; }
+
+        /* Property type badges */
+        .type-badge {
+            display: inline-block; padding: 0.2rem 0.55rem;
+            border-radius: 4px; font-size: 0.75rem; font-weight: 700; white-space: nowrap;
+        }
+        .type-sf    { background: #d1fae5; color: #065f46; }
+        .type-condo { background: #dbeafe; color: #1e40af; }
+        .type-mf    { background: #fef3c7; color: #92400e; }
+        .type-th    { background: #ede9fe; color: #5b21b6; }
+        .type-land  { background: #d6dbdf; color: #1c2833; }
+        .type-mfr   { background: #fce7f3; color: #9d174d; }
+        .type-unk   { background: #f3f4f6; color: #6b7280; }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex; gap: 1.5rem; flex-wrap: wrap;
+            margin-bottom: 1rem; padding: 0.75rem 1rem;
+            background: #f0fdfa; border-radius: 8px; border: 1px solid #ccfbf1;
+        }
+        .stat-item { font-size: 0.85rem; color: #495057; }
+        .stat-item strong { color: #0e7490; }
+
+        /* Type filter bar */
+        .type-filter-bar {
+            background: #f0fdfa; border: 1px solid #a7f3d0;
+            border-radius: 8px; padding: 0.65rem 1rem; margin-bottom: 0.75rem;
+            display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.75rem;
+        }
+        .type-filter-bar .bar-label {
+            font-size: 0.78rem; font-weight: 700; color: #0891b2;
+            text-transform: uppercase; letter-spacing: 0.05em; flex-shrink: 0;
+        }
+        .type-chip {
+            display: inline-flex; align-items: center; gap: 5px;
+            padding: 3px 10px; border-radius: 999px; cursor: pointer;
+            font-size: 0.78rem; font-weight: 600;
+            border: 2px solid transparent; transition: all 0.15s;
+            background: #e5e7eb; color: #374151;
+        }
+        .type-chip.active { border-color: #0891b2; background: white; color: #0891b2; }
+        .type-chip .chip-count { opacity: 0.7; font-size: 0.7rem; }
+
+        /* Search */
+        .search-row {
+            display: flex; gap: 1rem; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap;
+        }
+        .search-row input {
+            flex: 1; min-width: 200px; padding: 0.4rem 0.75rem;
+            border: 1px solid #dee2e6; border-radius: 6px; font-size: 0.9rem;
+        }
+
+        /* Pagination */
+        .pagination-controls { display: flex; gap: 0.5rem; align-items: center; }
+        .pagination-controls button {
+            padding: 0.25rem 0.75rem; border: 1px solid #dee2e6;
+            background: white; border-radius: 4px; cursor: pointer; font-size: 0.85rem;
+        }
+        .pagination-controls button:hover:not(:disabled) { background: #e9ecef; }
+        .pagination-controls button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .pagination-controls button.active-page { background: #0891b2; color: white; border-color: #0891b2; }
+        .page-size-select {
+            padding: 0.25rem 0.5rem; border: 1px solid #dee2e6;
+            border-radius: 4px; font-size: 0.85rem;
+        }
+
+        .empty-tab { text-align: center; padding: 3rem; color: #6c757d; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #0891b2 0%, #059669 100%);">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">Fresh Investor Leads</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                <li class="nav-item"><a class="nav-link active" href="property_type.html">Property Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="header">
+    <h1 class="mb-1">Property Type Dashboard</h1>
+    <p>Leads enriched with property type via Zillow lookup</p>
+</div>
+
+<div class="table-container">
+
+    <!-- County tabs (built dynamically) -->
+    <ul class="nav nav-tabs mb-3" id="countyTabs"></ul>
+
+    <!-- Type filter bar -->
+    <div class="type-filter-bar" id="typeFilterBar">
+        <span class="bar-label">Type:</span>
+    </div>
+
+    <!-- Stats bar -->
+    <div class="stats-bar" id="statsBar">
+        <div class="stat-item"><strong id="statTotal">—</strong> leads</div>
+        <div class="stat-item">Enriched: <strong id="statEnriched">—</strong></div>
+        <div class="stat-item">Single Family: <strong id="statSF">—</strong></div>
+        <div class="stat-item">Condo: <strong id="statCondo">—</strong></div>
+        <div class="stat-item">Multi-Family: <strong id="statMF">—</strong></div>
+        <div class="stat-item">Townhouse: <strong id="statTH">—</strong></div>
+        <div class="stat-item">Unknown: <strong id="statUnk">—</strong></div>
+    </div>
+
+    <!-- Search row -->
+    <div class="search-row">
+        <input type="text" id="searchBox" placeholder="Search owner, address, price..." oninput="applyFilters()">
+        <button class="btn btn-sm btn-outline-secondary" onclick="exportCSV()">Export CSV</button>
+        <a href="property_type_admin.html" class="btn btn-sm" style="background:linear-gradient(135deg,#0891b2,#059669);color:white;">+ Enrich More</a>
+    </div>
+
+    <!-- Table -->
+    <div style="overflow-x:auto;">
+        <table class="table table-hover" id="leadsTable">
+            <thead>
+                <tr>
+                    <th class="sortable" data-col="Owner Name" onclick="sortBy('Owner Name')">Owner</th>
+                    <th class="sortable" data-col="County" onclick="sortBy('County')">County</th>
+                    <th class="sortable" data-col="Address" onclick="sortBy('Address')">Address</th>
+                    <th class="sortable" data-col="Price" onclick="sortBy('Price')">Price</th>
+                    <th class="sortable" data-col="Sold Date" onclick="sortBy('Sold Date')">Sold Date</th>
+                    <th class="sortable" data-col="Property Type" onclick="sortBy('Property Type')">Property Type</th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                <tr><td colspan="6" class="empty-tab">Loading leads...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Pagination -->
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mt-2">
+        <div class="pagination-controls" id="paginationControls"></div>
+        <div class="d-flex align-items-center gap-2">
+            <span class="small text-muted" id="pageInfo"></span>
+            <select class="page-size-select" id="pageSizeSelect" onchange="changePageSize()">
+                <option value="50">50/page</option>
+                <option value="100" selected>100/page</option>
+                <option value="250">250/page</option>
+                <option value="500">500/page</option>
+            </select>
+        </div>
+    </div>
+
+</div><!-- /table-container -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let allLeads = [];
+let propertyTypes = {};
+let filteredLeads = [];
+let activeCounty = 'All';
+let activeType = 'All';
+let sortCol = 'Sold Date', sortDir = -1;
+let currentPage = 1, pageSize = 100;
+
+// ── CSV parser ───────────────────────────────────────────────────────────────
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g,''));
+    return lines.slice(1).map(line => {
+        const cols = []; let cur = '', inQ = false;
+        for (let c of line) {
+            if (c==='"') { inQ=!inQ; }
+            else if (c===',' && !inQ) { cols.push(cur); cur=''; }
+            else cur+=c;
+        }
+        cols.push(cur);
+        const obj = {};
+        headers.forEach((h,i) => obj[h]=(cols[i]||'').trim().replace(/^"|"$/g,''));
+        return obj;
+    });
+}
+
+function parseSoldDate(str) {
+    if (!str) return new Date(0);
+    const p = str.split('/');
+    if (p.length===3) return new Date(p[2], p[0]-1, p[1]);
+    return new Date(str);
+}
+
+function parsePrice(str) {
+    return parseInt((str||'').replace(/[^0-9]/g,'')) || 0;
+}
+
+// ── Load data ────────────────────────────────────────────────────────────────
+async function loadData() {
+    try {
+        const csvResp = await fetch('/nashville_cash_leads_clean.csv');
+        const csvText = await csvResp.text();
+        try {
+            const typesResp = await fetch('/api/property-types');
+            propertyTypes = typesResp.ok ? await typesResp.json() : {};
+        } catch(e) { propertyTypes = {}; }
+        // Zillow cache overrides county data; county data is the fallback
+        allLeads = parseCSV(csvText).map(row => ({
+            ...row,
+            'Property Type': propertyTypes[row['Address']] || row['Property Type'] || ''
+        }));
+
+        buildCountyTabs();
+        buildTypeChips();
+        applyFilters();
+    } catch(e) {
+        document.getElementById('tableBody').innerHTML =
+            `<tr><td colspan="6" class="empty-tab">Error loading data: ${e.message}</td></tr>`;
+    }
+}
+
+// ── County tabs ───────────────────────────────────────────────────────────────
+function buildCountyTabs() {
+    const counts = {};
+    allLeads.forEach(r => { counts[r['County']] = (counts[r['County']]||0)+1; });
+    const counties = Object.keys(counts).sort();
+    const total = allLeads.length;
+
+    const ul = document.getElementById('countyTabs');
+    ul.innerHTML = `
+        <li class="nav-item">
+            <a class="nav-link tab-all active" href="#" onclick="switchCounty('All', this); return false;">
+                All <span class="badge bg-secondary">${total.toLocaleString()}</span>
+            </a>
+        </li>
+        ${counties.map(c => `
+        <li class="nav-item">
+            <a class="nav-link tab-${c.toLowerCase()}" href="#" onclick="switchCounty('${c}', this); return false;">
+                ${c} <span class="badge bg-secondary">${(counts[c]||0).toLocaleString()}</span>
+            </a>
+        </li>`).join('')}`;
+}
+
+// ── Type chips ────────────────────────────────────────────────────────────────
+function buildTypeChips() {
+    const types = ['All', 'Single Family', 'Condo/Townhouse', 'Multi-Family', 'Mobile/Manufactured', 'Vacant Land', 'Commercial', 'Other', 'Unknown/Missing'];
+    const bar = document.getElementById('typeFilterBar');
+    const label = bar.querySelector('.bar-label');
+    bar.innerHTML = '';
+    bar.appendChild(label);
+
+    types.forEach(t => {
+        const chip = document.createElement('span');
+        chip.className = 'type-chip' + (t==='All' ? ' active' : '');
+        chip.dataset.type = t;
+        chip.onclick = () => switchType(t, chip);
+        chip.innerHTML = `${t} <span class="chip-count"></span>`;
+        bar.appendChild(chip);
+    });
+}
+
+function updateChipCounts(leads) {
+    document.querySelectorAll('.type-chip').forEach(chip => {
+        const t = chip.dataset.type;
+        let count;
+        if (t === 'All') count = leads.length;
+        else if (t === 'Unknown/Missing') count = leads.filter(r => !r['Property Type'] || r['Property Type'] === 'N/A').length;
+        else count = leads.filter(r => r['Property Type'] === t).length;
+        chip.querySelector('.chip-count').textContent = `(${count.toLocaleString()})`;
+    });
+}
+
+// ── Filters ───────────────────────────────────────────────────────────────────
+function switchCounty(county, el) {
+    activeCounty = county;
+    document.querySelectorAll('#countyTabs .nav-link').forEach(a => a.classList.remove('active'));
+    el.classList.add('active');
+    currentPage = 1;
+    applyFilters();
+}
+
+function switchType(type, el) {
+    activeType = type;
+    document.querySelectorAll('.type-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    currentPage = 1;
+    applyFilters();
+}
+
+function applyFilters() {
+    const q = (document.getElementById('searchBox')?.value || '').toLowerCase();
+    let leads = allLeads;
+
+    if (activeCounty !== 'All') leads = leads.filter(r => r['County'] === activeCounty);
+
+    if (activeType === 'Unknown/Missing') leads = leads.filter(r => !r['Property Type'] || r['Property Type'] === 'N/A');
+    else if (activeType !== 'All') leads = leads.filter(r => r['Property Type'] === activeType);
+
+    if (q) leads = leads.filter(r =>
+        (r['Owner Name']||'').toLowerCase().includes(q) ||
+        (r['Address']||'').toLowerCase().includes(q) ||
+        (r['Price']||'').toLowerCase().includes(q)
+    );
+
+    // sort
+    leads = [...leads].sort((a,b) => {
+        let va = a[sortCol]||'', vb = b[sortCol]||'';
+        if (sortCol === 'Sold Date') { va = parseSoldDate(va); vb = parseSoldDate(vb); }
+        else if (sortCol === 'Price') { va = parsePrice(va); vb = parsePrice(vb); }
+        if (va < vb) return -sortDir; if (va > vb) return sortDir; return 0;
+    });
+
+    filteredLeads = leads;
+    updateChipCounts(activeCounty === 'All' ? allLeads : allLeads.filter(r => r['County'] === activeCounty));
+    updateStats(leads);
+    renderPage();
+}
+
+function sortBy(col) {
+    if (sortCol === col) sortDir = -sortDir; else { sortCol = col; sortDir = -1; }
+    document.querySelectorAll('.table th').forEach(th => {
+        th.classList.remove('sort-asc','sort-desc');
+        th.classList.add('sortable');
+        if (th.dataset.col === sortCol) th.classList.add(sortDir===1 ? 'sort-asc' : 'sort-desc');
+    });
+    applyFilters();
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────────
+function updateStats(leads) {
+    const enriched = leads.filter(r => r['Property Type']).length;
+    document.getElementById('statTotal').textContent = leads.length.toLocaleString();
+    document.getElementById('statEnriched').textContent = enriched.toLocaleString();
+    document.getElementById('statSF').textContent = leads.filter(r=>r['Property Type']==='Single Family').length.toLocaleString();
+    document.getElementById('statCondo').textContent = leads.filter(r=>r['Property Type']==='Condo').length.toLocaleString();
+    document.getElementById('statMF').textContent = leads.filter(r=>r['Property Type']==='Multi-Family').length.toLocaleString();
+    document.getElementById('statTH').textContent = leads.filter(r=>r['Property Type']==='Townhouse').length.toLocaleString();
+    document.getElementById('statUnk').textContent = leads.filter(r=>!r['Property Type']).length.toLocaleString();
+}
+
+// ── Render ────────────────────────────────────────────────────────────────────
+function renderPage() {
+    const start = (currentPage - 1) * pageSize;
+    const page = filteredLeads.slice(start, start + pageSize);
+    const tbody = document.getElementById('tableBody');
+
+    if (!page.length) {
+        tbody.innerHTML = '<tr><td colspan="6" class="empty-tab">No leads match the current filters.</td></tr>';
+    } else {
+        tbody.innerHTML = page.map(row => {
+            const ptype = row['Property Type'];
+            const badge = ptype
+                ? `<span class="type-badge ${typeBadgeClass(ptype)}">${ptype}</span>`
+                : `<span class="type-badge type-unk">—</span>`;
+            return `<tr>
+                <td>${esc(row['Owner Name']||'N/A')}</td>
+                <td>${esc(row['County'])}</td>
+                <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${esc(row['Address'])}">${esc(row['Address'])}</td>
+                <td>${esc(row['Price'])}</td>
+                <td>${esc(row['Sold Date'])}</td>
+                <td>${badge}</td>
+            </tr>`;
+        }).join('');
+    }
+
+    renderPagination();
+}
+
+function typeBadgeClass(ptype) {
+    const t = (ptype||'').toLowerCase();
+    if (t.includes('single')) return 'type-sf';
+    if (t.includes('condo')||t.includes('co-op')) return 'type-condo';
+    if (t.includes('multi')||t.includes('apartment')) return 'type-mf';
+    if (t.includes('town')) return 'type-th';
+    if (t.includes('land')||t.includes('lot')) return 'type-land';
+    if (t.includes('manuf')||t.includes('mobile')) return 'type-mfr';
+    return 'type-unk';
+}
+
+function esc(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Pagination ────────────────────────────────────────────────────────────────
+function renderPagination() {
+    const totalPages = Math.ceil(filteredLeads.length / pageSize);
+    const ctrl = document.getElementById('paginationControls');
+    document.getElementById('pageInfo').textContent =
+        `${((currentPage-1)*pageSize+1).toLocaleString()}–${Math.min(currentPage*pageSize, filteredLeads.length).toLocaleString()} of ${filteredLeads.length.toLocaleString()}`;
+
+    if (totalPages <= 1) { ctrl.innerHTML = ''; return; }
+
+    const pages = [];
+    pages.push(`<button ${currentPage===1?'disabled':''} onclick="goPage(${currentPage-1})">‹</button>`);
+    for (let p = Math.max(1,currentPage-2); p <= Math.min(totalPages,currentPage+2); p++) {
+        pages.push(`<button class="${p===currentPage?'active-page':''}" onclick="goPage(${p})">${p}</button>`);
+    }
+    pages.push(`<button ${currentPage===totalPages?'disabled':''} onclick="goPage(${currentPage+1})">›</button>`);
+    ctrl.innerHTML = pages.join('');
+}
+
+function goPage(p) { currentPage = p; renderPage(); }
+function changePageSize() {
+    pageSize = parseInt(document.getElementById('pageSizeSelect').value);
+    currentPage = 1; renderPage();
+}
+
+// ── Export ────────────────────────────────────────────────────────────────────
+function exportCSV() {
+    const headers = ['Owner Name','County','Address','Price','Sold Date','Property Type'];
+    const rows = [headers.join(',')];
+    filteredLeads.forEach(r => {
+        rows.push(headers.map(h => `"${(r[h]||'').replace(/"/g,'""')}"`).join(','));
+    });
+    const blob = new Blob([rows.join('\n')], {type:'text/csv'});
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+    a.download = `property_types_${new Date().toISOString().slice(0,10)}.csv`;
+    a.click();
+}
+
+// ── Init ──────────────────────────────────────────────────────────────────────
+window.addEventListener('load', loadData);
+</script>
+</body>
+</html>
