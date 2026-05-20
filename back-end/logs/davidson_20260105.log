@@ -1,0 +1,68 @@
+2026-01-05 02:30:22,770 - INFO - ============================================================
+2026-01-05 02:30:22,770 - INFO - Davidson County Recent Sales Scraper
+2026-01-05 02:30:22,771 - INFO - ============================================================
+2026-01-05 02:30:22,772 - INFO - Fetching: https://www.padctn.org/resources/recent-sales/
+2026-01-05 02:30:25,792 - INFO - Found 630 Excel files
+2026-01-05 02:30:25,793 - INFO - 
+Sample file names:
+2026-01-05 02:30:25,794 - INFO -   - XLSX
+PDF 1_rural_2025.xlsx
+2026-01-05 02:30:25,795 - INFO -   - XLSX
+PDF 2_rural_2025-1.xlsx
+2026-01-05 02:30:25,803 - INFO -   - XLSX
+PDF 3zrural_2025.xlsx
+2026-01-05 02:30:25,804 - INFO -   - XLSX
+PDF 4zcomm2025.xlsx
+2026-01-05 02:30:25,805 - INFO -   - XLSX
+PDF 05_rural-11-7-2025.xlsx
+2026-01-05 02:30:25,805 - INFO -   - XLSX
+PDF 06_rural-11-7-2025.xlsx
+2026-01-05 02:30:25,806 - INFO -   - XLSX
+PDF 07_rural-11-7-2025.xlsx
+2026-01-05 02:30:25,807 - INFO -   - XLSX
+PDF 08_rural-11-7-2025.xlsx
+2026-01-05 02:30:25,811 - INFO -   - XLSX
+PDF 09_rural-11-7-2025.xlsx
+2026-01-05 02:30:25,812 - INFO -   - XLSX
+PDF 1_-z1_2025-sales.xlsx
+2026-01-05 02:30:25,813 - INFO - 
+Looking for January 2026 files...
+2026-01-05 02:30:25,814 - WARNING - No files found for January 2026
+2026-01-05 02:30:25,815 - INFO - 
+Looking for December 2025 files...
+2026-01-05 02:30:25,817 - WARNING - No files found for December 2025
+2026-01-05 02:30:25,818 - ERROR - No data downloaded
+2026-01-05 02:55:13,298 - INFO - ============================================================
+2026-01-05 02:55:13,298 - INFO - Davidson County Recent Sales Scraper
+2026-01-05 02:55:13,298 - INFO - ============================================================
+2026-01-05 02:55:13,298 - INFO - Fetching: https://www.padctn.org/resources/recent-sales/
+2026-01-05 02:55:16,415 - INFO - Found 630 Excel files
+2026-01-05 02:55:16,415 - INFO - 
+Sample file names:
+2026-01-05 02:55:16,415 - INFO -   - XLSX
+PDF 1_rural_2025.xlsx
+2026-01-05 02:55:16,418 - INFO -   - XLSX
+PDF 2_rural_2025-1.xlsx
+2026-01-05 02:55:16,419 - INFO -   - XLSX
+PDF 3zrural_2025.xlsx
+2026-01-05 02:55:16,419 - INFO -   - XLSX
+PDF 4zcomm2025.xlsx
+2026-01-05 02:55:16,419 - INFO -   - XLSX
+PDF 05_rural-11-7-2025.xlsx
+2026-01-05 02:55:16,419 - INFO -   - XLSX
+PDF 06_rural-11-7-2025.xlsx
+2026-01-05 02:55:16,419 - INFO -   - XLSX
+PDF 07_rural-11-7-2025.xlsx
+2026-01-05 02:55:16,420 - INFO -   - XLSX
+PDF 08_rural-11-7-2025.xlsx
+2026-01-05 02:55:16,420 - INFO -   - XLSX
+PDF 09_rural-11-7-2025.xlsx
+2026-01-05 02:55:16,420 - INFO -   - XLSX
+PDF 1_-z1_2025-sales.xlsx
+2026-01-05 02:55:16,420 - INFO - 
+Looking for January 2026 files...
+2026-01-05 02:55:16,420 - WARNING - No files found for January 2026
+2026-01-05 02:55:16,421 - INFO - 
+Looking for December 2025 files...
+2026-01-05 02:55:16,421 - WARNING - No files found for December 2025
+2026-01-05 02:55:16,421 - ERROR - No data downloaded

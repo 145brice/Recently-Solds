@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Counties - Fresh Leads Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+        .county-card {
+            background: white;
+            border-radius: 5px;
+            padding: 0.4rem;
+            margin-bottom: 0.25rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border 0.2s ease;
+            border: 2px solid transparent;
+        }
+        .county-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            border-color: #28a745;
+        }
+        .county-card.active-county {
+            border-color: #d4edda;
+            background: linear-gradient(135deg, #ffffff 0%, #f8fff9 100%);
+        }
+        .county-name {
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.1rem;
+        }
+        .county-location {
+            color: #6c757d;
+            font-size: 0.7rem;
+            margin-bottom: 0.1rem;
+        }
+        .county-status {
+            display: inline-block;
+            padding: 0.1rem 0.35rem;
+            border-radius: 10px;
+            font-size: 0.6rem;
+            font-weight: bold;
+            margin-bottom: 0.1rem;
+        }
+        .status-active {
+            background-color: #28a745;
+            color: white;
+        }
+        .status-coming-soon {
+            background-color: #ffc107;
+            color: #000;
+        }
+        .btn-purchase-county {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            color: white;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.75rem;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(40, 167, 69, 0.3);
+        }
+        .btn-purchase-county:hover {
+            background: linear-gradient(135deg, #20c997 0%, #28a745 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(40, 167, 69, 0.4);
+            color: white;
+        }
+        .btn-purchase-county:disabled {
+            background: #6c757d;
+            box-shadow: none;
+            cursor: not-allowed;
+        }
+        .county-price {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #28a745;
+            margin-right: 0.3rem;
+        }
+        .price-highlight {
+            background: linear-gradient(120deg, #fef3c7 0%, #fde68a 100%);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            display: inline-block;
+        }
+        .urgency-badge {
+            background: #dc3545;
+            color: white;
+            padding: 0.1rem 0.3rem;
+            border-radius: 3px;
+            font-size: 0.55rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 0.3rem;
+        }
+        .filter-section {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .state-badge {
+            display: inline-block;
+            padding: 0.15rem 0.3rem;
+            background-color: #e9ecef;
+            border-radius: 3px;
+            font-size: 0.65rem;
+            margin-right: 0.3rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Cash Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="counties.html">Browse Counties</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Choose Your County & Start Today</h1>
+        <p class="lead mb-2">Fresh leads daily • Beta pricing locked forever • Cancel anytime</p>
+        <div class="mb-2">
+            <span style="font-size: 1.8rem; font-weight: bold; color: #fff;">$79/mo</span>
+            <span style="font-size: 1rem; text-decoration: line-through; color: rgba(255,255,255,0.7); margin-left: 0.5rem;">$99/mo</span>
+        </div>
+        <p style="font-size: 0.85rem; color: rgba(255,255,255,0.9); margin-bottom: 0.5rem;">
+            Most guys charge three, four hundred. We do $79.
+        </p>
+        <p class="mb-0" style="font-size: 0.9rem;"><span class="badge bg-danger">LIMITED TIME</span> Lock in beta pricing before it goes to $99/mo</p>
+    </div>
+
+    <!-- Trust Bar -->
+    <div style="background: #fff3cd; border-top: 2px solid #ffc107; border-bottom: 2px solid #ffc107; padding: 0.4rem 0; text-align: center;">
+        <div class="container">
+            <small style="font-size: 0.75rem; font-weight: bold; color: #856404;">
+                ⚡ New leads added daily • 📊 Verified property data • 🔒 Secure checkout • 💯 Cancel anytime
+            </small>
+        </div>
+    </div>
+
+    <div class="container my-2">
+        <!-- Alabama Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #667eea; border-bottom: 1px solid #667eea; padding-bottom: 0.2rem; font-size: 1rem;">Alabama Counties (1)</h2>
+            <div id="alCounties" class="row"></div>
+        </div>
+
+        <!-- Arizona Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 0.2rem; font-size: 1rem;">
+                Arizona Counties (1) <span style="font-size: 0.7rem; color: #dc3545; font-weight: bold;">• ACTIVE NOW</span>
+            </h2>
+            <div id="azCounties" class="row"></div>
+        </div>
+
+        <!-- Florida Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #667eea; border-bottom: 1px solid #667eea; padding-bottom: 0.2rem; font-size: 1rem;">Florida Counties (4)</h2>
+            <div id="flCounties" class="row"></div>
+        </div>
+
+        <!-- Georgia Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 0.2rem; font-size: 1rem;">
+                Georgia Counties (3) <span style="font-size: 0.7rem; color: #dc3545; font-weight: bold;">• ACTIVE NOW</span>
+            </h2>
+            <div id="gaCounties" class="row"></div>
+        </div>
+
+        <!-- Nevada Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 0.2rem; font-size: 1rem;">
+                Nevada Counties (1) <span style="font-size: 0.7rem; color: #dc3545; font-weight: bold;">• ACTIVE NOW</span>
+            </h2>
+            <div id="nvCounties" class="row"></div>
+        </div>
+
+        <!-- North Carolina Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 0.2rem; font-size: 1rem;">
+                North Carolina Counties (2) <span style="font-size: 0.7rem; color: #dc3545; font-weight: bold;">• ACTIVE NOW</span>
+            </h2>
+            <div id="ncCounties" class="row"></div>
+        </div>
+
+        <!-- Tennessee Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 0.2rem; font-size: 1rem;">
+                Tennessee Counties (4) <span style="font-size: 0.7rem; color: #dc3545; font-weight: bold;">• ACTIVE NOW</span>
+            </h2>
+            <div id="tnCounties" class="row"></div>
+        </div>
+
+        <!-- Texas Counties -->
+        <div class="mb-2">
+            <h2 class="mb-1" style="color: #28a745; border-bottom: 1px solid #28a745; padding-bottom: 0.2rem; font-size: 1rem;">
+                Texas Counties (5) <span style="font-size: 0.7rem; color: #dc3545; font-weight: bold;">• ACTIVE NOW</span>
+            </h2>
+            <div id="txCounties" class="row"></div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const counties = [
+            // Alabama
+            { name: "Jefferson County", state: "AL", city: "Birmingham", status: "coming-soon", price: 79 },
+
+            // Arizona
+            { name: "Maricopa County", state: "AZ", city: "Phoenix", status: "active", price: 79 },
+
+            // Florida
+            { name: "Broward County", state: "FL", city: "Fort Lauderdale", status: "coming-soon", price: 79 },
+            { name: "Hillsborough County", state: "FL", city: "Tampa", status: "coming-soon", price: 79 },
+            { name: "Miami-Dade County", state: "FL", city: "Miami", status: "coming-soon", price: 79 },
+            { name: "Orange County", state: "FL", city: "Orlando", status: "coming-soon", price: 79 },
+
+            // Georgia
+            { name: "Cobb County", state: "GA", city: "Marietta", status: "coming-soon", price: 79 },
+            { name: "DeKalb County", state: "GA", city: "Decatur", status: "coming-soon", price: 79 },
+            { name: "Fulton County", state: "GA", city: "Atlanta", status: "active", price: 79 },
+
+            // Nevada
+            { name: "Clark County", state: "NV", city: "Las Vegas", status: "active", price: 79 },
+
+            // North Carolina
+            { name: "Mecklenburg County", state: "NC", city: "Charlotte", status: "active", price: 79 },
+            { name: "Wake County", state: "NC", city: "Raleigh", status: "coming-soon", price: 79 },
+
+            // Tennessee
+            { name: "Davidson County", state: "TN", city: "Nashville", status: "active", price: 79 },
+            { name: "Knox County", state: "TN", city: "Knoxville", status: "active", price: 79 },
+            { name: "Shelby County", state: "TN", city: "Memphis", status: "active", price: 79 },
+            { name: "Williamson County", state: "TN", city: "Franklin", status: "active", price: 79 },
+
+            // Texas
+            { name: "Bexar County", state: "TX", city: "San Antonio", status: "coming-soon", price: 79 },
+            { name: "Dallas County", state: "TX", city: "Dallas", status: "active", price: 79 },
+            { name: "Harris County", state: "TX", city: "Houston", status: "active", price: 79 },
+            { name: "Tarrant County", state: "TX", city: "Fort Worth", status: "coming-soon", price: 79 },
+            { name: "Travis County", state: "TX", city: "Austin", status: "coming-soon", price: 79 }
+        ];
+
+        const stateContainers = {
+            'TN': 'tnCounties',
+            'TX': 'txCounties',
+            'FL': 'flCounties',
+            'GA': 'gaCounties',
+            'NC': 'ncCounties',
+            'AZ': 'azCounties',
+            'NV': 'nvCounties',
+            'AL': 'alCounties'
+        };
+
+        function renderCounties() {
+            // Group counties by state
+            counties.forEach(county => {
+                const containerId = stateContainers[county.state];
+                if (!containerId) return;
+
+                const container = document.getElementById(containerId);
+                const col = document.createElement('div');
+                col.className = 'col-md-6 mb-3';
+
+                const statusClass = county.status === 'active' ? 'status-active' : 'status-coming-soon';
+                const statusText = county.status === 'active' ? 'ACTIVE' : 'COMING SOON';
+                const buttonDisabled = county.status === 'coming-soon' ? 'disabled' : '';
+
+                const urgencyBadge = county.status === 'active' ? '<span class="urgency-badge">BETA ONLY</span>' : '';
+                const activeClass = county.status === 'active' ? 'active-county' : '';
+
+                col.innerHTML = `
+                    <div class="county-card ${activeClass}">
+                        <div class="county-name">${county.name} ${urgencyBadge}</div>
+                        <div class="county-location">
+                            <span class="state-badge">${county.state}</span>
+                            ${county.city}
+                        </div>
+                        <span class="county-status ${statusClass}">${statusText}</span>
+                        <div class="mt-1">
+                            <div class="mb-1 price-highlight">
+                                <span class="county-price">$${county.price}/mo</span>
+                                <span class="text-muted" style="text-decoration: line-through; font-size: 0.65rem;">$99/mo</span>
+                                <span style="color: #dc3545; font-size: 0.65rem; font-weight: bold; margin-left: 0.2rem;">Save 20%</span>
+                            </div>
+                            <button class="btn btn-purchase-county w-100" ${buttonDisabled}
+                                onclick="purchaseCounty('${county.name}', '${county.state}', ${county.price})">
+                                ${county.status === 'active' ? '✓ Get Instant Access' : 'Join Waitlist'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(col);
+            });
+        }
+
+        function purchaseCounty(name, state, price) {
+            // In production, this would open a checkout modal or redirect to payment
+            alert(`Purchase ${name}, ${state} for $${price}/mo\n\nThis will redirect to checkout...`);
+            // For now, redirect to pricing page
+            setTimeout(() => {
+                window.location.href = 'pricing.html';
+            }, 1500);
+        }
+
+        // Initial render
+        renderCounties();
+    </script>
+</body>
+</html>

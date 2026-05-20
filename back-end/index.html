@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Leads Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        .table-container {
+            margin: 2rem auto;
+            max-width: 1200px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .table th {
+            background-color: #343a40;
+            color: white;
+            border: none;
+        }
+        .table td {
+            vertical-align: middle;
+        }
+        .btn-call {
+            background-color: #28a745;
+            border: none;
+            color: white;
+        }
+        .btn-call:hover {
+            background-color: #218838;
+        }
+        .sold-badge {
+            background-color: #dc3545;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Cash Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="index.html">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="pricing.html">Pricing</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="counties.html">Browse Counties</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Fresh Cash Leads Dashboard</h1>
+        <p>County-Level Real Estate Leads</p>
+    </div>
+
+    <div class="container table-container">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Address</th>
+                    <th>Price</th>
+                    <th>Sold Date</th>
+                    <th>Agent Phone</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be loaded dynamically -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Load CSV data dynamically
+        fetch('nashville_cash_leads_clean.csv')
+            .then(response => response.text())
+            .then(data => {
+                const rows = data.split('\n').slice(1); // Skip header
+                const tableBody = document.querySelector('tbody');
+                
+                rows.forEach(row => {
+                    if (row.trim()) {
+                        const cols = row.split(',');
+                        const tr = document.createElement('tr');
+                        
+                        cols.forEach((col, index) => {
+                            const td = document.createElement('td');
+                            let text = col.replace(/"/g, ''); // Remove quotes
+                            
+                            if (index === 2) { // Sold Date
+                                if (text === 'N/A') {
+                                    td.textContent = 'N/A';
+                                } else {
+                                    td.innerHTML = `<span class="sold-badge">SOLD</span> ${text}`;
+                                }
+                            } else {
+                                td.textContent = text;
+                            }
+                            
+                            tr.appendChild(td);
+                        });
+                        
+                        // Add Actions column
+                        const actionsTd = document.createElement('td');
+                        if (cols[3] && cols[3] !== 'N/A') { // Agent Phone
+                            actionsTd.innerHTML = `<button class="btn btn-call btn-sm" onclick="window.location.href='tel:${cols[3].replace(/"/g, '')}'">Call Agent</button>`;
+                        } else {
+                            actionsTd.textContent = 'No Phone';
+                        }
+                        tr.appendChild(actionsTd);
+                        
+                        tableBody.appendChild(tr);
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading CSV:', error));
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,453 @@
+2026-01-05 02:34:05,574 - INFO - ============================================================
+2026-01-05 02:34:05,575 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 02:34:05,576 - INFO - ============================================================
+2026-01-05 02:34:07,449 - INFO - Loading: https://secured.rutherfordcountytn.gov/propertydata/RealPropertySearch2.aspx
+2026-01-05 02:34:14,594 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:34:14,709 - INFO - Page preview: Rob Mitchell
+319 N Maple St. Suite 200
+Murfreesboro, TN 37130
+Welcome to the Rutherford County Property Assessor's Website
+The information provided within is as a courtesy to the citizens of Rutherford County. It is the most current information for ad valorem tax purposes. If you discover an inaccuracy contact our office. Our address is 319 North Maple St Ste 200 Murfreesboro, Tennessee 37129 We are open between the hours of 8AM to 4 PM Monday-Friday.
+
+Our phone number is 615-898-7750 and our email is assessor@rutherfordcountytn.gov.
+Quick Search
+Advanced Search
+Real Estate
+Personal Property
+Options
+Owner
+Address
+Map & Parcel
+Export Results | Export Results Without Images
+Search Examples
+Enter 3 or more characters
+Name: Doe John Cannot search with the comma(,).
+Street Name: Main St
+Map & P
+2026-01-05 02:34:18,861 - INFO - Clicked on Advanced Search
+2026-01-05 02:34:18,900 - WARNING - Could not find Sales link: Message: no such element: Unable to locate element: {"method":"partial link text","selector":"Search for Real Property Sales"}
+  (Session info: chrome=143.0.7499.170); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff79b4288e5
+	0x7ff79b428940
+	0x7ff79b20165d
+	0x7ff79b259a33
+	0x7ff79b259d3c
+	0x7ff79b2adf67
+	0x7ff79b2aac97
+	0x7ff79b24ac29
+	0x7ff79b24ba93
+	0x7ff79b740640
+	0x7ff79b73af80
+	0x7ff79b7596e6
+	0x7ff79b445de4
+	0x7ff79b44ed8c
+	0x7ff79b432004
+	0x7ff79b4321b5
+	0x7ff79b417ee2
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 02:34:18,972 - INFO - Found 1 search buttons
+2026-01-05 02:34:19,064 - INFO -   Button 0: Search
+2026-01-05 02:34:20,143 - INFO - Search submitted
+2026-01-05 02:34:20,146 - INFO - Waiting for results...
+2026-01-05 02:34:28,148 - INFO - Extracting results...
+2026-01-05 02:34:29,884 - WARNING - Retrying (Retry(total=2, connect=None, read=None, redirect=None, status=None)) after connection broken by 'ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None)': /session/356f789d17892bf85543507d59b60b7a
+2026-01-05 02:34:33,969 - WARNING - Retrying (Retry(total=1, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=52787): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/356f789d17892bf85543507d59b60b7a
+2026-01-05 02:34:38,062 - WARNING - Retrying (Retry(total=0, connect=None, read=None, redirect=None, status=None)) after connection broken by 'NewConnectionError("HTTPConnection(host='localhost', port=52787): Failed to establish a new connection: [WinError 10061] No connection could be made because the target machine actively refused it")': /session/356f789d17892bf85543507d59b60b7a
+2026-01-05 02:40:10,943 - INFO - ============================================================
+2026-01-05 02:40:10,943 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 02:40:10,944 - INFO - ============================================================
+2026-01-05 02:40:12,793 - INFO - Loading: https://secured.rutherfordcountytn.gov/propertydata/RealPropertySearch2.aspx
+2026-01-05 02:40:20,715 - INFO - Searching for sales from 07/09/2025 to 01/05/2026
+2026-01-05 02:40:20,873 - INFO - Page preview: Rob Mitchell
+319 N Maple St. Suite 200
+Murfreesboro, TN 37130
+Welcome to the Rutherford County Property Assessor's Website
+The information provided within is as a courtesy to the citizens of Rutherford County. It is the most current information for ad valorem tax purposes. If you discover an inaccuracy contact our office. Our address is 319 North Maple St Ste 200 Murfreesboro, Tennessee 37129 We are open between the hours of 8AM to 4 PM Monday-Friday.
+
+Our phone number is 615-898-7750 and our email is assessor@rutherfordcountytn.gov.
+Quick Search
+Advanced Search
+Real Estate
+Personal Property
+Options
+Owner
+Address
+Map & Parcel
+Export Results | Export Results Without Images
+Search Examples
+Enter 3 or more characters
+Name: Doe John Cannot search with the comma(,).
+Street Name: Main St
+Map & P
+2026-01-05 02:40:24,946 - INFO - Clicked on Advanced Search
+2026-01-05 02:40:24,977 - WARNING - Could not find Sales link: Message: no such element: Unable to locate element: {"method":"partial link text","selector":"Search for Real Property Sales"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 02:40:24,997 - INFO - Found 1 search buttons
+2026-01-05 02:40:25,010 - INFO -   Button 0: Search
+2026-01-05 02:40:26,070 - INFO - Search submitted
+2026-01-05 02:40:26,070 - INFO - Waiting for results...
+2026-01-05 02:40:34,071 - INFO - Extracting results...
+2026-01-05 02:40:37,372 - INFO - Results page preview: Rob Mitchell
+319 N Maple St. Suite 200
+Murfreesboro, TN 37130
+Welcome to the Rutherford County Property Assessor's Website
+The information provided within is as a courtesy to the citizens of Rutherford County. It is the most current information for ad valorem tax purposes. If you discover an inaccuracy contact our office. Our address is 319 North Maple St Ste 200 Murfreesboro, Tennessee 37129 We are open between the hours of 8AM to 4 PM Monday-Friday.
+
+Our phone number is 615-898-7750 and our email is assessor@rutherfordcountytn.gov.
+Quick Search
+Advanced Search
+Real Estate Personal Property
+Parcel:
+Building Type:
+0026 - Studio Loft
+0099 - Detached Garage
+0100 - Single Family Residential
+0101 - Single Family Exceptional
+0102 - Duplex
+0106 - Triplex
+0108 - Townhome
+0109 - Townhouse/Condo
+0112 - Condominium unit
+0114 - Condominium - Separate Unit
+0116 - Apartment w/4-8 Units
+0118 - Apartment w/9 + Units
+0127 - Townhouse - Zero Lot Line
+0130 - Comm Business.SFD
+0207 - Firing Range Buildin
+2026-01-05 02:40:37,389 - INFO - Found 2 tables on page
+2026-01-05 02:40:37,412 - INFO -   Table 0: 6 rows
+2026-01-05 02:40:37,412 - INFO -   Using table 0 as results table
+2026-01-05 02:40:37,430 - INFO - Found 6 total rows to process
+2026-01-05 02:40:37,543 - INFO - Row 0: 6 cells - ['No data to display', '', '', 'No data to display', '', '']
+2026-01-05 02:40:37,767 - INFO - ============================================================
+2026-01-05 02:40:37,772 - INFO -   Output: output/rutherford_sales_20260105_024037.csv
+2026-01-05 02:40:37,772 - INFO -   NOTE: Column mapping may need verification
+2026-01-05 02:40:37,773 - INFO - ============================================================
+2026-01-05 02:50:02,448 - INFO - ============================================================
+2026-01-05 02:50:02,449 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 02:50:02,449 - INFO - ============================================================
+2026-01-05 02:50:04,324 - INFO - Loading: https://secured.rutherfordcountytn.gov/propertydata/RealPropertySearch2.aspx
+2026-01-05 02:50:11,234 - INFO - Searching for sales from 10/07/2025 to 01/05/2026
+2026-01-05 02:50:11,311 - INFO - Page preview: Rob Mitchell
+319 N Maple St. Suite 200
+Murfreesboro, TN 37130
+Welcome to the Rutherford County Property Assessor's Website
+The information provided within is as a courtesy to the citizens of Rutherford County. It is the most current information for ad valorem tax purposes. If you discover an inaccuracy contact our office. Our address is 319 North Maple St Ste 200 Murfreesboro, Tennessee 37129 We are open between the hours of 8AM to 4 PM Monday-Friday.
+
+Our phone number is 615-898-7750 and our email is assessor@rutherfordcountytn.gov.
+Quick Search
+Advanced Search
+Real Estate
+Personal Property
+Options
+Owner
+Address
+Map & Parcel
+Export Results | Export Results Without Images
+Search Examples
+Enter 3 or more characters
+Name: Doe John Cannot search with the comma(,).
+Street Name: Main St
+Map & P
+2026-01-05 02:50:15,366 - INFO - Clicked on Advanced Search
+2026-01-05 02:50:15,390 - WARNING - Could not find Sales link: Message: no such element: Unable to locate element: {"method":"partial link text","selector":"Search for Real Property Sales"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 02:50:15,405 - INFO - Found 1 search buttons
+2026-01-05 02:50:15,417 - INFO -   Button 0: Search
+2026-01-05 02:50:16,517 - INFO - Search submitted
+2026-01-05 02:50:16,517 - INFO - Waiting for results...
+2026-01-05 02:50:24,518 - INFO - Extracting results...
+2026-01-05 02:50:28,602 - INFO - Scrolled to load all results
+2026-01-05 02:50:28,857 - INFO - Results page preview: Rob Mitchell
+319 N Maple St. Suite 200
+Murfreesboro, TN 37130
+Welcome to the Rutherford County Property Assessor's Website
+The information provided within is as a courtesy to the citizens of Rutherford County. It is the most current information for ad valorem tax purposes. If you discover an inaccuracy contact our office. Our address is 319 North Maple St Ste 200 Murfreesboro, Tennessee 37129 We are open between the hours of 8AM to 4 PM Monday-Friday.
+
+Our phone number is 615-898-7750 and our email is assessor@rutherfordcountytn.gov.
+Quick Search
+Advanced Search
+Real Estate Personal Property
+Parcel:
+Building Type:
+0026 - Studio Loft
+0099 - Detached Garage
+0100 - Single Family Residential
+0101 - Single Family Exceptional
+0102 - Duplex
+0106 - Triplex
+0108 - Townhome
+0109 - Townhouse/Condo
+0112 - Condominium unit
+0114 - Condominium - Separate Unit
+0116 - Apartment w/4-8 Units
+0118 - Apartment w/9 + Units
+0127 - Townhouse - Zero Lot Line
+0130 - Comm Business.SFD
+0207 - Firing Range Buildin
+2026-01-05 02:50:28,873 - INFO - Found 2 tables on page
+2026-01-05 02:50:28,890 - INFO -   Table 0: 6 rows
+2026-01-05 02:50:28,890 - INFO -   Using table 0 as results table
+2026-01-05 02:50:28,908 - INFO - Found 6 total rows to process
+2026-01-05 02:50:28,908 - INFO - Processing page 1...
+2026-01-05 02:50:28,933 - INFO -   Found 6 rows on page 1
+2026-01-05 02:50:29,206 - INFO -   No more pages
+2026-01-05 02:50:29,206 - INFO - Total records collected: 1
+2026-01-05 02:50:29,213 - INFO - ============================================================
+2026-01-05 02:50:29,218 - INFO -   Output: output/rutherford_sales_20260105_025029.csv
+2026-01-05 02:50:29,218 - INFO -   NOTE: Column mapping may need verification
+2026-01-05 02:50:29,218 - INFO - ============================================================
+2026-01-05 02:56:06,934 - INFO - ============================================================
+2026-01-05 02:56:06,935 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 02:56:06,935 - INFO - ============================================================
+2026-01-05 02:56:08,786 - INFO - Loading: https://secured.rutherfordcountytn.gov/propertydata/RealPropertySearch2.aspx
+2026-01-05 02:56:16,560 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 02:56:16,652 - INFO - Page preview: Rob Mitchell
+319 N Maple St. Suite 200
+Murfreesboro, TN 37130
+Welcome to the Rutherford County Property Assessor's Website
+The information provided within is as a courtesy to the citizens of Rutherford County. It is the most current information for ad valorem tax purposes. If you discover an inaccuracy contact our office. Our address is 319 North Maple St Ste 200 Murfreesboro, Tennessee 37129 We are open between the hours of 8AM to 4 PM Monday-Friday.
+
+Our phone number is 615-898-7750 and our email is assessor@rutherfordcountytn.gov.
+Quick Search
+Advanced Search
+Real Estate
+Personal Property
+Options
+Owner
+Address
+Map & Parcel
+Export Results | Export Results Without Images
+Search Examples
+Enter 3 or more characters
+Name: Doe John Cannot search with the comma(,).
+Street Name: Main St
+Map & P
+2026-01-05 02:56:20,739 - INFO - Clicked on Advanced Search
+2026-01-05 02:56:20,817 - WARNING - Could not find Sales link: Message: no such element: Unable to locate element: {"method":"partial link text","selector":"Search for Real Property Sales"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 02:56:20,868 - INFO - Found 1 search buttons
+2026-01-05 02:56:20,905 - INFO -   Button 0: Search
+2026-01-05 02:56:22,016 - INFO - Search submitted
+2026-01-05 02:56:22,017 - INFO - Waiting for results...
+2026-01-05 02:56:30,018 - INFO - Extracting results...
+2026-01-05 02:56:34,079 - INFO - Scrolled to load all results
+2026-01-05 02:56:34,370 - INFO - Results page preview: Rob Mitchell
+319 N Maple St. Suite 200
+Murfreesboro, TN 37130
+Welcome to the Rutherford County Property Assessor's Website
+The information provided within is as a courtesy to the citizens of Rutherford County. It is the most current information for ad valorem tax purposes. If you discover an inaccuracy contact our office. Our address is 319 North Maple St Ste 200 Murfreesboro, Tennessee 37129 We are open between the hours of 8AM to 4 PM Monday-Friday.
+
+Our phone number is 615-898-7750 and our email is assessor@rutherfordcountytn.gov.
+Quick Search
+Advanced Search
+Real Estate Personal Property
+Parcel:
+Building Type:
+0026 - Studio Loft
+0099 - Detached Garage
+0100 - Single Family Residential
+0101 - Single Family Exceptional
+0102 - Duplex
+0106 - Triplex
+0108 - Townhome
+0109 - Townhouse/Condo
+0112 - Condominium unit
+0114 - Condominium - Separate Unit
+0116 - Apartment w/4-8 Units
+0118 - Apartment w/9 + Units
+0127 - Townhouse - Zero Lot Line
+0130 - Comm Business.SFD
+0207 - Firing Range Buildin
+2026-01-05 02:56:34,385 - INFO - Found 2 tables on page
+2026-01-05 02:56:34,402 - INFO -   Table 0: 6 rows
+2026-01-05 02:56:34,402 - INFO -   Using table 0 as results table
+2026-01-05 02:56:34,420 - INFO - Found 6 total rows to process
+2026-01-05 02:56:34,420 - INFO - Processing page 1...
+2026-01-05 02:56:34,445 - INFO -   Found 6 rows on page 1
+2026-01-05 02:56:34,696 - INFO -   No more pages
+2026-01-05 02:56:34,696 - INFO - Total records collected: 1
+2026-01-05 04:39:02,082 - INFO - ============================================================
+2026-01-05 04:39:02,082 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:39:02,083 - INFO - ============================================================
+2026-01-05 04:39:04,166 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:39:13,052 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 04:39:13,279 - INFO - Clicked Advanced Search
+2026-01-05 04:39:16,357 - INFO - Found 22 input fields
+2026-01-05 04:39:16,940 - INFO - Found date field: SaleDateStart
+2026-01-05 04:39:16,978 - INFO - Found date field: SaleDateEnd
+2026-01-05 04:39:18,260 - INFO - Submitted search
+2026-01-05 04:39:23,262 - INFO - Waiting for results...
+2026-01-05 04:39:28,264 - INFO - Processing page 1
+2026-01-05 04:39:28,327 - INFO - Found 6 potential result elements
+2026-01-05 04:39:28,575 - INFO - Collected 0 sales so far
+2026-01-05 04:39:28,591 - INFO - No Next button found
+2026-01-05 04:39:28,592 - WARNING - No sales data found
+2026-01-05 04:39:28,593 - INFO - Saving page source for debugging...
+2026-01-05 04:39:28,609 - INFO - Saved to output/rutherford_debug.html
+2026-01-05 04:39:30,950 - INFO - Browser closed
+2026-01-05 04:41:49,641 - INFO - ============================================================
+2026-01-05 04:41:49,642 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:41:49,642 - INFO - ============================================================
+2026-01-05 04:41:51,543 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:42:00,447 - INFO - Searching for sales from 12/29/2025 to 01/05/2026
+2026-01-05 04:42:00,698 - INFO - Clicked Advanced Search
+2026-01-05 04:42:04,203 - INFO - Filled sale date fields
+2026-01-05 04:42:06,260 - WARNING - Could not submit search: Message: no such element: Unable to locate element: {"method":"css selector","selector":"button[type='submit']"}
+  (Session info: MicrosoftEdge=143.0.3650.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#nosuchelementexception
+Stacktrace:
+Symbols not available. Dumping unresolved backtrace:
+	0x7ff6c0ed87d5
+	0x7ff6c0e48e44
+	0x7ff6c12331f2
+	0x7ff6c0ca2d9e
+	0x7ff6c0ca2ffb
+	0x7ff6c0cde917
+	0x7ff6c0c9a2e5
+	0x7ff6c0cdc8de
+	0x7ff6c0c9982a
+	0x7ff6c0c98b33
+	0x7ff6c0c99653
+	0x7ff6c0d822e4
+	0x7ff6c0d9109c
+	0x7ff6c0d8ac7f
+	0x7ff6c0f69b37
+	0x7ff6c0e546a6
+	0x7ff6c0e4eab4
+	0x7ff6c0e4ebf9
+	0x7ff6c0e42cbd
+	0x7ffcb0367374
+	0x7ffcb089cc91
+
+2026-01-05 04:42:06,291 - INFO - Waiting for results...
+2026-01-05 04:42:11,409 - INFO - Found 6 result rows in grid
+2026-01-05 04:42:11,468 - INFO - Table columns: []
+2026-01-05 04:42:11,663 - INFO - Extracted 0 sales from grid
+2026-01-05 04:42:11,664 - INFO - Processing page 1
+2026-01-05 04:42:11,681 - INFO - Found 6 potential result elements
+2026-01-05 04:42:11,842 - INFO - Collected 0 sales so far
+2026-01-05 04:42:11,859 - INFO - No Next button found
+2026-01-05 04:42:11,860 - WARNING - No sales data found
+2026-01-05 04:42:11,864 - INFO - Saving page source for debugging...
+2026-01-05 04:42:11,880 - INFO - Saved to output/rutherford_debug.html
+2026-01-05 04:42:14,198 - INFO - Browser closed
+2026-01-05 04:42:37,586 - INFO - ============================================================
+2026-01-05 04:42:37,587 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:42:37,588 - INFO - ============================================================
+2026-01-05 04:42:39,602 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:42:48,602 - INFO - Searching for sales from 12/29/2025 to 01/05/2026
+2026-01-05 04:42:48,849 - INFO - Clicked Advanced Search
+2026-01-05 04:42:52,558 - INFO - Filled sale date fields
+2026-01-05 04:42:55,736 - INFO - Submitted search
+2026-01-05 04:43:10,794 - INFO - Results grid loaded
+2026-01-05 04:43:15,796 - INFO - Waiting for results...
+2026-01-05 04:43:20,891 - INFO - Found 7 result rows in grid
+2026-01-05 04:43:20,942 - INFO - Table columns: []
+2026-01-05 04:43:21,281 - INFO - Extracted 1 sales from grid
+2026-01-05 04:43:21,281 - INFO - Processing page 1
+2026-01-05 04:43:21,299 - INFO - Found 7 potential result elements
+2026-01-05 04:43:21,595 - INFO - Collected 2 sales so far
+2026-01-05 04:43:21,612 - INFO - No Next button found
+2026-01-05 04:43:21,623 - INFO - ============================================================
+2026-01-05 04:43:21,628 - INFO - SUCCESS: Found 2 sales
+2026-01-05 04:43:21,631 - INFO - Saved to: output/rutherford_sales_20260105_044321.csv
+2026-01-05 04:43:21,633 - INFO - ============================================================
+2026-01-05 04:43:23,922 - INFO - Browser closed
+2026-01-05 04:48:18,101 - INFO - ============================================================
+2026-01-05 04:48:18,102 - INFO - Rutherford County Recent Sales Scraper
+2026-01-05 04:48:18,103 - INFO - ============================================================
+2026-01-05 04:48:20,320 - INFO - Loading WebPro 5 page: https://secured.rutherfordcountytn.gov/OFS/WP/Home
+2026-01-05 04:49:06,815 - INFO - Searching for sales from 12/06/2025 to 01/05/2026
+2026-01-05 04:49:07,080 - INFO - Clicked Advanced Search
+2026-01-05 04:49:10,498 - INFO - Filled sale date fields
+2026-01-05 04:49:13,554 - INFO - Submitted search
+2026-01-05 04:49:28,592 - INFO - Results grid loaded
+2026-01-05 04:49:33,593 - INFO - Waiting for results...
+2026-01-05 04:49:38,641 - INFO - Found 7 result rows in grid
+2026-01-05 04:49:38,665 - INFO - Table columns: []
+2026-01-05 04:49:38,999 - INFO - Extracted 1 sales from grid
+2026-01-05 04:49:39,001 - INFO - Processing page 1
+2026-01-05 04:49:39,025 - INFO - Found 7 potential result elements
+2026-01-05 04:49:39,432 - INFO - Collected 2 sales so far
+2026-01-05 04:49:39,461 - INFO - No Next button found
+2026-01-05 04:49:39,474 - INFO - ============================================================
+2026-01-05 04:49:39,480 - INFO - SUCCESS: Found 2 sales
+2026-01-05 04:49:39,484 - INFO - Saved to: output/rutherford_sales_20260105_044939.csv
+2026-01-05 04:49:39,490 - INFO - ============================================================
+2026-01-05 04:49:41,953 - INFO - Browser closed

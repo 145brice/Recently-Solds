@@ -1,0 +1,9 @@
+
+# Contractor Leads - Daily Scraping at 9:00 AM CST
+0 9 * * * cd /Users/briceleasure/Desktop/contractor-leads-saas && /usr/bin/python3 incremental_scraper.py >> /Users/briceleasure/Desktop/contractor-leads-saas/logs/scraper.log 2>&1
+
+# Contractor Leads - Daily Emails at 6:00 AM
+0 6 * * * cd /Users/briceleasure/Desktop/contractor-leads-saas && /usr/bin/python3 email_sender.py >> /Users/briceleasure/Desktop/contractor-leads-saas/logs/email.log 2>&1
+
+*/30 * * * * cd '/Users/briceleasure/Desktop/contractors reddit' && /usr/bin/python3 reddit_scraper_hourly.py >> '/Users/briceleasure/Desktop/contractors reddit/scraper.log' 2>&1
+30 5 * * * /Users/briceleasure/Desktop/recents/random_time_scraper.sh
