@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - Fresh Leads Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+        }
+        .pricing-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+        }
+        .pricing-card.featured {
+            border: 3px solid #667eea;
+            position: relative;
+        }
+        .featured-badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .price {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 1rem 0;
+        }
+        .price-period {
+            font-size: 1rem;
+            color: #6c757d;
+        }
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+        .feature-list li::before {
+            content: "✓";
+            color: #28a745;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+        .btn-purchase {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            width: 100%;
+            transition: opacity 0.3s ease;
+        }
+        .btn-purchase:hover {
+            opacity: 0.9;
+            color: white;
+        }
+        .faq-section {
+            max-width: 800px;
+            margin: 4rem auto;
+            background: white;
+            border-radius: 15px;
+            padding: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .faq-item {
+            margin-bottom: 1.5rem;
+        }
+        .faq-question {
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">Fresh Investor Leads</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
+                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                    <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="pricing.html">Pricing</a></li>
+                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="header">
+        <h1>Nashville Metro Property Leads</h1>
+        <p class="lead mb-3">Fresh daily leads from 7 counties &mdash; Davidson, Williamson, Wilson, Sumner, Rutherford, Robertson &amp; Cheatham</p>
+        <p style="font-size: 0.95rem; color: rgba(255,255,255,0.95); margin-bottom: 0;">
+            One flat monthly subscription &mdash; $99/month
+        </p>
+    </div>
+
+    <div class="container my-5">
+        <div class="row justify-content-center">
+            <!-- All Counties Plan (Featured) -->
+            <div class="col-md-6">
+                <div class="pricing-card featured">
+                    <div class="featured-badge">ALL 7 COUNTIES INCLUDED</div>
+                    <h3 class="text-center">Property Leads Subscription</h3>
+                    <div class="price text-center">
+                        $99<span class="price-period">/mo</span>
+                    </div>
+                    <p class="text-center text-muted"><small>Month-to-month &bull; Cancel anytime</small></p>
+                    <ul class="feature-list">
+                        <li>All 7 Nashville-metro counties</li>
+                        <li>Fresh daily data pulls from public records</li>
+                        <li>Property sales, owner &amp; buyer information</li>
+                        <li>Sale price, date &amp; full address on every lead</li>
+                        <li>Advanced search &amp; filtering</li>
+                        <li>Unlimited CSV exports</li>
+                        <li>Owner contact lookup</li>
+                        <li>Email support</li>
+                    </ul>
+                    <button class="btn btn-purchase" onclick="startCheckout()">Get Access Now &mdash; $99/mo</button>
+                    <p class="text-center mt-3"><small>No contracts &bull; Cancel anytime</small></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section">
+            <h2 class="text-center mb-4">Frequently Asked Questions</h2>
+
+            <div class="faq-item">
+                <div class="faq-question">What counties are included?</div>
+                <div class="faq-answer">All 7 Nashville-metro counties: Davidson, Williamson, Wilson, Sumner, Rutherford, Robertson, and Cheatham. One subscription unlocks all of them.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">How often is the data updated?</div>
+                <div class="faq-answer">Data is pulled fresh daily from each county's public records system. You'll see the latest property transactions as they're recorded.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What data fields are included on each lead?</div>
+                <div class="faq-answer">Every lead includes: owner/buyer name, full property address, sale price, sale date, and agent phone number where available.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">Can I cancel anytime?</div>
+                <div class="faq-answer">Yes. The subscription is month-to-month with no long-term contracts. Cancel anytime from your account.</div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question">What payment methods do you accept?</div>
+                <div class="faq-answer">We accept all major credit cards (Visa, MasterCard, American Express, Discover) via Stripe.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout loading overlay -->
+    <div id="checkoutOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
+        <div style="background:white; padding:2rem; border-radius:10px; text-align:center;">
+            <div class="spinner-border text-primary mb-3" role="status"></div>
+            <p class="mb-0 fw-bold">Redirecting to Stripe Checkout...</p>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        async function startCheckout() {
+            const overlay = document.getElementById('checkoutOverlay');
+            overlay.style.display = 'flex';
+
+            try {
+                const response = await fetch('/api/create-subscription-session', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({})
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    alert('Checkout error: ' + data.error);
+                    overlay.style.display = 'none';
+                    return;
+                }
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Could not create checkout session. Please try again.');
+                    overlay.style.display = 'none';
+                }
+            } catch (err) {
+                alert('Could not connect to the server. Make sure the back-end is running.');
+                overlay.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

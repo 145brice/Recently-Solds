@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Property Type Enrichment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background: #1a1a2e; color: #eee; font-family: 'Segoe UI', sans-serif; }
+        .navbar { background: linear-gradient(135deg, #0891b2 0%, #059669 100%) !important; }
+
+        .admin-grid {
+            max-width: 1200px; margin: 30px auto;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+            padding: 0 1rem;
+        }
+        .card-dark {
+            background: #16213e; border-radius: 12px; padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        h5 { color: #0891b2; margin-bottom: 1rem; }
+        hr { border-color: #333; }
+
+        .status-bar { max-width: 1200px; margin: 20px auto 0; padding: 0 1rem; }
+        .status-inner {
+            background: #16213e; border-radius: 12px; padding: 1rem 1.5rem;
+            display: flex; align-items: center; justify-content: space-between;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .status-dot { display: inline-block; width: 12px; height: 12px; border-radius: 50%; margin-right: 8px; }
+        .dot-idle    { background: #666; }
+        .dot-running { background: #ffc107; animation: pulse 1s infinite; }
+        .dot-success { background: #28a745; }
+        .dot-error   { background: #dc3545; }
+        @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.4; } }
+
+        .county-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .county-toggle {
+            display: flex; align-items: center; gap: 10px;
+            padding: 10px 14px; border-radius: 8px;
+            background: #1a1a3e; border: 1px solid #333;
+            cursor: pointer; transition: all 0.15s; user-select: none;
+        }
+        .county-toggle:hover { border-color: #0891b2; }
+        .county-toggle.active { background: #1a2e3e; border-color: #0891b2; }
+        .county-toggle .dot { width: 10px; height: 10px; border-radius: 50%; background: #444; flex-shrink: 0; }
+        .county-toggle.active .dot { background: #28a745; }
+        .county-toggle .name { font-size: 0.9rem; font-weight: 500; }
+        .county-toggle .sub  { font-size: 0.7rem; color: #888; }
+        .toggle-all { grid-column: 1 / -1; justify-content: center; border-style: dashed; opacity: 0.6; }
+        .toggle-all:hover { opacity: 1; }
+
+        .config-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+        .config-row label { width: 140px; font-size: 0.85rem; color: #aab; flex-shrink: 0; }
+        .config-row input[type=range] { flex: 1; accent-color: #0891b2; }
+        .config-row .val { width: 60px; text-align: right; font-family: 'Consolas', monospace; font-size: 0.85rem; color: #0891b2; flex-shrink: 0; }
+
+        .btn-run {
+            background: linear-gradient(135deg, #0891b2, #059669);
+            border: none; color: white; font-size: 1.1rem; padding: 0.75rem 2rem;
+            transition: all 0.2s; border-radius: 6px;
+        }
+        .btn-run:hover { opacity: 0.9; color: white; transform: translateY(-1px); }
+        .btn-run:disabled { opacity: 0.5; transform: none; }
+
+        .log-box {
+            background: #0f0f23; color: #0f0; font-family: 'Consolas', monospace;
+            font-size: 12px; padding: 1rem; border-radius: 8px;
+            height: 100%; min-height: 300px; overflow-y: auto; white-space: pre-wrap;
+            border: 1px solid #333;
+        }
+        .full-row { grid-column: 1 / -1; }
+
+        /* Leads table */
+        .leads-table-wrap { overflow-x: auto; max-height: 500px; overflow-y: auto; border-radius: 8px; }
+        .leads-table { font-size: 0.82rem; width: 100%; border-collapse: collapse; }
+        .leads-table th {
+            background: #0891b2; color: white; padding: 8px 10px;
+            position: sticky; top: 0; z-index: 2; white-space: nowrap; border: none;
+        }
+        .leads-table td { padding: 6px 10px; border-bottom: 1px solid #222; vertical-align: middle; }
+        .leads-table tr:hover td { background: #1a2540; }
+        .leads-table tr.has-type td { opacity: 0.6; }
+
+        .type-badge {
+            display: inline-block; padding: 2px 8px; border-radius: 4px;
+            font-size: 0.72rem; font-weight: 700; white-space: nowrap;
+        }
+        .type-sf   { background: #d1fae5; color: #065f46; }
+        .type-condo { background: #dbeafe; color: #1e40af; }
+        .type-mf   { background: #fef3c7; color: #92400e; }
+        .type-th   { background: #ede9fe; color: #5b21b6; }
+        .type-land { background: #d6dbdf; color: #1c2833; }
+        .type-unk  { background: #374151; color: #9ca3af; }
+
+        .sel-bar {
+            display: flex; align-items: center; gap: 12px;
+            flex-wrap: wrap; padding: 0.75rem 0; margin-bottom: 0.5rem;
+        }
+        .sel-bar span { font-size: 0.85rem; color: #aab; }
+        .sel-bar strong { color: #0891b2; }
+        .progress-bar-wrap { background: #1a1a3e; border-radius: 6px; height: 8px; overflow: hidden; margin: 8px 0; }
+        .progress-bar-fill { height: 100%; background: linear-gradient(90deg, #0891b2, #059669); transition: width 0.3s; }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand fw-bold" href="index.html">Fresh Investor Leads</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
+                <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
+                <li class="nav-item"><a class="nav-link active" href="property_type_admin.html">Type Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
+                <li class="nav-item"><a class="nav-link" href="storefront.html">Buy Leads</a></li>
+                <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
+                <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Status Bar -->
+<div class="status-bar">
+    <div class="status-inner">
+        <div>
+            <span id="statusDot" class="status-dot dot-idle"></span>
+            <strong id="statusText">Idle</strong>
+            <span id="statusDetail" class="text-muted small ms-3"></span>
+        </div>
+        <div class="d-flex align-items-center gap-3">
+            <span id="progressLabel" class="small text-muted"></span>
+            <button id="enrichBtn" class="btn btn-run" onclick="enrichSelected()" disabled>Enrich (0)</button>
+            <button id="killBtn" class="btn btn-danger" onclick="killEnrich()" style="font-size:1.1rem; padding:0.75rem 1.5rem;" disabled>Kill</button>
+        </div>
+    </div>
+</div>
+
+<!-- Main Grid -->
+<div class="admin-grid">
+
+    <!-- Left: Filters -->
+    <div class="card-dark">
+        <h5>Filter Leads to Load</h5>
+
+        <div class="county-grid" id="countyGrid">
+            <div class="county-toggle active" data-county="Davidson" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Davidson</div><div class="sub">Nashville, TN</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Williamson" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Williamson</div><div class="sub">Franklin, TN</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Wilson" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Wilson</div><div class="sub">Lebanon, TN</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Sumner" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Sumner</div><div class="sub">Hendersonville, TN</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Robertson" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Robertson</div><div class="sub">Springfield, TN</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Cheatham" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Cheatham</div><div class="sub">Ashland City, TN</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Rutherford" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Rutherford</div><div class="sub">Murfreesboro, TN</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Wake" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Wake</div><div class="sub">Raleigh, NC</div></div>
+            </div>
+            <div class="county-toggle active" data-county="Cook" onclick="toggleCounty(this)">
+                <div class="dot"></div><div><div class="name">Cook</div><div class="sub">Chicago, IL</div></div>
+            </div>
+            <div class="county-toggle toggle-all" onclick="toggleAllCounties(this)">
+                <div class="dot" style="background:#0891b2"></div>
+                <div><div class="name">Toggle All</div></div>
+            </div>
+        </div>
+
+        <hr>
+
+        <div class="config-row">
+            <label>Days back</label>
+            <input type="range" id="daysSlider" min="7" max="365" value="30" step="1" oninput="document.getElementById('daysVal').textContent=this.value">
+            <span class="val" id="daysVal">30</span>
+        </div>
+
+        <div class="config-row" style="margin-top:6px;">
+            <label>Show only</label>
+            <select id="showFilter" class="form-select form-select-sm" style="background:#1a1a3e; color:#eee; border-color:#333;">
+                <option value="all">All leads</option>
+                <option value="missing">Missing type only</option>
+                <option value="hastype">Already enriched</option>
+            </select>
+        </div>
+
+        <hr>
+        <button class="btn btn-run w-100" onclick="loadLeads()">Load Leads</button>
+        <div id="loadStats" class="text-muted small mt-2" style="text-align:center;"></div>
+    </div>
+
+    <!-- Right: Log -->
+    <div class="card-dark">
+        <h5>Enrichment Log</h5>
+        <div id="progressBar" class="progress-bar-wrap" style="display:none;">
+            <div id="progressFill" class="progress-bar-fill" style="width:0%"></div>
+        </div>
+        <div class="log-box" id="logBox">Waiting to start enrichment...\n</div>
+    </div>
+
+    <!-- Full-width: Leads Table -->
+    <div class="card-dark full-row">
+        <div class="sel-bar">
+            <button class="btn btn-sm btn-outline-secondary" onclick="selectAll()">Select All</button>
+            <button class="btn btn-sm btn-outline-secondary" onclick="selectNone()">Select None</button>
+            <button class="btn btn-sm btn-outline-warning" onclick="selectMissing()">Select Without Type</button>
+            <span id="selCount"><strong>0</strong> selected</span>
+            <span id="totalCount" class="ms-auto"></span>
+        </div>
+        <div class="leads-table-wrap">
+            <table class="leads-table">
+                <thead>
+                    <tr>
+                        <th style="width:36px;"><input type="checkbox" id="checkAll" onchange="toggleCheckAll(this)"></th>
+                        <th>Owner</th>
+                        <th>County</th>
+                        <th>Address</th>
+                        <th>Price</th>
+                        <th>Sold Date</th>
+                        <th>Property Type</th>
+                    </tr>
+                </thead>
+                <tbody id="leadsBody">
+                    <tr><td colspan="7" style="text-align:center; padding:2rem; color:#666;">Load leads using the filters above.</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div><!-- /admin-grid -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+let allLeads = [];       // full parsed CSV
+let displayedLeads = []; // after filter
+let propertyTypes = {};  // address -> type from cache
+let pollTimer = null;
+let lastCsvFile = '';
+
+function normalizeCountyName(name) {
+    const raw = String(name || '').trim();
+    if (!raw) return '';
+    return raw
+        .replace(/\s+county\b/i, '')
+        .replace(/,\s*[A-Z]{2}\b/, '')
+        .trim()
+        .toLowerCase();
+}
+
+function normalizeAddress(addr) {
+    return String(addr || '').trim().replace(/\s+/g, ' ').toUpperCase();
+}
+
+function normalizeTypeValue(value) {
+    return String(value || '').trim();
+}
+
+function isMissingPropertyType(value) {
+    const t = normalizeTypeValue(value).toLowerCase();
+    return !t || ['n/a', 'na', 'unknown', '-', '--', 'null', 'undefined'].includes(t);
+}
+
+function getPropertyTypeForRow(row) {
+    const addr = row && row['Address'];
+    return normalizeTypeValue(
+        propertyTypes[addr] ||
+        propertyTypes[normalizeAddress(addr)] ||
+        (row && row['Property Type']) ||
+        ''
+    );
+}
+
+// ── CSV parser ──────────────────────────────────────────────────────────────
+function parseCSV(text) {
+    const lines = text.trim().split('\n');
+    const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
+    return lines.slice(1).map(line => {
+        const cols = [];
+        let cur = '', inQ = false;
+        for (let c of line) {
+            if (c === '"') { inQ = !inQ; }
+            else if (c === ',' && !inQ) { cols.push(cur); cur = ''; }
+            else cur += c;
+        }
+        cols.push(cur);
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = (cols[i] || '').trim().replace(/^"|"$/g, ''));
+        return obj;
+    });
+}
+
+function parseSoldDate(str) {
+    if (!str) return new Date(0);
+    // MM/DD/YYYY
+    const parts = str.split('/');
+    if (parts.length === 3) return new Date(parts[2], parts[0]-1, parts[1]);
+    return new Date(str);
+}
+
+// ── Load leads ───────────────────────────────────────────────────────────────
+async function loadLeads() {
+    document.getElementById('loadStats').textContent = 'Loading...';
+    try {
+        const csvResp = await fetch('/nashville_cash_leads_clean.csv');
+        const csvText = await csvResp.text();
+        try {
+            const typesResp = await fetch('/api/property-types');
+            propertyTypes = typesResp.ok ? await typesResp.json() : {};
+        } catch(e) { propertyTypes = {}; }
+        allLeads = parseCSV(csvText);
+
+        applyFiltersAndRender();
+        selectMissing(); // auto-select all rows that don't have a type yet
+        document.getElementById('loadStats').textContent =
+            `${allLeads.length.toLocaleString()} total records loaded.`;
+        await syncEnrichStateOnLoad();
+    } catch(e) {
+        document.getElementById('loadStats').textContent = 'Error loading leads: ' + e.message;
+    }
+}
+
+function applyFiltersAndRender() {
+    const days = parseInt(document.getElementById('daysSlider').value);
+    const showFilter = document.getElementById('showFilter').value;
+    const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - days);
+
+    const enabledCounties = new Set(
+        [...document.querySelectorAll('.county-toggle.active:not(.toggle-all)')]
+            .map(el => normalizeCountyName(el.dataset.county))
+    );
+
+    displayedLeads = allLeads.filter(row => {
+        if (!enabledCounties.has(normalizeCountyName(row['County']))) return false;
+        const soldDate = parseSoldDate(row['Sold Date']);
+        if (soldDate < cutoff) return false;
+        const hasType = !isMissingPropertyType(getPropertyTypeForRow(row));
+        if (showFilter === 'missing' && hasType) return false;
+        if (showFilter === 'hastype' && !hasType) return false;
+        return true;
+    });
+
+    renderTable();
+    document.getElementById('totalCount').textContent =
+        `Showing ${displayedLeads.length.toLocaleString()} records`;
+    updateSelCount();
+}
+
+// ── Render table ─────────────────────────────────────────────────────────────
+function renderTable() {
+    const tbody = document.getElementById('leadsBody');
+    if (!displayedLeads.length) {
+        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:2rem;color:#666;">No leads match the current filters.</td></tr>';
+        return;
+    }
+
+    tbody.innerHTML = displayedLeads.map((row, i) => {
+        const addr = row['Address'];
+        const ptype = getPropertyTypeForRow(row);
+        const hasType = !isMissingPropertyType(ptype);
+        const badgeHtml = hasType ? `<span class="type-badge ${typeBadgeClass(ptype)}">${ptype}</span>` : '<span class="type-badge type-unk">Unknown</span>';
+        const rowClass = hasType ? 'has-type' : '';
+        return `<tr class="${rowClass}" data-idx="${i}">
+            <td><input type="checkbox" class="row-check" data-addr="${escHtml(addr)}" data-county="${escHtml(row['County'])}" onchange="updateSelCount()"></td>
+            <td>${escHtml(row['Owner Name'] || 'N/A')}</td>
+            <td>${escHtml(row['County'])}</td>
+            <td style="max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;" title="${escHtml(addr)}">${escHtml(addr)}</td>
+            <td>${escHtml(row['Price'])}</td>
+            <td>${escHtml(row['Sold Date'])}</td>
+            <td id="type-${i}">${badgeHtml}</td>
+        </tr>`;
+    }).join('');
+}
+
+function typeBadgeClass(ptype) {
+    const t = (ptype || '').toLowerCase();
+    if (t.includes('single')) return 'type-sf';
+    if (t.includes('condo') || t.includes('co-op')) return 'type-condo';
+    if (t.includes('multi') || t.includes('apartment')) return 'type-mf';
+    if (t.includes('town')) return 'type-th';
+    if (t.includes('land') || t.includes('lot')) return 'type-land';
+    return 'type-unk';
+}
+
+function escHtml(s) {
+    return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── Selection helpers ─────────────────────────────────────────────────────────
+function updateSelCount() {
+    const n = document.querySelectorAll('.row-check:checked').length;
+    document.getElementById('selCount').innerHTML = `<strong>${n}</strong> selected`;
+    const btn = document.getElementById('enrichBtn');
+    btn.disabled = n === 0 || enrich_running;
+    btn.textContent = `Enrich (${n})`;
+}
+
+function selectAll()     { document.querySelectorAll('.row-check').forEach(c => c.checked = true); updateSelCount(); }
+function selectNone()    { document.querySelectorAll('.row-check').forEach(c => c.checked = false); updateSelCount(); }
+function selectMissing() {
+    document.querySelectorAll('.row-check').forEach(c => {
+        const row = displayedLeads.find(r => normalizeAddress(r['Address']) === normalizeAddress(c.dataset.addr));
+        c.checked = !row || isMissingPropertyType(getPropertyTypeForRow(row));
+    });
+    updateSelCount();
+}
+function toggleCheckAll(cb) {
+    document.querySelectorAll('.row-check').forEach(c => c.checked = cb.checked);
+    updateSelCount();
+}
+
+// ── County toggles ────────────────────────────────────────────────────────────
+function toggleCounty(el) {
+    el.classList.toggle('active');
+    applyFiltersAndRender();
+    selectMissing();
+}
+function toggleAllCounties(btn) {
+    const toggles = document.querySelectorAll('.county-toggle:not(.toggle-all)');
+    const allActive = [...toggles].every(t => t.classList.contains('active'));
+    toggles.forEach(t => allActive ? t.classList.remove('active') : t.classList.add('active'));
+    applyFiltersAndRender();
+    selectMissing();
+}
+
+// ── Enrich ────────────────────────────────────────────────────────────────────
+let enrich_running = false;
+
+async function enrichSelected() {
+    const checked = [...document.querySelectorAll('.row-check:checked')];
+    const addresses = checked
+        .map(c => ({ address: c.dataset.addr, county: c.dataset.county || '' }))
+        .filter(x => x.address);
+    if (!addresses.length) return;
+
+    if (addresses.length > 200) {
+        if (!confirm(`You have ${addresses.length.toLocaleString()} addresses selected.\n\nThis will use Google metadata/snippets for every selected Unknown row and may take several minutes.\n\nContinue?`)) return;
+    }
+
+    try {
+        const resp = await fetch('/api/enrich', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({addresses})
+        });
+        if (!resp.ok) {
+            const txt = await resp.text();
+            alert('Server error — make sure the server has been restarted to pick up the new /api/enrich endpoint.\n\n' + txt.slice(0,200));
+            return;
+        }
+        const data = await resp.json();
+        if (data.error) { alert(data.error); return; }
+
+        enrich_running = true;
+        document.getElementById('enrichBtn').disabled = true;
+        const killBtn = document.getElementById('killBtn');
+        killBtn.disabled = false;
+        killBtn.textContent = 'Kill';
+        document.getElementById('progressBar').style.display = 'block';
+        document.getElementById('logBox').textContent = '';
+        startPolling();
+    } catch(e) {
+        alert('Error starting enrichment: ' + e.message);
+    }
+}
+
+function startPolling() {
+    if (pollTimer) clearInterval(pollTimer);
+    pollTimer = setInterval(pollStatus, 2000);
+}
+
+async function syncEnrichStateOnLoad() {
+    try {
+        const resp = await fetch('/api/enrich-status');
+        const s = await resp.json();
+        if (s.running) {
+            enrich_running = true;
+            document.getElementById('statusDot').className = 'status-dot dot-running';
+            document.getElementById('statusText').textContent = 'Running';
+            document.getElementById('statusDetail').textContent = s.current ? `→ ${s.current}` : '';
+            const killBtn = document.getElementById('killBtn');
+            killBtn.disabled = false;
+            killBtn.textContent = 'Kill';
+            document.getElementById('progressBar').style.display = 'block';
+            document.getElementById('logBox').textContent = s.log || '';
+            startPolling();
+        } else {
+            enrich_running = false;
+            const killBtn = document.getElementById('killBtn');
+            killBtn.disabled = true;
+            killBtn.textContent = 'Kill';
+        }
+        updateSelCount();
+    } catch (e) {
+        console.error('sync state error:', e);
+    }
+}
+
+async function pollStatus() {
+    try {
+        const resp = await fetch('/api/enrich-status');
+        const s = await resp.json();
+
+        // update status bar
+        const dot = document.getElementById('statusDot');
+        const text = document.getElementById('statusText');
+        const detail = document.getElementById('statusDetail');
+        if (s.running) {
+            dot.className = 'status-dot dot-running';
+            text.textContent = 'Running';
+            detail.textContent = s.current ? `→ ${s.current}` : '';
+        } else {
+            dot.className = 'status-dot dot-success';
+            text.textContent = 'Done';
+            detail.textContent = `${s.done} / ${s.total} addresses`;
+        }
+        if (s.csv_file) {
+            lastCsvFile = s.csv_file;
+            detail.textContent += ` | CSV: ${s.csv_file}`;
+        }
+
+        // progress bar
+        const pct = s.total > 0 ? Math.round((s.done / s.total) * 100) : 0;
+        document.getElementById('progressFill').style.width = pct + '%';
+        document.getElementById('progressLabel').textContent = s.total > 0 ? `${s.done}/${s.total}` : '';
+
+        // log
+        document.getElementById('logBox').textContent = s.log;
+        const logBox = document.getElementById('logBox');
+        logBox.scrollTop = logBox.scrollHeight;
+
+        // update type cells as results come in
+        if (s.log) {
+            const matches = s.log.matchAll(/\[\d+\/\d+\] (.+?)\s{2}<-\s{2}(.+)/g);
+            for (const m of matches) {
+                const ptype = m[1].trim();
+                const addr = m[2].trim();
+                propertyTypes[addr] = ptype;
+            }
+            // re-render type cells only
+            displayedLeads.forEach((row, i) => {
+                const cell = document.getElementById(`type-${i}`);
+                const ptype = getPropertyTypeForRow(row);
+                if (cell && !isMissingPropertyType(ptype)) {
+                    cell.innerHTML = `<span class="type-badge ${typeBadgeClass(ptype)}">${ptype}</span>`;
+                    cell.closest('tr').classList.add('has-type');
+                }
+            });
+        }
+
+        if (!s.running) {
+            clearInterval(pollTimer);
+            enrich_running = false;
+            const killBtn = document.getElementById('killBtn');
+            killBtn.disabled = true;
+            killBtn.textContent = 'Kill';
+            updateSelCount();
+            if (lastCsvFile) {
+                document.getElementById('loadStats').textContent = `Live CSV saved: ${lastCsvFile}`;
+            }
+        }
+    } catch(e) {
+        console.error('Poll error:', e);
+    }
+}
+
+async function killEnrich() {
+    const killBtn = document.getElementById('killBtn');
+    killBtn.disabled = true;
+    killBtn.textContent = 'Killing...';
+    try {
+        await fetch('/api/enrich-kill', {method: 'POST'});
+    } finally {
+        document.getElementById('statusText').textContent = 'Stopping...';
+    }
+}
+
+// Auto-load on page open
+window.addEventListener('load', loadLeads);
+</script>
+</body>
+</html>
