@@ -20,6 +20,10 @@
     { "source": "/counties", "destination": "/404", "statusCode": 404 },
     { "source": "/counties.html", "destination": "/404", "statusCode": 404 },
     { "source": "/pricing", "destination": "/404", "statusCode": 404 },
-    { "source": "/pricing.html", "destination": "/404", "statusCode": 404 }
+    { "source": "/pricing.html", "destination": "/404", "statusCode": 404 },
+    { "source": "/nashville_cash_leads_clean.csv", "destination": "/404", "statusCode": 404 },
+    { "source": "/nashville_cash_leads_clean_expanded.csv", "destination": "/404", "statusCode": 404 },
+    { "source": "/nashville_cash_leads_clean_sample.csv", "destination": "/404", "statusCode": 404 },
+    { "source": "/motivated_sellers.csv", "destination": "/404", "statusCode": 404 }
   ]
 }

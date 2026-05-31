@@ -1,606 +1,801 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Subscribe - Fresh Investor Leads</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 2.5rem 0;
-            text-align: center;
-        }
-        .header p { opacity: 0.9; margin-bottom: 0; }
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fresh Investor Leads Storefront</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* Main layout */
-        .store-layout {
-            display: flex;
-            max-width: 1400px;
-            margin: 2rem auto;
-            gap: 1.5rem;
-            padding: 0 1rem;
-        }
-        .leads-panel {
-            flex: 1;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            padding: 1.5rem;
-            min-width: 0;
-        }
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #0f1117;
+      color: #e0e0e0;
+      min-height: 100vh;
+    }
 
-        /* Subscription sidebar */
-        .sub-sidebar {
-            width: 340px;
-            flex-shrink: 0;
-            position: sticky;
-            top: 1rem;
-            align-self: flex-start;
-        }
-        .sub-panel {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(102,126,234,0.2);
-            padding: 1.75rem;
-            border: 2px solid #667eea;
-        }
-        .sub-panel .price-display {
-            text-align: center;
-            margin: 1.25rem 0;
-        }
-        .sub-panel .price-display .amount {
-            font-size: 3rem;
-            font-weight: 800;
-            color: #667eea;
-            line-height: 1;
-        }
-        .sub-panel .price-display .period {
-            font-size: 1rem;
-            color: #6c757d;
-        }
-        .sub-panel h5 {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #212529;
-            margin-bottom: 0;
-            text-align: center;
-        }
-        .sub-panel .badge-pill {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 20px;
-            padding: 0.3rem 1rem;
-            font-size: 0.78rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-        }
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: 1.25rem 0;
-        }
-        .feature-list li {
-            padding: 0.5rem 0;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 0.9rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-        .feature-list li:last-child { border-bottom: none; }
-        .feature-list li::before {
-            content: "✓";
-            color: #28a745;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-        .subscribe-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            width: 100%;
-            padding: 0.85rem;
-            font-weight: 700;
-            font-size: 1.05rem;
-            border-radius: 8px;
-            color: white;
-            cursor: pointer;
-            transition: opacity 0.2s, transform 0.1s;
-        }
-        .subscribe-btn:hover { opacity: 0.92; transform: translateY(-1px); }
-        .sub-note {
-            text-align: center;
-            font-size: 0.78rem;
-            color: #6c757d;
-            margin-top: 0.75rem;
-        }
+    /* ---- Navbar ---- */
+    .navbar {
+      background: linear-gradient(135deg, #1a1f2e 0%, #0d1226 100%);
+      border-bottom: 2px solid #2563eb;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      min-height: 52px;
+    }
+    .navbar-brand {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      letter-spacing: 0.5px;
+    }
+    .navbar-brand span { color: #3b82f6; }
+    .nav-links {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .nav-links a {
+      color: #94a3b8;
+      text-decoration: none;
+      font-size: 0.82rem;
+      padding: 6px 12px;
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: #fff; background: #1e293b; }
 
-        /* Table styles */
-        .table th {
-            background-color: #343a40;
-            color: white;
-            border: none;
-            cursor: pointer;
-            user-select: none;
-        }
-        .table tbody tr:hover { background-color: #e3f2fd; }
-        .table th.sort-asc::after { content: ' \25B2'; font-size: 12px; }
-        .table th.sort-desc::after { content: ' \25BC'; font-size: 12px; }
-        .table th.sortable::after { content: ' \21C5'; font-size: 12px; opacity: 0.5; }
-        .table td { vertical-align: middle; }
-        .sold-badge {
-            background-color: #dc3545;
-            color: white;
-            padding: 0.25rem 0.5rem;
-            border-radius: 0.25rem;
-            font-size: 0.75rem;
-        }
-        .blurred-row td:not(:first-child):not(:nth-child(2)) {
-            filter: blur(4px);
-            user-select: none;
-        }
+    /* ---- Sub-header ---- */
+    .sub-header {
+      background: #0f1117;
+      padding: 10px 28px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .badge {
+      background: #1e3a8a;
+      color: #93c5fd;
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
 
-        .nav-tabs .nav-link {
-            font-weight: 600;
-            color: #495057;
-            border: none;
-            padding: 0.75rem 1.25rem;
-        }
-        .nav-tabs .nav-link.active {
-            color: white;
-            background: none;
-            border: none;
-        }
-        .nav-tabs .nav-link .badge {
-            font-size: 0.7rem;
-            margin-left: 0.4rem;
-            vertical-align: middle;
-        }
-        .county-tab-all.active { background-color: #343a40 !important; }
-        .county-tab-davidson.active { background-color: #0d6efd !important; }
-        .county-tab-williamson.active { background-color: #6f42c1 !important; }
-        .county-tab-wilson.active { background-color: #198754 !important; }
-        .county-tab-sumner.active { background-color: #fd7e14 !important; }
-        .county-tab-rutherford.active { background-color: #dc3545 !important; }
-        .county-tab-robertson.active { background-color: #20c997 !important; }
-        .county-tab-cheatham.active { background-color: #6610f2 !important; }
-        .county-tab-wake.active  { background-color: #0891b2 !important; }
-        .county-tab-cook.active  { background-color: #059669 !important; }
-        .nav-tabs .nav-link:not(.active):hover { background-color: #e9ecef; border: none; }
-        .nav-tabs { border-bottom: 2px solid #dee2e6; gap: 0.25rem; align-items: center; }
-        .tab-state-sep { display: flex; align-items: center; padding: 0 0.25rem; }
-        .tab-state-label {
-            font-size: 0.68rem; font-weight: 700; text-transform: uppercase;
-            letter-spacing: 0.07em; color: #adb5bd; padding: 0 0.4rem;
-            border-left: 2px solid #dee2e6; line-height: 1; white-space: nowrap;
-        }
+    /* ---- Buttons ---- */
+    .btn {
+      padding: 6px 14px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 600;
+      transition: opacity 0.15s;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-primary   { background: #2563eb; color: #fff; }
+    .btn-success   { background: #16a34a; color: #fff; }
+    .btn-secondary { background: #334155; color: #e0e0e0; }
+    .btn-outline   { background: transparent; color: #3b82f6; border: 1px solid #2563eb; }
+    .btn-sm { padding: 4px 10px; font-size: 0.78rem; }
 
-        .stats-bar {
-            display: flex;
-            gap: 1.5rem;
-            flex-wrap: wrap;
-            margin-bottom: 1rem;
-            padding: 0.75rem 1rem;
-            background: #f1f3f5;
-            border-radius: 8px;
-        }
-        .stat-item { font-size: 0.85rem; color: #495057; }
-        .stat-item strong { color: #212529; }
+    /* ---- County Tabs ---- */
+    .tab-bar {
+      background: #161b2b;
+      border-bottom: 1px solid #1e293b;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .tab-bar::-webkit-scrollbar { display: none; }
+    .tab-btn {
+      padding: 10px 14px;
+      border: none;
+      background: transparent;
+      color: #64748b;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      transition: all 0.15s;
+    }
+    .tab-btn:hover { color: #94a3b8; }
+    .tab-btn.active { color: #fff; border-bottom-color: #3b82f6; }
+    .tab-sep {
+      color: #334155;
+      font-size: 0.65rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      padding: 0 8px;
+      border-left: 1px solid #1e293b;
+      margin-left: 4px;
+      white-space: nowrap;
+      line-height: 1;
+    }
+    .tab-count {
+      background: #1e293b;
+      color: #64748b;
+      font-size: 0.67rem;
+      padding: 1px 6px;
+      border-radius: 10px;
+      margin-left: 4px;
+      font-weight: 700;
+    }
+    .tab-btn.active .tab-count { background: #1e3a8a; color: #93c5fd; }
 
-        .preview-label {
-            display: inline-block;
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffc107;
-            border-radius: 6px;
-            padding: 0.35rem 0.85rem;
-            font-size: 0.82rem;
-            font-weight: 600;
-            margin-bottom: 0.75rem;
-        }
+    /* ---- Signal filter bar ---- */
+    .signal-bar {
+      background: #161b2b;
+      border-bottom: 1px solid #1e293b;
+      padding: 8px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+    }
+    .signal-bar .bar-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      flex-shrink: 0;
+    }
+    .signal-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 12px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+      background: #0f1117;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #94a3b8;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .signal-chip:hover { border-color: #3b82f6; color: #e0e0e0; }
+    .signal-chip.active { background: #1e3a8a; border-color: #2563eb; color: #93c5fd; }
+    .chip-dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; flex-shrink: 0; }
 
-        @media (max-width: 992px) {
-            .store-layout { flex-direction: column; }
-            .sub-sidebar { width: 100%; position: static; }
-        }
-    </style>
+    /* ---- Controls bar ---- */
+    .controls {
+      background: #0f1117;
+      border-bottom: 1px solid #1e293b;
+      padding: 10px 28px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+    .controls select, .controls input[type=text] {
+      background: #161b2b;
+      border: 1px solid #334155;
+      color: #e0e0e0;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+    }
+    .controls select:focus, .controls input:focus {
+      outline: none;
+      border-color: #3b82f6;
+    }
+
+    /* ---- Stats bar ---- */
+    .stats-bar {
+      background: #0f1117;
+      padding: 6px 28px;
+      border-bottom: 1px solid #1e293b;
+      display: flex;
+      gap: 18px;
+      font-size: 0.8rem;
+      color: #64748b;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .stats-bar strong { color: #94a3b8; }
+
+    /* ---- Table ---- */
+    .table-wrap {
+      overflow-x: auto;
+      padding: 0 10px 40px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.81rem;
+      margin-top: 10px;
+      min-width: 900px;
+    }
+    thead th {
+      background: #1a1f2e;
+      color: #94a3b8;
+      text-transform: uppercase;
+      font-size: 0.68rem;
+      letter-spacing: 0.7px;
+      padding: 6px 10px;
+      border-bottom: 2px solid #1e293b;
+      border-right: 1px solid #263045;
+      white-space: nowrap;
+      position: sticky;
+      top: 0;
+      z-index: 2;
+      cursor: pointer;
+      user-select: none;
+    }
+    thead th:hover { color: #e0e0e0; }
+    thead th.sort-asc::after  { content: ' ▲'; font-size: 0.65rem; }
+    thead th.sort-desc::after { content: ' ▼'; font-size: 0.65rem; }
+    thead th.sortable:not(.sort-asc):not(.sort-desc)::after { content: ' ⇅'; font-size: 0.65rem; opacity: 0.4; }
+    tbody tr { border-bottom: 1px solid #1a1f2e; }
+    tbody tr:hover { background: #161b2b; }
+    tbody td {
+      padding: 5px 10px;
+      vertical-align: middle;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 220px;
+      border-right: 1px solid #1a2030;
+    }
+
+    /* ---- Badges ---- */
+    .county-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 600;
+      background: #1e293b;
+      color: #7dd3fc;
+    }
+    .sold-badge {
+      background: #7f1d1d;
+      color: #fca5a5;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.68rem;
+      font-weight: 700;
+      margin-right: 4px;
+    }
+    .prop-type-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .prop-type-single-family   { background: #164e63; color: #a5f3fc; }
+    .prop-type-multi-family    { background: #78350f; color: #fed7aa; }
+    .prop-type-condo-townhouse { background: #14532d; color: #86efac; }
+    .prop-type-commercial      { background: #7f1d1d; color: #fca5a5; }
+    .prop-type-vacant-land     { background: #1e293b; color: #94a3b8; }
+    .prop-type-other           { background: #1e293b; color: #94a3b8; }
+    .signal-badge {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.67rem;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+    .signal-llc      { background: #2e1065; color: #c4b5fd; }
+    .signal-trust    { background: #1e3a8a; color: #93c5fd; }
+    .signal-investor { background: #7f1d1d; color: #fca5a5; }
+
+    /* ---- Empty state ---- */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #475569;
+    }
+    .empty-state h2 { font-size: 1.1rem; margin-bottom: 8px; color: #64748b; }
+
+    /* ---- Pagination ---- */
+    .pagination-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 28px;
+      border-top: 1px solid #1e293b;
+      font-size: 0.8rem;
+      color: #64748b;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .page-btn {
+      padding: 4px 12px;
+      border: 1px solid #334155;
+      background: #161b2b;
+      color: #94a3b8;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+    .page-btn:hover:not(:disabled) { border-color: #3b82f6; color: #e0e0e0; }
+    .page-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .page-size-select {
+      background: #161b2b;
+      border: 1px solid #334155;
+      color: #94a3b8;
+      padding: 3px 8px;
+      border-radius: 6px;
+      font-size: 0.78rem;
+    }
+
+    /* ---- Maps link ---- */
+    .maps-link { color: #3b82f6; font-size: 0.8rem; text-decoration: none; margin-left: 4px; }
+    .maps-link:hover { text-decoration: underline; }
+
+    /* ---- Scrollbar ---- */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #0f1117; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+  </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-        <div class="container">
-            <a class="navbar-brand fw-bold" href="index.html">Fresh Cash Leads</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
-                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
-                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
-                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="storefront.html">Buy Leads</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
-                </ul>
-            </div>
-        </div>
-    </nav>
 
-    <div class="header">
-        <h1>Nashville Metro Property Leads</h1>
-        <p>Fresh daily leads from 7 counties &mdash; one flat monthly subscription</p>
-    </div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a class="navbar-brand" href="storefront.html">Fresh <span>Investor Leads</span></a>
+  <div class="nav-links">
+    <a href="storefront.html" class="active">Buy Leads</a>
+    <a href="#checkout" class="active">$5 / lead</a>
+  </div>
+</nav>
 
-    <div class="store-layout">
-        <!-- Leads preview panel -->
-        <div class="leads-panel">
-            <span class="preview-label">Sample Preview — Subscribe to unlock all leads</span>
-            <ul class="nav nav-tabs mb-3" id="countyTabs"></ul>
+<div class="sub-header" id="checkout">
+  <span class="badge">$5 per lead</span>
+  <span style="font-size:0.82rem;color:#94a3b8;">Preview data is masked. Purchase unlocks owner, street address, and contact details.</span>
+</div>
 
-            <div class="d-flex justify-content-between align-items-center mb-3">
-                <div class="stats-bar flex-grow-1" id="statsBar"></div>
-                <div class="d-flex gap-2 ms-3">
-                    <select id="priceFilter" class="form-select form-select-sm" style="width: 150px;">
-                        <option value="">All Prices</option>
-                        <option value="0-100000">$0 - $100K</option>
-                        <option value="100000-500000">$100K - $500K</option>
-                        <option value="500000-1000000">$500K - $1M</option>
-                        <option value="1000000+">$1M+</option>
-                    </select>
-                    <input type="text" id="searchInput" class="form-control form-control-sm" placeholder="Search leads..." style="width: 180px;">
-                </div>
-            </div>
+<!-- COUNTY TABS -->
+<div class="tab-bar" id="countyTabs"></div>
 
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th data-column="0" class="sortable">Owner Name</th>
-                            <th data-column="1" class="sortable">County</th>
-                            <th data-column="2" class="sortable">Address</th>
-                            <th data-column="3" data-type="price" class="sortable">Sale Price</th>
-                            <th data-column="4" data-type="date" class="sortable">Sold Date</th>
-                            <th data-column="5">Contact</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-            </div>
-            <div class="mt-2 text-muted">
-                <small>Showing <span id="recordCount">0</span> leads (preview — subscribe for full access)</small>
-            </div>
-        </div>
+<!-- SIGNAL FILTERS -->
+<div class="signal-bar">
+  <span class="bar-label">Show only:</span>
+  <span class="signal-chip" id="chip-llc" onclick="toggleSignal('llc')">
+    <span class="chip-dot"></span> LLC / Corp / Inc
+  </span>
+  <span class="signal-chip" id="chip-trust" onclick="toggleSignal('trust')">
+    <span class="chip-dot"></span> Trust / Estate
+  </span>
+  <span class="signal-chip" id="chip-multi" onclick="toggleSignal('multi')">
+    <span class="chip-dot"></span> Multi-Unit
+  </span>
+  <span class="signal-chip" id="chip-investor" onclick="toggleSignal('investor')">
+    <span class="chip-dot"></span> Investor Keywords
+  </span>
+  <span style="font-size:0.72rem;color:#475569;margin-left:auto;">Multiple = OR</span>
+</div>
 
-        <!-- Subscription sidebar -->
-        <div class="sub-sidebar">
-            <div class="sub-panel">
-                <div class="text-center">
-                    <span class="badge-pill">ALL COUNTIES INCLUDED</span>
-                </div>
-                <h5>Property Leads Subscription</h5>
-                <div class="price-display">
-                    <div class="amount">$5</div>
-                    <div class="period">/lead</div>
-                </div>
-                <ul class="feature-list">
-                    <li>All 7 Nashville-metro counties</li>
-                    <li>Fresh daily data pulls</li>
-                    <li>Owner name &amp; contact info</li>
-                    <li>Sale price &amp; date</li>
-                    <li>Full address on every lead</li>
-                    <li>Pay only for leads you choose</li>
-                    <li>No monthly commitment</li>
-                </ul>
-                <button class="subscribe-btn" id="subscribeBtn" onclick="startCheckout()">
-                    Buy Leads — $5 each
-                </button>
-                <p class="sub-note">$5 per lead &bull; No subscription required</p>
-            </div>
-        </div>
-    </div>
+<!-- CONTROLS -->
+<div class="controls">
+  <select id="typeFilter">
+    <option value="">All Property Types</option>
+    <option value="Single Family">Single Family</option>
+    <option value="Multi-Family">Multi-Family</option>
+    <option value="Condo/Townhouse">Condo/Townhouse</option>
+    <option value="Commercial">Commercial</option>
+    <option value="Vacant Land">Vacant Land</option>
+    <option value="Other">Other</option>
+  </select>
+  <select id="priceFilter">
+    <option value="">All Prices</option>
+    <option value="0-100000">$0 – $100K</option>
+    <option value="100000-500000">$100K – $500K</option>
+    <option value="500000-1000000">$500K – $1M</option>
+    <option value="1000000+">$1M+</option>
+  </select>
+  <input type="text" id="searchInput" placeholder="Search visible fields..."/>
+  <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
+    <label style="font-size:0.75rem;color:#64748b;">Per page:</label>
+    <select id="pageSize" class="page-size-select" onchange="changePageSize()">
+      <option value="25">25</option>
+      <option value="50" selected>50</option>
+      <option value="100">100</option>
+    </select>
+    <button id="buyBtn" class="btn btn-outline btn-sm">Buy Leads - $5 each</button>
+  </div>
+</div>
 
-    <!-- Checkout loading overlay -->
-    <div id="checkoutOverlay" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:9999; justify-content:center; align-items:center;">
-        <div style="background:white; padding:2rem; border-radius:10px; text-align:center;">
-            <div class="spinner-border text-primary mb-3" role="status"></div>
-            <p class="mb-0 fw-bold">Redirecting to Stripe Checkout...</p>
-        </div>
-    </div>
+<!-- STATS BAR -->
+<div class="stats-bar" id="statsBar">
+  <span>Loading data...</span>
+</div>
 
-    <script>
-        const STATE_GROUPS = [
-            { state: 'Tennessee', counties: ['Davidson', 'Williamson', 'Wilson', 'Sumner', 'Rutherford', 'Robertson', 'Cheatham'] },
-            { state: 'North Carolina', counties: ['Wake'] },
-            { state: 'Illinois', counties: ['Cook'] },
-        ];
-        const COUNTIES = STATE_GROUPS.flatMap(g => g.counties);
-        const PREVIEW_LIMIT = 10; // rows to show per county in preview
+<!-- TABLE -->
+<div class="table-wrap">
+  <table id="mainTable">
+    <thead>
+      <tr>
+        <th data-column="0" class="sortable">Owner Name</th>
+        <th data-column="1" class="sortable">Address</th>
+        <th data-column="2" data-type="price" class="sortable">Price</th>
+        <th data-column="3" data-type="date" class="sortable">Sold Date</th>
+        <th data-column="4" class="sortable">Property Type</th>
+        <th data-column="5">Agent Phone</th>
+      </tr>
+    </thead>
+    <tbody id="tableBody"></tbody>
+  </table>
+</div>
 
-        let allData = [];
-        let countyData = {};
-        let activeCounty = 'all';
-        let filteredData = [];
-        let currentSortColumn = -1;
-        let currentSortDirection = 'asc';
+<!-- PAGINATION -->
+<div class="pagination-row">
+  <span><small>Showing <span id="recordCount">0</span> of <span id="totalCount">0</span> records</small></span>
+  <div style="display:flex;gap:6px;align-items:center;">
+    <button class="page-btn" id="prevPage" onclick="changePage(-1)">&#8592; Prev</button>
+    <span id="pageInfo" style="font-size:0.8rem;color:#64748b;">Page 1</span>
+    <button class="page-btn" id="nextPage" onclick="changePage(1)">Next &#8594;</button>
+  </div>
+</div>
 
-        fetch('nashville_cash_leads_clean.csv')
-            .then(r => r.text())
-            .then(csv => {
-                const rows = csv.split('\n').slice(1);
-                let id = 0;
-                allData = rows.filter(r => r.trim()).map(r => {
-                    const cols = parseCSVRow(r);
-                    return {
-                        id: id++,
-                        ownerName: cols[0] || '',
-                        county: cols[1] || '',
-                        address: cols[2] || '',
-                        price: cols[3] || '',
-                        soldDate: cols[4] || '',
-                        agentPhone: cols[5] || ''
-                    };
-                });
+<script>
+  const STATE_GROUPS = [
+    { state: 'Tennessee', abbr: 'TN', counties: ['Davidson','Williamson','Wilson','Sumner','Rutherford','Robertson','Cheatham'] },
+    { state: 'North Carolina', abbr: 'NC', counties: ['Wake'] },
+    { state: 'Illinois', abbr: 'IL', counties: ['Cook'] },
+  ];
+  const COUNTIES = STATE_GROUPS.flatMap(g => g.counties);
 
-                countyData = {};
-                COUNTIES.forEach(c => countyData[c] = []);
-                allData.forEach(row => {
-                    if (countyData[row.county]) countyData[row.county].push(row);
-                });
+  let allData = [];
+  let countyData = {};
+  let activeCounty = 'all';
+  let filteredData = [];
+  let currentSortColumn = -1;
+  let currentSortDirection = 'asc';
+  let currentPage = 1;
+  let pageSize = 50;
+  let propertyTypeCache = {};
+  const activeSignals = new Set();
 
-                buildTabs();
-                switchTab('all');
-                attachListeners();
-            })
-            .catch(() => {
-                document.getElementById('tableBody').innerHTML =
-                    '<tr><td colspan="6" class="text-center text-danger py-4">Error loading leads data.</td></tr>';
-            });
+  Promise.all([
+    fetch('nashville_cash_leads_public.csv').then(r => r.text()),
+    fetch('/api/property-types').then(r => r.json()).catch(() => ({}))
+  ]).then(([csv, ptCache]) => {
+    propertyTypeCache = ptCache || {};
+    const rows = csv.split('\n').slice(1);
+    allData = rows.filter(r => r.trim()).map(r => {
+      const cols = parseCSVRow(r);
+      const addr = cols[2] || '';
+      return {
+        ownerName:    cols[0] || '',
+        county:       cols[1] || '',
+        address:      addr,
+        price:        cols[3] || '',
+        soldDate:     cols[4] || '',
+        agentPhone:   cols[5] || '',
+        propertyType: (cols[7] && cols[7] !== 'N/A') ? cols[7]
+                    : (propertyTypeCache[addr] && propertyTypeCache[addr] !== 'Unknown' ? propertyTypeCache[addr] : '')
+      };
+    });
+    countyData = {};
+    COUNTIES.forEach(c => countyData[c] = []);
+    allData.forEach(row => { if (countyData[row.county]) countyData[row.county].push(row); });
+    buildTabs();
+    switchTab('all');
+    attachListeners();
+  }).catch(err => {
+    document.getElementById('statsBar').innerHTML = '<span style="color:#fca5a5;">Error loading data</span>';
+    console.error(err);
+  });
 
-        function buildTabs() {
-            const tabContainer = document.getElementById('countyTabs');
-            let html = `<li class="nav-item"><button class="nav-link county-tab-all active" data-county="all" type="button">All <span class="badge bg-secondary">${allData.length}</span></button></li>`;
-            STATE_GROUPS.forEach(group => {
-                const groupCounties = group.counties.filter(c => (countyData[c] || []).length > 0);
-                if (groupCounties.length === 0) return;
-                html += `<li class="nav-item tab-state-sep"><span class="tab-state-label">${group.state}</span></li>`;
-                groupCounties.forEach(county => {
-                    const count = countyData[county].length;
-                    html += `<li class="nav-item"><button class="nav-link county-tab-${county.toLowerCase()}" data-county="${county}" type="button">${county} <span class="badge bg-secondary">${count}</span></button></li>`;
-                });
-            });
-            tabContainer.innerHTML = html;
-            tabContainer.querySelectorAll('.nav-link').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    tabContainer.querySelectorAll('.nav-link').forEach(t => t.classList.remove('active'));
-                    tab.classList.add('active');
-                    switchTab(tab.dataset.county);
-                });
-            });
-        }
+  function buildTabs() {
+    const bar = document.getElementById('countyTabs');
+    let html = `<button class="tab-btn active" data-county="all" onclick="activateTab(this,'all')">
+                  All <span class="tab-count">${allData.length}</span>
+                </button>`;
+    STATE_GROUPS.forEach(group => {
+      html += `<span class="tab-sep">${group.abbr}</span>`;
+      group.counties.forEach(county => {
+        const count = (countyData[county] || []).length;
+        html += `<button class="tab-btn" data-county="${county}" onclick="activateTab(this,'${county}')">
+                   ${county} <span class="tab-count">${count}</span>
+                 </button>`;
+      });
+    });
+    bar.innerHTML = html;
+  }
 
-        function switchTab(county) {
-            activeCounty = county;
-            currentSortColumn = -1;
-            currentSortDirection = 'asc';
-            document.querySelectorAll('th.sortable').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
-            document.getElementById('searchInput').value = '';
-            document.getElementById('priceFilter').value = '';
-            applyFilters();
-            updateStats();
-        }
+  function activateTab(el, county) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    switchTab(county);
+  }
 
-        function updateStats() {
-            const data = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
-            const bar = document.getElementById('statsBar');
-            if (data.length === 0) { bar.innerHTML = '<span class="stat-item">No data available</span>'; return; }
-            const prices = data.map(r => parsePrice(r.price)).filter(p => p > 0);
-            const avgPrice = prices.length ? prices.reduce((a, b) => a + b, 0) / prices.length : 0;
-            bar.innerHTML = `
-                <span class="stat-item"><strong>${data.length}</strong> leads available</span>
-                <span class="stat-item">Avg Sale: <strong>$${Math.round(avgPrice).toLocaleString()}</strong></span>
-            `;
-        }
+  function switchTab(county) {
+    activeCounty = county;
+    currentSortColumn = -1;
+    currentSortDirection = 'asc';
+    currentPage = 1;
+    document.querySelectorAll('thead th').forEach(h => h.classList.remove('sort-asc','sort-desc'));
+    document.getElementById('searchInput').value = '';
+    document.getElementById('priceFilter').value = '';
+    document.getElementById('typeFilter').value = '';
+    activeSignals.clear();
+    ['llc','trust','multi','investor'].forEach(k => document.getElementById('chip-'+k).classList.remove('active'));
+    applyFilters();
+  }
 
-        function applyFilters() {
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
-            const priceRange = document.getElementById('priceFilter').value;
-            const sourceData = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
+  function toggleSignal(key) {
+    if (activeSignals.has(key)) activeSignals.delete(key);
+    else activeSignals.add(key);
+    document.getElementById('chip-'+key).classList.toggle('active', activeSignals.has(key));
+    currentPage = 1;
+    applyFilters();
+  }
 
-            filteredData = sourceData.filter(row => {
-                const matchesSearch = searchTerm === '' ||
-                    row.ownerName.toLowerCase().includes(searchTerm) ||
-                    row.address.toLowerCase().includes(searchTerm) ||
-                    row.county.toLowerCase().includes(searchTerm);
+  function getSignal(name) {
+    if (!name || name === 'N/A') return null;
+    const n = name.toUpperCase();
+    if (/\b(LLC|L\.L\.C|INC|CORP|CORPORATION|LTD|L\.P\.|LLP|PLLC)\b/.test(n))
+      return { type: 'llc', label: 'LLC/Corp' };
+    if (/\b(TRUST|TRUSTEE|ESTATE|HEIR|LIVING TR|REV TR|REVOCABLE|IRREVOCABLE)\b/.test(n))
+      return { type: 'trust', label: 'Trust/Estate' };
+    if (/\b(PROPERTIES|HOLDINGS|INVESTMENTS|VENTURES|REALTY|RENTALS|APARTMENTS|PARTNERS|GROUP|CAPITAL|FUND|ASSETS|MANAGEMENT|MGMT|EQUIT)\b/.test(n))
+      return { type: 'investor', label: 'Investor' };
+    return null;
+  }
 
-                let matchesPrice = true;
-                if (priceRange) {
-                    const pv = parsePrice(row.price);
-                    switch (priceRange) {
-                        case '0-100000': matchesPrice = pv >= 0 && pv <= 100000; break;
-                        case '100000-500000': matchesPrice = pv > 100000 && pv <= 500000; break;
-                        case '500000-1000000': matchesPrice = pv > 500000 && pv <= 1000000; break;
-                        case '1000000+': matchesPrice = pv > 1000000; break;
-                    }
-                }
-                return matchesSearch && matchesPrice;
-            });
+  function matchesSignalFilters(row) {
+    if (activeSignals.size === 0) return true;
+    const sig = getSignal(row.ownerName);
+    const pt = (row.propertyType || '').toLowerCase();
+    if (activeSignals.has('multi') &&
+        (pt.includes('multi') || pt.includes('duplex') || pt.includes('two-flat') || pt.includes('apartment')))
+      return true;
+    if (!sig) return false;
+    if (activeSignals.has('llc')      && sig.type === 'llc')      return true;
+    if (activeSignals.has('trust')    && sig.type === 'trust')     return true;
+    if (activeSignals.has('investor') && sig.type === 'investor')  return true;
+    return false;
+  }
 
-            if (currentSortColumn >= 0) {
-                const header = document.querySelector(`th[data-column="${currentSortColumn}"]`);
-                sortData(currentSortColumn, header ? header.dataset.type || 'text' : 'text');
-            }
-            renderTable();
-        }
+  function applyFilters() {
+    const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+    const priceRange = document.getElementById('priceFilter').value;
+    const typeFilter = document.getElementById('typeFilter').value;
+    const sourceData = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
 
-        function attachListeners() {
-            document.getElementById('searchInput').addEventListener('input', applyFilters);
-            document.getElementById('priceFilter').addEventListener('change', applyFilters);
+    filteredData = sourceData.filter(row => {
+      const matchesSearch = !searchTerm ||
+        row.county.toLowerCase().includes(searchTerm) ||
+        row.price.toLowerCase().includes(searchTerm) ||
+        row.soldDate.toLowerCase().includes(searchTerm) ||
+        (row.propertyType || '').toLowerCase().includes(searchTerm);
 
-            document.querySelectorAll('th.sortable').forEach(header => {
-                header.addEventListener('click', () => {
-                    const col = parseInt(header.dataset.column);
-                    const type = header.dataset.type || 'text';
-                    if (currentSortColumn === col) {
-                        currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
-                    } else {
-                        currentSortColumn = col;
-                        currentSortDirection = 'asc';
-                    }
-                    document.querySelectorAll('th.sortable').forEach(h => h.classList.remove('sort-asc', 'sort-desc'));
-                    header.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
-                    sortData(col, type);
-                    renderTable();
-                });
-            });
-        }
+      let matchesPrice = true;
+      if (priceRange) {
+        const pv = parsePrice(row.price);
+        if (priceRange === '0-100000')       matchesPrice = pv >= 0 && pv <= 100000;
+        else if (priceRange === '100000-500000') matchesPrice = pv > 100000 && pv <= 500000;
+        else if (priceRange === '500000-1000000') matchesPrice = pv > 500000 && pv <= 1000000;
+        else if (priceRange === '1000000+')  matchesPrice = pv > 1000000;
+      }
 
-        function sortData(column, type) {
-            filteredData.sort((a, b) => {
-                let va, vb;
-                switch (column) {
-                    case 0: va = a.ownerName.toLowerCase(); vb = b.ownerName.toLowerCase(); break;
-                    case 1: va = a.county.toLowerCase(); vb = b.county.toLowerCase(); break;
-                    case 2: va = a.address.toLowerCase(); vb = b.address.toLowerCase(); break;
-                    case 3: va = parsePrice(a.price); vb = parsePrice(b.price); break;
-                    case 4: va = parseDate(a.soldDate); vb = parseDate(b.soldDate); break;
-                    default: return 0;
-                }
-                if (va < vb) return currentSortDirection === 'asc' ? -1 : 1;
-                if (va > vb) return currentSortDirection === 'asc' ? 1 : -1;
-                return 0;
-            });
-        }
+      const matchesType = !typeFilter || row.propertyType === typeFilter;
+      return matchesSearch && matchesPrice && matchesType && matchesSignalFilters(row);
+    });
 
-        function renderTable() {
-            const tbody = document.getElementById('tableBody');
-            const countEl = document.getElementById('recordCount');
+    if (currentSortColumn >= 0) {
+      const h = document.querySelector(`th[data-column="${currentSortColumn}"]`);
+      sortData(currentSortColumn, h ? h.dataset.type || 'text' : 'text');
+    }
+    renderTable();
+  }
 
-            // Show first PREVIEW_LIMIT rows clearly, blur the rest
-            const previewRows = filteredData.slice(0, PREVIEW_LIMIT);
-            const blurRows = filteredData.slice(PREVIEW_LIMIT, PREVIEW_LIMIT + 5);
+  function attachListeners() {
+    document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; applyFilters(); });
+    document.getElementById('priceFilter').addEventListener('change', () => { currentPage = 1; applyFilters(); });
+    document.getElementById('typeFilter').addEventListener('change', () => { currentPage = 1; applyFilters(); });
+    const buyBtn = document.getElementById('buyBtn');
+    if (buyBtn) buyBtn.addEventListener('click', startCheckout);
 
-            countEl.textContent = filteredData.length;
+    document.querySelectorAll('thead th.sortable').forEach(header => {
+      header.addEventListener('click', () => {
+        const col = parseInt(header.dataset.column);
+        const type = header.dataset.type || 'text';
+        if (currentSortColumn === col) currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+        else { currentSortColumn = col; currentSortDirection = 'asc'; }
+        currentPage = 1;
+        document.querySelectorAll('thead th').forEach(h => h.classList.remove('sort-asc','sort-desc'));
+        header.classList.add(currentSortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+        sortData(col, type);
+        renderTable();
+      });
+    });
+  }
 
-            if (filteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No leads found. Try adjusting your filters.</td></tr>';
-                return;
-            }
+  function sortData(column, type) {
+    filteredData.sort((a, b) => {
+      let va, vb;
+      switch (column) {
+        case 0: va = a.ownerName.toLowerCase(); vb = b.ownerName.toLowerCase(); break;
+        case 1: va = a.address.toLowerCase();   vb = b.address.toLowerCase();   break;
+        case 2: va = parsePrice(a.price);        vb = parsePrice(b.price);       break;
+        case 3: va = parseDate(a.soldDate);      vb = parseDate(b.soldDate);     break;
+        case 4: va = (a.propertyType||'').toLowerCase(); vb = (b.propertyType||'').toLowerCase(); break;
+        default: return 0;
+      }
+      if (va < vb) return currentSortDirection === 'asc' ? -1 : 1;
+      if (va > vb) return currentSortDirection === 'asc' ?  1 : -1;
+      return 0;
+    });
+  }
 
-            const fragment = document.createDocumentFragment();
+  function renderTable() {
+    const tbody    = document.getElementById('tableBody');
+    const countEl  = document.getElementById('recordCount');
+    const totalEl  = document.getElementById('totalCount');
+    const pageInfo = document.getElementById('pageInfo');
+    const prevBtn  = document.getElementById('prevPage');
+    const nextBtn  = document.getElementById('nextPage');
+    const tabData  = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
 
-            previewRows.forEach(row => {
-                fragment.appendChild(buildRow(row, false));
-            });
+    const totalRecords = filteredData.length;
+    const totalPages   = Math.ceil(totalRecords / pageSize) || 1;
+    if (currentPage > totalPages) currentPage = totalPages;
+    const start    = (currentPage - 1) * pageSize;
+    const end      = Math.min(start + pageSize, totalRecords);
+    const pageData = filteredData.slice(start, end);
 
-            blurRows.forEach(row => {
-                fragment.appendChild(buildRow(row, true));
-            });
+    totalEl.textContent = totalRecords;
 
-            if (filteredData.length > PREVIEW_LIMIT + 5) {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td colspan="6" class="text-center py-3" style="background:#f8f9fa;">
-                    <strong style="color:#667eea;">${filteredData.length - PREVIEW_LIMIT - 5} more leads hidden</strong>
-                    &mdash; <a href="#" onclick="document.getElementById('subscribeBtn').scrollIntoView({behavior:'smooth'});return false;">Subscribe to unlock all</a>
-                </td>`;
-                fragment.appendChild(tr);
-            }
+    if (totalRecords === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" class="empty-state"><h2>No leads found</h2><p>Try adjusting your filters.</p></td></tr>`;
+      countEl.textContent = '0';
+      pageInfo.textContent = 'Page 0 of 0';
+      prevBtn.disabled = true;
+      nextBtn.disabled = true;
+      updateStats(tabData);
+      return;
+    }
 
-            tbody.innerHTML = '';
-            tbody.appendChild(fragment);
-        }
+    countEl.textContent = `${start + 1}–${end}`;
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    prevBtn.disabled = currentPage <= 1;
+    nextBtn.disabled = currentPage >= totalPages;
 
-        function buildRow(row, blurred) {
-            const tr = document.createElement('tr');
-            if (blurred) tr.classList.add('blurred-row');
+    const frag = document.createDocumentFragment();
+    pageData.forEach(row => {
+      const tr = document.createElement('tr');
 
-            const maskedAddress = (row.address && row.address !== 'N/A')
-                ? `********, ${row.address.split(',').slice(1).join(',').trim()}`
-                : '********';
-            const fields = [blurred ? '********' : row.ownerName, row.county, blurred ? maskedAddress : row.address, row.price, row.soldDate];
-            fields.forEach((val, i) => {
-                const td = document.createElement('td');
-                if (i === 4 && val && val !== 'N/A') {
-                    td.innerHTML = `<span class="sold-badge">SOLD</span> ${val}`;
-                } else {
-                    td.textContent = val || 'N/A';
-                }
-                tr.appendChild(td);
-            });
-            return tr;
-        }
-        async function startCheckout() {
-            const overlay = document.getElementById('checkoutOverlay');
-            overlay.style.display = 'flex';
-            document.getElementById('subscribeBtn').disabled = true;
+      const td0 = document.createElement('td');
+      td0.title = 'Masked until purchase';
+      td0.textContent = row.ownerName || 'N/A';
+      tr.appendChild(td0);
 
-            try {
-                const response = await fetch('/api/create-subscription-session', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({})
-                });
-                const data = await response.json();
+      const td1 = document.createElement('td');
+      td1.title = 'Street number and street name masked until purchase';
+      td1.textContent = row.address || 'N/A';
+      tr.appendChild(td1);
 
-                if (data.error) {
-                    alert('Checkout error: ' + data.error);
-                    overlay.style.display = 'none';
-                    document.getElementById('subscribeBtn').disabled = false;
-                    return;
-                }
+      const td2 = document.createElement('td');
+      td2.textContent = row.price;
+      tr.appendChild(td2);
 
-                if (data.url) {
-                    window.location.href = data.url;
-                } else {
-                    alert('Could not create checkout session. Please try again.');
-                    overlay.style.display = 'none';
-                    document.getElementById('subscribeBtn').disabled = false;
-                }
-            } catch (err) {
-                alert('Could not connect to the server. Make sure the back-end is running.');
-                overlay.style.display = 'none';
-                document.getElementById('subscribeBtn').disabled = false;
-            }
-        }
+      const td3 = document.createElement('td');
+      td3.innerHTML = row.soldDate && row.soldDate !== 'N/A'
+        ? `<span class="sold-badge">SOLD</span>${row.soldDate}`
+        : 'N/A';
+      tr.appendChild(td3);
 
-        function parseCSVRow(row) {
-            const result = [];
-            let current = '';
-            let inQuotes = false;
-            for (let i = 0; i < row.length; i++) {
-                const ch = row[i];
-                if (ch === '"') {
-                    if (inQuotes && row[i + 1] === '"') { current += '"'; i++; }
-                    else inQuotes = !inQuotes;
-                } else if (ch === ',' && !inQuotes) {
-                    result.push(current.trim());
-                    current = '';
-                } else {
-                    current += ch;
-                }
-            }
-            result.push(current.trim());
-            return result;
-        }
+      const td4 = document.createElement('td');
+      const pt = row.propertyType || 'N/A';
+      td4.innerHTML = pt !== 'N/A'
+        ? `<span class="prop-type-badge prop-type-${pt.toLowerCase().replace(/[^a-z]/g,'-')}">${pt}</span>`
+        : '<span style="color:#475569;">N/A</span>';
+      tr.appendChild(td4);
 
-        function parsePrice(p) {
-            if (!p || p === 'N/A') return 0;
-            return parseFloat(p.replace(/[$,]/g, '')) || 0;
-        }
+      const td5 = document.createElement('td');
+      td5.textContent = row.agentPhone || 'N/A';
+      td5.style.color = '#64748b';
+      tr.appendChild(td5);
 
-        function parseDate(d) {
-            if (!d || d === 'N/A') return new Date(0);
-            return new Date(d);
-        }
-    </script>
+      frag.appendChild(tr);
+    });
+    tbody.innerHTML = '';
+    tbody.appendChild(frag);
+    updateStats(tabData);
+  }
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  function updateStats(tabData) {
+    const bar = document.getElementById('statsBar');
+    const isFiltered = filteredData.length !== (tabData || []).length;
+    const displayData = filteredData;
+    const prices = displayData.map(r => parsePrice(r.price)).filter(p => p > 0);
+    const avg = prices.length ? prices.reduce((a,b)=>a+b,0)/prices.length : 0;
+    const min = prices.length ? Math.min(...prices) : 0;
+    const max = prices.length ? Math.max(...prices) : 0;
+    const dates = displayData.map(r => new Date(r.soldDate)).filter(d => !isNaN(d));
+    let dateRange = '';
+    if (dates.length) {
+      const earliest = new Date(Math.min(...dates));
+      const latest   = new Date(Math.max(...dates));
+      dateRange = `${earliest.toLocaleDateString()} – ${latest.toLocaleDateString()}`;
+    }
+    bar.innerHTML = `
+      <span>Showing <strong>${displayData.length.toLocaleString()}</strong>${isFiltered && tabData ? ` of <strong>${tabData.length.toLocaleString()}</strong>` : ''} leads</span>
+      ${prices.length ? `<span>Avg: <strong>$${Math.round(avg).toLocaleString()}</strong></span>` : ''}
+      ${prices.length ? `<span>Range: <strong>$${Math.round(min).toLocaleString()}</strong> – <strong>$${Math.round(max).toLocaleString()}</strong></span>` : ''}
+      ${dateRange ? `<span>Dates: <strong>${dateRange}</strong></span>` : ''}
+      ${isFiltered ? `<span style="color:#3b82f6;">Filters active</span>` : ''}
+    `;
+  }
+
+  function exportToCSV() {
+    if (!filteredData.length) { alert('No data to export'); return; }
+    const label = activeCounty === 'all' ? 'all_counties' : activeCounty.toLowerCase();
+    const headers = ['Owner Name','County','Address','Price','Sold Date','Property Type','Agent Phone'];
+    let csv = headers.join(',') + '\n';
+    filteredData.forEach(row => {
+      csv += [`"${row.ownerName}"`,`"${row.county}"`,`"${row.address}"`,`"${row.price}"`,
+              `"${row.soldDate}"`,`"${row.propertyType||''}"`,`"${row.agentPhone}"`].join(',') + '\n';
+    });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8;' }));
+    link.download = `leads_${label}_${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+  }
+
+  async function startCheckout() {
+    alert('Checkout is paused while this storefront is in preview mode.');
+  }
+
+  function parseCSVRow(row) {
+    const result = []; let current = ''; let inQuotes = false;
+    for (let i = 0; i < row.length; i++) {
+      const ch = row[i];
+      if (ch === '"') { if (inQuotes && row[i+1]==='"') { current+='"'; i++; } else inQuotes=!inQuotes; }
+      else if (ch === ',' && !inQuotes) { result.push(current.trim()); current = ''; }
+      else current += ch;
+    }
+    result.push(current.trim());
+    return result;
+  }
+
+  function parsePrice(p) {
+    if (!p || p === 'N/A') return 0;
+    return parseFloat(p.replace(/[$,]/g,'')) || 0;
+  }
+
+  function parseDate(d) {
+    if (!d || d === 'N/A') return new Date(0);
+    return new Date(d);
+  }
+
+  function changePageSize() {
+    pageSize = parseInt(document.getElementById('pageSize').value);
+    currentPage = 1;
+    renderTable();
+  }
+
+  function changePage(delta) {
+    const totalPages = Math.ceil(filteredData.length / pageSize) || 1;
+    currentPage = Math.max(1, Math.min(totalPages, currentPage + delta));
+    renderTable();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
 </body>
 </html>
