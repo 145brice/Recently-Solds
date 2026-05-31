@@ -1,0 +1,24 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/", "destination": "/storefront.html" },
+    { "source": "/index", "destination": "/storefront.html" },
+    { "source": "/index.html", "destination": "/storefront.html" }
+  ],
+  "redirects": [
+    { "source": "/admin", "destination": "/404", "statusCode": 404 },
+    { "source": "/admin.html", "destination": "/404", "statusCode": 404 },
+    { "source": "/motivated_sellers", "destination": "/404", "statusCode": 404 },
+    { "source": "/motivated_sellers.html", "destination": "/404", "statusCode": 404 },
+    { "source": "/motivated_sellers_admin", "destination": "/404", "statusCode": 404 },
+    { "source": "/motivated_sellers_admin.html", "destination": "/404", "statusCode": 404 },
+    { "source": "/property_type", "destination": "/404", "statusCode": 404 },
+    { "source": "/property_type.html", "destination": "/404", "statusCode": 404 },
+    { "source": "/property_type_admin", "destination": "/404", "statusCode": 404 },
+    { "source": "/property_type_admin.html", "destination": "/404", "statusCode": 404 },
+    { "source": "/counties", "destination": "/404", "statusCode": 404 },
+    { "source": "/counties.html", "destination": "/404", "statusCode": 404 },
+    { "source": "/pricing", "destination": "/404", "statusCode": 404 },
+    { "source": "/pricing.html", "destination": "/404", "statusCode": 404 }
+  ]
+}
