@@ -96,7 +96,7 @@
         }
         .feature-list li:last-child { border-bottom: none; }
         .feature-list li::before {
-            content: "✓";
+            content: "*";
             color: #28a745;
             font-weight: 700;
             flex-shrink: 0;
@@ -220,15 +220,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="admin.html">Sales Admin</a></li>
-                    <li class="nav-item"><a class="nav-link" href="index.html">Recent Sales</a></li>
-                    <li class="nav-item"><a class="nav-link" href="motivated_sellers_admin.html">Motivated Admin</a></li>
-                    <li class="nav-item"><a class="nav-link" href="motivated_sellers.html">Motivated Sellers</a></li>
-                    <li class="nav-item"><a class="nav-link" href="property_type_admin.html">Type Admin</a></li>
-                    <li class="nav-item"><a class="nav-link" href="property_type.html">Property Types</a></li>
                     <li class="nav-item"><a class="nav-link active" href="storefront.html">Buy Leads</a></li>
-                    <li class="nav-item"><a class="nav-link" href="pricing.html">Pricing</a></li>
-                    <li class="nav-item"><a class="nav-link" href="counties.html">Browse Counties</a></li>
                 </ul>
             </div>
         </div>
@@ -236,13 +228,13 @@
 
     <div class="header">
         <h1>Nashville Metro Property Leads</h1>
-        <p>Fresh daily leads from 7 counties &mdash; one flat monthly subscription</p>
+        <p>Fresh daily leads from 7 counties &mdash; simple pay-per-lead access</p>
     </div>
 
     <div class="store-layout">
         <!-- Leads preview panel -->
         <div class="leads-panel">
-            <span class="preview-label">Sample Preview — Subscribe to unlock all leads</span>
+            <span class="preview-label">Sample Preview - Subscribe to unlock all leads</span>
             <ul class="nav nav-tabs mb-3" id="countyTabs"></ul>
 
             <div class="d-flex justify-content-between align-items-center mb-3">
@@ -268,13 +260,14 @@
                             <th data-column="2" class="sortable">Address</th>
                             <th data-column="3" data-type="price" class="sortable">Sale Price</th>
                             <th data-column="4" data-type="date" class="sortable">Sold Date</th>
+                            <th data-column="5">Contact</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody"></tbody>
                 </table>
             </div>
             <div class="mt-2 text-muted">
-                <small>Showing <span id="recordCount">0</span> leads (preview — subscribe for full access)</small>
+                <small>Showing <span id="recordCount">0</span> leads (preview - subscribe for full access)</small>
             </div>
         </div>
 
@@ -284,10 +277,10 @@
                 <div class="text-center">
                     <span class="badge-pill">ALL COUNTIES INCLUDED</span>
                 </div>
-                <h5>Property Leads Subscription</h5>
+                <h5>Property Leads Access</h5>
                 <div class="price-display">
-                    <div class="amount">$99</div>
-                    <div class="period">/month</div>
+                    <div class="amount">$5</div>
+                    <div class="period">/lead</div>
                 </div>
                 <ul class="feature-list">
                     <li>All 7 Nashville-metro counties</li>
@@ -295,13 +288,12 @@
                     <li>Owner name &amp; contact info</li>
                     <li>Sale price &amp; date</li>
                     <li>Full address on every lead</li>
-                    <li>Unlimited CSV exports</li>
-                    <li>Cancel anytime</li>
+                    <li>Pay only for leads you choose</li>
+                    <li>No monthly commitment</li>
                 </ul>
                 <button class="subscribe-btn" id="subscribeBtn" onclick="startCheckout()">
-                    Subscribe Now — $99/mo
-                </button>
-                <p class="sub-note">Month-to-month &bull; No contracts &bull; Cancel anytime</p>
+                    Buy Leads - $5 each</button>
+                <p class="sub-note">$5 per lead &bull; No subscription required</p>
             </div>
         </div>
     </div>
@@ -360,7 +352,7 @@
             })
             .catch(() => {
                 document.getElementById('tableBody').innerHTML =
-                    '<tr><td colspan="5" class="text-center text-danger py-4">Error loading leads data.</td></tr>';
+                    '<tr><td colspan="6" class="text-center text-danger py-4">Error loading leads data.</td></tr>';
             });
 
         function buildTabs() {
@@ -489,7 +481,7 @@
             countEl.textContent = filteredData.length;
 
             if (filteredData.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No leads found. Try adjusting your filters.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-4">No leads found. Try adjusting your filters.</td></tr>';
                 return;
             }
 
@@ -505,7 +497,7 @@
 
             if (filteredData.length > PREVIEW_LIMIT + 5) {
                 const tr = document.createElement('tr');
-                tr.innerHTML = `<td colspan="5" class="text-center py-3" style="background:#f8f9fa;">
+                tr.innerHTML = `<td colspan="6" class="text-center py-3" style="background:#f8f9fa;">
                     <strong style="color:#667eea;">${filteredData.length - PREVIEW_LIMIT - 5} more leads hidden</strong>
                     &mdash; <a href="#" onclick="document.getElementById('subscribeBtn').scrollIntoView({behavior:'smooth'});return false;">Subscribe to unlock all</a>
                 </td>`;
@@ -520,7 +512,14 @@
             const tr = document.createElement('tr');
             if (blurred) tr.classList.add('blurred-row');
 
-            const fields = [row.ownerName, row.county, blurred ? '████████████' : row.address, row.price, row.soldDate];
+            const fields = [
+                maskOwner(row.ownerName),
+                row.county,
+                maskAddress(row.address),
+                row.price,
+                row.soldDate,
+                maskContact(row.agentPhone)
+            ];
             fields.forEach((val, i) => {
                 const td = document.createElement('td');
                 if (i === 4 && val && val !== 'N/A') {
@@ -531,6 +530,24 @@
                 tr.appendChild(td);
             });
             return tr;
+        }
+
+
+        function maskOwner(ownerName) {
+            if (!ownerName || ownerName === 'N/A') return '********';
+            return '********';
+        }
+
+        function maskAddress(address) {
+            if (!address || address === 'N/A') return '********, ***';
+            const parts = address.split(',');
+            const suffix = parts.length > 1 ? parts.slice(1).join(',').trim() : '';
+            return suffix ? `********, ${suffix}` : '********';
+        }
+
+        function maskContact(contact) {
+            if (!contact || contact === 'N/A') return '***-***-****';
+            return '***-***-****';
         }
 
         async function startCheckout() {
