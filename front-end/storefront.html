@@ -68,6 +68,42 @@
       border-radius: 12px;
       font-weight: 600;
     }
+    .purchase-bar {
+      background: #1f4475;
+      border-bottom: 1px solid #2563eb;
+      padding: 13px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .purchase-summary {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #bfdbfe;
+      font-size: 0.95rem;
+    }
+    .purchase-summary strong {
+      color: #fff;
+      font-weight: 800;
+    }
+    .checkout-btn {
+      background: #2563eb;
+      color: #fff;
+      border: 1px solid #3b82f6;
+      border-radius: 7px;
+      padding: 8px 26px;
+      font-weight: 800;
+      cursor: pointer;
+      min-width: 140px;
+    }
+    .checkout-btn:hover { background: #1d4ed8; }
+    .checkout-btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
 
     /* ---- Buttons ---- */
     .btn {
@@ -245,6 +281,7 @@
     thead th.sortable:not(.sort-asc):not(.sort-desc)::after { content: ' ⇅'; font-size: 0.65rem; opacity: 0.4; }
     tbody tr { border-bottom: 1px solid #1a1f2e; }
     tbody tr:hover { background: #161b2b; }
+    tbody tr.selected-row { background: #24344d; }
     tbody td {
       padding: 5px 10px;
       vertical-align: middle;
@@ -253,6 +290,17 @@
       text-overflow: ellipsis;
       max-width: 220px;
       border-right: 1px solid #1a2030;
+    }
+    .select-col {
+      width: 34px;
+      max-width: 34px;
+      text-align: center;
+    }
+    .lead-check {
+      width: 15px;
+      height: 15px;
+      accent-color: #2563eb;
+      cursor: pointer;
     }
 
     /* ---- Badges ---- */
@@ -361,9 +409,17 @@
   </div>
 </nav>
 
-<div class="sub-header" id="checkout">
-  <span class="badge">$5 per lead</span>
-  <span style="font-size:0.82rem;color:#94a3b8;">Preview data is masked. Purchase unlocks owner, street address, and contact details.</span>
+<div class="purchase-bar" id="checkout">
+  <div class="purchase-summary">
+    <span style="font-size:1.05rem;">Cart</span>
+    <strong id="selectedCount">0</strong>
+    <span>leads selected</span>
+    <span style="color:#93c5fd;">|</span>
+    <span>Total:</span>
+    <strong id="selectedTotal">$0</strong>
+    <span style="color:#93c5fd;">at $5 each</span>
+  </div>
+  <button id="checkoutBtn" class="checkout-btn" disabled>Checkout</button>
 </div>
 
 <!-- COUNTY TABS -->
@@ -413,7 +469,6 @@
       <option value="50" selected>50</option>
       <option value="100">100</option>
     </select>
-    <button id="buyBtn" class="btn btn-outline btn-sm">Buy Leads - $5 each</button>
   </div>
 </div>
 
@@ -427,6 +482,9 @@
   <table id="mainTable">
     <thead>
       <tr>
+        <th class="select-col">
+          <input type="checkbox" id="selectPage" class="lead-check" title="Select visible leads"/>
+        </th>
         <th data-column="0" class="sortable">Owner Name</th>
         <th data-column="1" class="sortable">Address</th>
         <th data-column="2" data-type="price" class="sortable">Price</th>
@@ -466,6 +524,8 @@
   let currentPage = 1;
   let pageSize = 50;
   let propertyTypeCache = {};
+  const LEAD_PRICE = 5;
+  const selectedLeads = new Map();
   const activeSignals = new Set();
 
   Promise.all([
@@ -474,10 +534,11 @@
   ]).then(([csv, ptCache]) => {
     propertyTypeCache = ptCache || {};
     const rows = csv.split('\n').slice(1);
-    allData = rows.filter(r => r.trim()).map(r => {
+    allData = rows.filter(r => r.trim()).map((r, id) => {
       const cols = parseCSVRow(r);
       const addr = cols[2] || '';
       return {
+        id,
         ownerName:    cols[0] || '',
         county:       cols[1] || '',
         address:      addr,
@@ -607,8 +668,8 @@
     document.getElementById('searchInput').addEventListener('input', () => { currentPage = 1; applyFilters(); });
     document.getElementById('priceFilter').addEventListener('change', () => { currentPage = 1; applyFilters(); });
     document.getElementById('typeFilter').addEventListener('change', () => { currentPage = 1; applyFilters(); });
-    const buyBtn = document.getElementById('buyBtn');
-    if (buyBtn) buyBtn.addEventListener('click', startCheckout);
+    document.getElementById('checkoutBtn').addEventListener('click', startCheckout);
+    document.getElementById('selectPage').addEventListener('change', toggleCurrentPage);
 
     document.querySelectorAll('thead th.sortable').forEach(header => {
       header.addEventListener('click', () => {
@@ -661,12 +722,13 @@
     totalEl.textContent = totalRecords;
 
     if (totalRecords === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" class="empty-state"><h2>No leads found</h2><p>Try adjusting your filters.</p></td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><h2>No leads found</h2><p>Try adjusting your filters.</p></td></tr>`;
       countEl.textContent = '0';
       pageInfo.textContent = 'Page 0 of 0';
       prevBtn.disabled = true;
       nextBtn.disabled = true;
       updateStats(tabData);
+      updatePurchaseBar();
       return;
     }
 
@@ -678,6 +740,18 @@
     const frag = document.createDocumentFragment();
     pageData.forEach(row => {
       const tr = document.createElement('tr');
+      if (selectedLeads.has(row.id)) tr.classList.add('selected-row');
+
+      const tdSelect = document.createElement('td');
+      tdSelect.className = 'select-col';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.className = 'lead-check';
+      cb.checked = selectedLeads.has(row.id);
+      cb.setAttribute('aria-label', 'Select lead');
+      cb.addEventListener('change', () => toggleLead(row, cb.checked));
+      tdSelect.appendChild(cb);
+      tr.appendChild(tdSelect);
 
       const td0 = document.createElement('td');
       td0.title = 'Masked until purchase';
@@ -715,7 +789,41 @@
     });
     tbody.innerHTML = '';
     tbody.appendChild(frag);
+    updatePageCheckbox(pageData);
+    updatePurchaseBar();
     updateStats(tabData);
+  }
+
+  function toggleLead(row, checked) {
+    if (checked) selectedLeads.set(row.id, row);
+    else selectedLeads.delete(row.id);
+    renderTable();
+  }
+
+  function toggleCurrentPage(event) {
+    const checked = event.target.checked;
+    const start = (currentPage - 1) * pageSize;
+    const end = Math.min(start + pageSize, filteredData.length);
+    filteredData.slice(start, end).forEach(row => {
+      if (checked) selectedLeads.set(row.id, row);
+      else selectedLeads.delete(row.id);
+    });
+    renderTable();
+  }
+
+  function updatePageCheckbox(pageData) {
+    const selectPage = document.getElementById('selectPage');
+    if (!selectPage) return;
+    const selectedOnPage = pageData.filter(row => selectedLeads.has(row.id)).length;
+    selectPage.checked = pageData.length > 0 && selectedOnPage === pageData.length;
+    selectPage.indeterminate = selectedOnPage > 0 && selectedOnPage < pageData.length;
+  }
+
+  function updatePurchaseBar() {
+    const count = selectedLeads.size;
+    document.getElementById('selectedCount').textContent = count.toLocaleString();
+    document.getElementById('selectedTotal').textContent = `$${(count * LEAD_PRICE).toLocaleString()}`;
+    document.getElementById('checkoutBtn').disabled = count === 0;
   }
 
   function updateStats(tabData) {
@@ -758,7 +866,11 @@
   }
 
   async function startCheckout() {
-    alert('Checkout is paused while this storefront is in preview mode.');
+    if (selectedLeads.size === 0) {
+      alert('Select at least one lead first.');
+      return;
+    }
+    alert(`Checkout preview: ${selectedLeads.size} leads selected for $${selectedLeads.size * LEAD_PRICE}.`);
   }
 
   function parseCSVRow(row) {
