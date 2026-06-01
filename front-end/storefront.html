@@ -469,6 +469,9 @@
       <option value="50" selected>50</option>
       <option value="100">100</option>
     </select>
+    <button class="page-btn" id="prevPageTop" onclick="changePage(-1)">&#8592;</button>
+    <span id="pageInfoTop" style="font-size:0.8rem;color:#64748b;min-width:92px;text-align:center;">Page 1</span>
+    <button class="page-btn" id="nextPageTop" onclick="changePage(1)">&#8594;</button>
   </div>
 </div>
 
@@ -710,6 +713,9 @@
     const pageInfo = document.getElementById('pageInfo');
     const prevBtn  = document.getElementById('prevPage');
     const nextBtn  = document.getElementById('nextPage');
+    const pageInfoTop = document.getElementById('pageInfoTop');
+    const prevBtnTop  = document.getElementById('prevPageTop');
+    const nextBtnTop  = document.getElementById('nextPageTop');
     const tabData  = activeCounty === 'all' ? allData : countyData[activeCounty] || [];
 
     const totalRecords = filteredData.length;
@@ -725,8 +731,11 @@
       tbody.innerHTML = `<tr><td colspan="7" class="empty-state"><h2>No leads found</h2><p>Try adjusting your filters.</p></td></tr>`;
       countEl.textContent = '0';
       pageInfo.textContent = 'Page 0 of 0';
+      pageInfoTop.textContent = 'Page 0 of 0';
       prevBtn.disabled = true;
       nextBtn.disabled = true;
+      prevBtnTop.disabled = true;
+      nextBtnTop.disabled = true;
       updateStats(tabData);
       updatePurchaseBar();
       return;
@@ -734,8 +743,11 @@
 
     countEl.textContent = `${start + 1}–${end}`;
     pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    pageInfoTop.textContent = `Page ${currentPage} of ${totalPages}`;
     prevBtn.disabled = currentPage <= 1;
     nextBtn.disabled = currentPage >= totalPages;
+    prevBtnTop.disabled = currentPage <= 1;
+    nextBtnTop.disabled = currentPage >= totalPages;
 
     const frag = document.createDocumentFragment();
     pageData.forEach(row => {
