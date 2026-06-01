@@ -335,6 +335,7 @@
     .prop-type-condo-townhouse { background: #14532d; color: #86efac; }
     .prop-type-commercial      { background: #7f1d1d; color: #fca5a5; }
     .prop-type-vacant-land     { background: #1e293b; color: #94a3b8; }
+    .prop-type-unknown         { background: #312e81; color: #c7d2fe; }
     .prop-type-other           { background: #1e293b; color: #94a3b8; }
     .signal-badge {
       display: inline-block;
@@ -452,6 +453,7 @@
     <option value="Condo/Townhouse">Condo/Townhouse</option>
     <option value="Commercial">Commercial</option>
     <option value="Vacant Land">Vacant Land</option>
+    <option value="Unknown">Unknown</option>
     <option value="Other">Other</option>
   </select>
   <select id="priceFilter">
@@ -492,7 +494,7 @@
         <th data-column="1" class="sortable">Address</th>
         <th data-column="2" data-type="price" class="sortable">Price</th>
         <th data-column="3" data-type="date" class="sortable">Sold Date</th>
-        <th data-column="4" class="sortable">Property Type</th>
+        <th data-column="4" class="sortable">Estimated Type</th>
         <th data-column="5">Agent Phone</th>
       </tr>
     </thead>
