@@ -532,9 +532,11 @@
   const LEAD_PRICE = 5;
   const selectedLeads = new Map();
   const activeSignals = new Set();
+  const isLocalView = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+  const leadCsvFile = isLocalView ? 'nashville_cash_leads_clean.csv' : 'nashville_cash_leads_public.csv';
 
   Promise.all([
-    fetch('nashville_cash_leads_public.csv').then(r => r.text()),
+    fetch(leadCsvFile).then(r => r.text()),
     fetch('/api/property-types').then(r => r.json()).catch(() => ({}))
   ]).then(([csv, ptCache]) => {
     propertyTypeCache = ptCache || {};
